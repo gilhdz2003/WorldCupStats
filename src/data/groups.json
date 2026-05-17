@@ -1,0 +1,890 @@
+[
+  {
+    "id": "A",
+    "name": "GRUPO A",
+    "teams": [
+      {
+        "name": "Mexico",
+        "abbreviation": "MEX",
+        "logo": "/logos/mex.png",
+        "espnId": "203",
+        "stats": {
+          "rank": "1",
+          "gamesPlayed": "0",
+          "wins": "0",
+          "ties": "0",
+          "losses": "0",
+          "goalsFor": "0",
+          "goalsAgainst": "0",
+          "points": "0",
+          "goalDifference": "0"
+        }
+      },
+      {
+        "name": "Czechia",
+        "abbreviation": "CZE",
+        "logo": "/logos/cze.png",
+        "espnId": "450",
+        "stats": {
+          "rank": "4",
+          "gamesPlayed": "0",
+          "wins": "0",
+          "ties": "0",
+          "losses": "0",
+          "goalsFor": "0",
+          "goalsAgainst": "0",
+          "points": "0",
+          "goalDifference": "0"
+        }
+      },
+      {
+        "name": "South Korea",
+        "abbreviation": "KOR",
+        "logo": "/logos/kor.png",
+        "espnId": "451",
+        "stats": {
+          "rank": "3",
+          "gamesPlayed": "0",
+          "wins": "0",
+          "ties": "0",
+          "losses": "0",
+          "goalsFor": "0",
+          "goalsAgainst": "0",
+          "points": "0",
+          "goalDifference": "0"
+        }
+      },
+      {
+        "name": "South Africa",
+        "abbreviation": "RSA",
+        "logo": "/logos/rsa.png",
+        "espnId": "467",
+        "stats": {
+          "rank": "2",
+          "gamesPlayed": "0",
+          "wins": "0",
+          "ties": "0",
+          "losses": "0",
+          "goalsFor": "0",
+          "goalsAgainst": "0",
+          "points": "0",
+          "goalDifference": "0"
+        }
+      }
+    ]
+  },
+  {
+    "id": "B",
+    "name": "GRUPO B",
+    "teams": [
+      {
+        "name": "Canada",
+        "abbreviation": "CAN",
+        "logo": "/logos/can.png",
+        "espnId": "206",
+        "stats": {
+          "rank": "1",
+          "gamesPlayed": "0",
+          "wins": "0",
+          "ties": "0",
+          "losses": "0",
+          "goalsFor": "0",
+          "goalsAgainst": "0",
+          "points": "0",
+          "goalDifference": "0"
+        }
+      },
+      {
+        "name": "Bosnia-Herzegovina",
+        "abbreviation": "BIH",
+        "logo": "/logos/bih.png",
+        "espnId": "452",
+        "stats": {
+          "rank": "2",
+          "gamesPlayed": "0",
+          "wins": "0",
+          "ties": "0",
+          "losses": "0",
+          "goalsFor": "0",
+          "goalsAgainst": "0",
+          "points": "0",
+          "goalDifference": "0"
+        }
+      },
+      {
+        "name": "Switzerland",
+        "abbreviation": "SUI",
+        "logo": "/logos/sui.png",
+        "espnId": "475",
+        "stats": {
+          "rank": "4",
+          "gamesPlayed": "0",
+          "wins": "0",
+          "ties": "0",
+          "losses": "0",
+          "goalsFor": "0",
+          "goalsAgainst": "0",
+          "points": "0",
+          "goalDifference": "0"
+        }
+      },
+      {
+        "name": "Qatar",
+        "abbreviation": "QAT",
+        "logo": "/logos/qat.png",
+        "espnId": "4398",
+        "stats": {
+          "rank": "3",
+          "gamesPlayed": "0",
+          "wins": "0",
+          "ties": "0",
+          "losses": "0",
+          "goalsFor": "0",
+          "goalsAgainst": "0",
+          "points": "0",
+          "goalDifference": "0"
+        }
+      }
+    ]
+  },
+  {
+    "id": "C",
+    "name": "GRUPO C",
+    "teams": [
+      {
+        "name": "Brazil",
+        "abbreviation": "BRA",
+        "logo": "/logos/bra.png",
+        "espnId": "205",
+        "stats": {
+          "rank": "1",
+          "gamesPlayed": "0",
+          "wins": "0",
+          "ties": "0",
+          "losses": "0",
+          "goalsFor": "0",
+          "goalsAgainst": "0",
+          "points": "0",
+          "goalDifference": "0"
+        }
+      },
+      {
+        "name": "Scotland",
+        "abbreviation": "SCO",
+        "logo": "/logos/sco.png",
+        "espnId": "580",
+        "stats": {
+          "rank": "4",
+          "gamesPlayed": "0",
+          "wins": "0",
+          "ties": "0",
+          "losses": "0",
+          "goalsFor": "0",
+          "goalsAgainst": "0",
+          "points": "0",
+          "goalDifference": "0"
+        }
+      },
+      {
+        "name": "Haiti",
+        "abbreviation": "HAI",
+        "logo": "/logos/hai.png",
+        "espnId": "2654",
+        "stats": {
+          "rank": "3",
+          "gamesPlayed": "0",
+          "wins": "0",
+          "ties": "0",
+          "losses": "0",
+          "goalsFor": "0",
+          "goalsAgainst": "0",
+          "points": "0",
+          "goalDifference": "0"
+        }
+      },
+      {
+        "name": "Morocco",
+        "abbreviation": "MAR",
+        "logo": "/logos/mar.png",
+        "espnId": "2869",
+        "stats": {
+          "rank": "2",
+          "gamesPlayed": "0",
+          "wins": "0",
+          "ties": "0",
+          "losses": "0",
+          "goalsFor": "0",
+          "goalsAgainst": "0",
+          "points": "0",
+          "goalDifference": "0"
+        }
+      }
+    ]
+  },
+  {
+    "id": "D",
+    "name": "GRUPO D",
+    "teams": [
+      {
+        "name": "Paraguay",
+        "abbreviation": "PAR",
+        "logo": "/logos/par.png",
+        "espnId": "210",
+        "stats": {
+          "rank": "2",
+          "gamesPlayed": "0",
+          "wins": "0",
+          "ties": "0",
+          "losses": "0",
+          "goalsFor": "0",
+          "goalsAgainst": "0",
+          "points": "0",
+          "goalDifference": "0"
+        }
+      },
+      {
+        "name": "Türkiye",
+        "abbreviation": "TUR",
+        "logo": "/logos/tur.png",
+        "espnId": "465",
+        "stats": {
+          "rank": "4",
+          "gamesPlayed": "0",
+          "wins": "0",
+          "ties": "0",
+          "losses": "0",
+          "goalsFor": "0",
+          "goalsAgainst": "0",
+          "points": "0",
+          "goalDifference": "0"
+        }
+      },
+      {
+        "name": "Australia",
+        "abbreviation": "AUS",
+        "logo": "/logos/aus.png",
+        "espnId": "628",
+        "stats": {
+          "rank": "3",
+          "gamesPlayed": "0",
+          "wins": "0",
+          "ties": "0",
+          "losses": "0",
+          "goalsFor": "0",
+          "goalsAgainst": "0",
+          "points": "0",
+          "goalDifference": "0"
+        }
+      },
+      {
+        "name": "United States",
+        "abbreviation": "USA",
+        "logo": "/logos/usa.png",
+        "espnId": "660",
+        "stats": {
+          "rank": "1",
+          "gamesPlayed": "0",
+          "wins": "0",
+          "ties": "0",
+          "losses": "0",
+          "goalsFor": "0",
+          "goalsAgainst": "0",
+          "points": "0",
+          "goalDifference": "0"
+        }
+      }
+    ]
+  },
+  {
+    "id": "E",
+    "name": "GRUPO E",
+    "teams": [
+      {
+        "name": "Ecuador",
+        "abbreviation": "ECU",
+        "logo": "/logos/ecu.png",
+        "espnId": "209",
+        "stats": {
+          "rank": "4",
+          "gamesPlayed": "0",
+          "wins": "0",
+          "ties": "0",
+          "losses": "0",
+          "goalsFor": "0",
+          "goalsAgainst": "0",
+          "points": "0",
+          "goalDifference": "0"
+        }
+      },
+      {
+        "name": "Germany",
+        "abbreviation": "GER",
+        "logo": "/logos/ger.png",
+        "espnId": "481",
+        "stats": {
+          "rank": "1",
+          "gamesPlayed": "0",
+          "wins": "0",
+          "ties": "0",
+          "losses": "0",
+          "goalsFor": "0",
+          "goalsAgainst": "0",
+          "points": "0",
+          "goalDifference": "0"
+        }
+      },
+      {
+        "name": "Ivory Coast",
+        "abbreviation": "CIV",
+        "logo": "/logos/civ.png",
+        "espnId": "4789",
+        "stats": {
+          "rank": "3",
+          "gamesPlayed": "0",
+          "wins": "0",
+          "ties": "0",
+          "losses": "0",
+          "goalsFor": "0",
+          "goalsAgainst": "0",
+          "points": "0",
+          "goalDifference": "0"
+        }
+      },
+      {
+        "name": "Curacao",
+        "abbreviation": "CUW",
+        "logo": "/logos/cuw.png",
+        "espnId": "11678",
+        "stats": {
+          "rank": "2",
+          "gamesPlayed": "0",
+          "wins": "0",
+          "ties": "0",
+          "losses": "0",
+          "goalsFor": "0",
+          "goalsAgainst": "0",
+          "points": "0",
+          "goalDifference": "0"
+        }
+      }
+    ]
+  },
+  {
+    "id": "F",
+    "name": "GRUPO F",
+    "teams": [
+      {
+        "name": "Netherlands",
+        "abbreviation": "NED",
+        "logo": "/logos/ned.png",
+        "espnId": "449",
+        "stats": {
+          "rank": "1",
+          "gamesPlayed": "0",
+          "wins": "0",
+          "ties": "0",
+          "losses": "0",
+          "goalsFor": "0",
+          "goalsAgainst": "0",
+          "points": "0",
+          "goalDifference": "0"
+        }
+      },
+      {
+        "name": "Sweden",
+        "abbreviation": "SWE",
+        "logo": "/logos/swe.png",
+        "espnId": "466",
+        "stats": {
+          "rank": "3",
+          "gamesPlayed": "0",
+          "wins": "0",
+          "ties": "0",
+          "losses": "0",
+          "goalsFor": "0",
+          "goalsAgainst": "0",
+          "points": "0",
+          "goalDifference": "0"
+        }
+      },
+      {
+        "name": "Japan",
+        "abbreviation": "JPN",
+        "logo": "/logos/jpn.png",
+        "espnId": "627",
+        "stats": {
+          "rank": "2",
+          "gamesPlayed": "0",
+          "wins": "0",
+          "ties": "0",
+          "losses": "0",
+          "goalsFor": "0",
+          "goalsAgainst": "0",
+          "points": "0",
+          "goalDifference": "0"
+        }
+      },
+      {
+        "name": "Tunisia",
+        "abbreviation": "TUN",
+        "logo": "/logos/tun.png",
+        "espnId": "659",
+        "stats": {
+          "rank": "4",
+          "gamesPlayed": "0",
+          "wins": "0",
+          "ties": "0",
+          "losses": "0",
+          "goalsFor": "0",
+          "goalsAgainst": "0",
+          "points": "0",
+          "goalDifference": "0"
+        }
+      }
+    ]
+  },
+  {
+    "id": "G",
+    "name": "GRUPO G",
+    "teams": [
+      {
+        "name": "Belgium",
+        "abbreviation": "BEL",
+        "logo": "/logos/bel.png",
+        "espnId": "459",
+        "stats": {
+          "rank": "1",
+          "gamesPlayed": "0",
+          "wins": "0",
+          "ties": "0",
+          "losses": "0",
+          "goalsFor": "0",
+          "goalsAgainst": "0",
+          "points": "0",
+          "goalDifference": "0"
+        }
+      },
+      {
+        "name": "Iran",
+        "abbreviation": "IRN",
+        "logo": "/logos/irn.png",
+        "espnId": "469",
+        "stats": {
+          "rank": "3",
+          "gamesPlayed": "0",
+          "wins": "0",
+          "ties": "0",
+          "losses": "0",
+          "goalsFor": "0",
+          "goalsAgainst": "0",
+          "points": "0",
+          "goalDifference": "0"
+        }
+      },
+      {
+        "name": "Egypt",
+        "abbreviation": "EGY",
+        "logo": "/logos/egy.png",
+        "espnId": "2620",
+        "stats": {
+          "rank": "2",
+          "gamesPlayed": "0",
+          "wins": "0",
+          "ties": "0",
+          "losses": "0",
+          "goalsFor": "0",
+          "goalsAgainst": "0",
+          "points": "0",
+          "goalDifference": "0"
+        }
+      },
+      {
+        "name": "New Zealand",
+        "abbreviation": "NZL",
+        "logo": "/logos/nzl.png",
+        "espnId": "2666",
+        "stats": {
+          "rank": "4",
+          "gamesPlayed": "0",
+          "wins": "0",
+          "ties": "0",
+          "losses": "0",
+          "goalsFor": "0",
+          "goalsAgainst": "0",
+          "points": "0",
+          "goalDifference": "0"
+        }
+      }
+    ]
+  },
+  {
+    "id": "H",
+    "name": "GRUPO H",
+    "teams": [
+      {
+        "name": "Spain",
+        "abbreviation": "ESP",
+        "logo": "/logos/esp.png",
+        "espnId": "164",
+        "stats": {
+          "rank": "1",
+          "gamesPlayed": "0",
+          "wins": "0",
+          "ties": "0",
+          "losses": "0",
+          "goalsFor": "0",
+          "goalsAgainst": "0",
+          "points": "0",
+          "goalDifference": "0"
+        }
+      },
+      {
+        "name": "Uruguay",
+        "abbreviation": "URU",
+        "logo": "/logos/uru.png",
+        "espnId": "212",
+        "stats": {
+          "rank": "4",
+          "gamesPlayed": "0",
+          "wins": "0",
+          "ties": "0",
+          "losses": "0",
+          "goalsFor": "0",
+          "goalsAgainst": "0",
+          "points": "0",
+          "goalDifference": "0"
+        }
+      },
+      {
+        "name": "Saudi Arabia",
+        "abbreviation": "KSA",
+        "logo": "/logos/ksa.png",
+        "espnId": "655",
+        "stats": {
+          "rank": "3",
+          "gamesPlayed": "0",
+          "wins": "0",
+          "ties": "0",
+          "losses": "0",
+          "goalsFor": "0",
+          "goalsAgainst": "0",
+          "points": "0",
+          "goalDifference": "0"
+        }
+      },
+      {
+        "name": "Cape Verde",
+        "abbreviation": "CPV",
+        "logo": "/logos/cpv.png",
+        "espnId": "2597",
+        "stats": {
+          "rank": "2",
+          "gamesPlayed": "0",
+          "wins": "0",
+          "ties": "0",
+          "losses": "0",
+          "goalsFor": "0",
+          "goalsAgainst": "0",
+          "points": "0",
+          "goalDifference": "0"
+        }
+      }
+    ]
+  },
+  {
+    "id": "I",
+    "name": "GRUPO I",
+    "teams": [
+      {
+        "name": "Norway",
+        "abbreviation": "NOR",
+        "logo": "/logos/nor.png",
+        "espnId": "464",
+        "stats": {
+          "rank": "4",
+          "gamesPlayed": "0",
+          "wins": "0",
+          "ties": "0",
+          "losses": "0",
+          "goalsFor": "0",
+          "goalsAgainst": "0",
+          "points": "0",
+          "goalDifference": "0"
+        }
+      },
+      {
+        "name": "France",
+        "abbreviation": "FRA",
+        "logo": "/logos/fra.png",
+        "espnId": "478",
+        "stats": {
+          "rank": "1",
+          "gamesPlayed": "0",
+          "wins": "0",
+          "ties": "0",
+          "losses": "0",
+          "goalsFor": "0",
+          "goalsAgainst": "0",
+          "points": "0",
+          "goalDifference": "0"
+        }
+      },
+      {
+        "name": "Senegal",
+        "abbreviation": "SEN",
+        "logo": "/logos/sen.png",
+        "espnId": "654",
+        "stats": {
+          "rank": "2",
+          "gamesPlayed": "0",
+          "wins": "0",
+          "ties": "0",
+          "losses": "0",
+          "goalsFor": "0",
+          "goalsAgainst": "0",
+          "points": "0",
+          "goalDifference": "0"
+        }
+      },
+      {
+        "name": "Iraq",
+        "abbreviation": "IRQ",
+        "logo": "/logos/irq.png",
+        "espnId": "4375",
+        "stats": {
+          "rank": "3",
+          "gamesPlayed": "0",
+          "wins": "0",
+          "ties": "0",
+          "losses": "0",
+          "goalsFor": "0",
+          "goalsAgainst": "0",
+          "points": "0",
+          "goalDifference": "0"
+        }
+      }
+    ]
+  },
+  {
+    "id": "J",
+    "name": "GRUPO J",
+    "teams": [
+      {
+        "name": "Argentina",
+        "abbreviation": "ARG",
+        "logo": "/logos/arg.png",
+        "espnId": "202",
+        "stats": {
+          "rank": "1",
+          "gamesPlayed": "0",
+          "wins": "0",
+          "ties": "0",
+          "losses": "0",
+          "goalsFor": "0",
+          "goalsAgainst": "0",
+          "points": "0",
+          "goalDifference": "0"
+        }
+      },
+      {
+        "name": "Austria",
+        "abbreviation": "AUT",
+        "logo": "/logos/aut.png",
+        "espnId": "474",
+        "stats": {
+          "rank": "3",
+          "gamesPlayed": "0",
+          "wins": "0",
+          "ties": "0",
+          "losses": "0",
+          "goalsFor": "0",
+          "goalsAgainst": "0",
+          "points": "0",
+          "goalDifference": "0"
+        }
+      },
+      {
+        "name": "Algeria",
+        "abbreviation": "ALG",
+        "logo": "/logos/alg.png",
+        "espnId": "624",
+        "stats": {
+          "rank": "2",
+          "gamesPlayed": "0",
+          "wins": "0",
+          "ties": "0",
+          "losses": "0",
+          "goalsFor": "0",
+          "goalsAgainst": "0",
+          "points": "0",
+          "goalDifference": "0"
+        }
+      },
+      {
+        "name": "Jordan",
+        "abbreviation": "JOR",
+        "logo": "/logos/jor.png",
+        "espnId": "2917",
+        "stats": {
+          "rank": "4",
+          "gamesPlayed": "0",
+          "wins": "0",
+          "ties": "0",
+          "losses": "0",
+          "goalsFor": "0",
+          "goalsAgainst": "0",
+          "points": "0",
+          "goalDifference": "0"
+        }
+      }
+    ]
+  },
+  {
+    "id": "K",
+    "name": "GRUPO K",
+    "teams": [
+      {
+        "name": "Colombia",
+        "abbreviation": "COL",
+        "logo": "/logos/col.png",
+        "espnId": "208",
+        "stats": {
+          "rank": "4",
+          "gamesPlayed": "0",
+          "wins": "0",
+          "ties": "0",
+          "losses": "0",
+          "goalsFor": "0",
+          "goalsAgainst": "0",
+          "points": "0",
+          "goalDifference": "0"
+        }
+      },
+      {
+        "name": "Portugal",
+        "abbreviation": "POR",
+        "logo": "/logos/por.png",
+        "espnId": "482",
+        "stats": {
+          "rank": "1",
+          "gamesPlayed": "0",
+          "wins": "0",
+          "ties": "0",
+          "losses": "0",
+          "goalsFor": "0",
+          "goalsAgainst": "0",
+          "points": "0",
+          "goalDifference": "0"
+        }
+      },
+      {
+        "name": "Uzbekistan",
+        "abbreviation": "UZB",
+        "logo": "/logos/uzb.png",
+        "espnId": "2570",
+        "stats": {
+          "rank": "3",
+          "gamesPlayed": "0",
+          "wins": "0",
+          "ties": "0",
+          "losses": "0",
+          "goalsFor": "0",
+          "goalsAgainst": "0",
+          "points": "0",
+          "goalDifference": "0"
+        }
+      },
+      {
+        "name": "Congo DR",
+        "abbreviation": "COD",
+        "logo": "/logos/cod.png",
+        "espnId": "2850",
+        "stats": {
+          "rank": "2",
+          "gamesPlayed": "0",
+          "wins": "0",
+          "ties": "0",
+          "losses": "0",
+          "goalsFor": "0",
+          "goalsAgainst": "0",
+          "points": "0",
+          "goalDifference": "0"
+        }
+      }
+    ]
+  },
+  {
+    "id": "L",
+    "name": "GRUPO L",
+    "teams": [
+      {
+        "name": "England",
+        "abbreviation": "ENG",
+        "logo": "/logos/eng.png",
+        "espnId": "448",
+        "stats": {
+          "rank": "1",
+          "gamesPlayed": "0",
+          "wins": "0",
+          "ties": "0",
+          "losses": "0",
+          "goalsFor": "0",
+          "goalsAgainst": "0",
+          "points": "0",
+          "goalDifference": "0"
+        }
+      },
+      {
+        "name": "Croatia",
+        "abbreviation": "CRO",
+        "logo": "/logos/cro.png",
+        "espnId": "477",
+        "stats": {
+          "rank": "2",
+          "gamesPlayed": "0",
+          "wins": "0",
+          "ties": "0",
+          "losses": "0",
+          "goalsFor": "0",
+          "goalsAgainst": "0",
+          "points": "0",
+          "goalDifference": "0"
+        }
+      },
+      {
+        "name": "Panama",
+        "abbreviation": "PAN",
+        "logo": "/logos/pan.png",
+        "espnId": "2659",
+        "stats": {
+          "rank": "4",
+          "gamesPlayed": "0",
+          "wins": "0",
+          "ties": "0",
+          "losses": "0",
+          "goalsFor": "0",
+          "goalsAgainst": "0",
+          "points": "0",
+          "goalDifference": "0"
+        }
+      },
+      {
+        "name": "Ghana",
+        "abbreviation": "GHA",
+        "logo": "/logos/gha.png",
+        "espnId": "4469",
+        "stats": {
+          "rank": "3",
+          "gamesPlayed": "0",
+          "wins": "0",
+          "ties": "0",
+          "losses": "0",
+          "goalsFor": "0",
+          "goalsAgainst": "0",
+          "points": "0",
+          "goalDifference": "0"
+        }
+      }
+    ]
+  }
+]

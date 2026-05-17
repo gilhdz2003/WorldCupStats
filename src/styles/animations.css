@@ -1,0 +1,49 @@
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse-subtle {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+  100% { transform: scale(1); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.6s ease-out forwards;
+}
+
+.stagger-1 { animation-delay: 0.1s; }
+.stagger-2 { animation-delay: 0.2s; }
+.stagger-3 { animation-delay: 0.3s; }
+.stagger-4 { animation-delay: 0.4s; }
+
+/* Group Headers Specific Colors */
+.bg-group-A { background-color: var(--group-a); }
+.bg-group-B { background-color: var(--group-b); }
+.bg-group-C { background-color: var(--group-c); }
+.bg-group-D { background-color: var(--group-d); }
+.bg-group-E { background-color: var(--group-e); }
+.bg-group-F { background-color: var(--group-f); }
+.bg-group-G { background-color: var(--group-g); }
+.bg-group-H { background-color: var(--group-h); }
+.bg-group-I { background-color: var(--group-i); }
+.bg-group-J { background-color: var(--group-j); }
+.bg-group-K { background-color: var(--group-k); }
+.bg-group-L { background-color: var(--group-l); }

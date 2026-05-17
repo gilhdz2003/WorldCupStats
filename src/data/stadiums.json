@@ -1,0 +1,18 @@
+[
+  { "id": "azteca", "name": "Estadio Azteca", "city": "Ciudad de México", "country": "México", "capacity": 87000 },
+  { "id": "akron", "name": "Estadio Akron", "city": "Guadalajara", "country": "México", "capacity": 49850 },
+  { "id": "bbva", "name": "Estadio BBVA", "city": "Monterrey", "country": "México", "capacity": 53500 },
+  { "id": "bmo", "name": "BMO Field", "city": "Toronto", "country": "Canadá", "capacity": 45000 },
+  { "id": "bcplace", "name": "BC Place", "city": "Vancouver", "country": "Canadá", "capacity": 54500 },
+  { "id": "metlife", "name": "MetLife Stadium", "city": "Nueva Jersey", "country": "EE.UU.", "capacity": 82500 },
+  { "id": "sofi", "name": "SoFi Stadium", "city": "Los Ángeles", "country": "EE.UU.", "capacity": 70000 },
+  { "id": "att", "name": "AT&T Stadium", "city": "Dallas", "country": "EE.UU.", "capacity": 80000 },
+  { "id": "nrgelectric", "name": "NRG Stadium", "city": "Houston", "country": "EE.UU.", "capacity": 72000 },
+  { "id": "mercedesbenz", "name": "Mercedes-Benz Stadium", "city": "Atlanta", "country": "EE.UU.", "capacity": 71000 },
+  { "id": "hardrock", "name": "Hard Rock Stadium", "city": "Miami", "country": "EE.UU.", "capacity": 65000 },
+  { "id": "gillette", "name": "Gillette Stadium", "city": "Boston", "country": "EE.UU.", "capacity": 65000 },
+  { "id": "lincoln", "name": "Lincoln Financial Field", "city": "Filadelfia", "country": "EE.UU.", "capacity": 69000 },
+  { "id": "lumen", "name": "Lumen Field", "city": "Seattle", "country": "EE.UU.", "capacity": 69000 },
+  { "id": "levis", "name": "Levi's Stadium", "city": "San Francisco", "country": "EE.UU.", "capacity": 68500 },
+  { "id": "arrowhead", "name": "Arrowhead Stadium", "city": "Kansas City", "country": "EE.UU.", "capacity": 67000 }
+]
