@@ -1,4 +1,4 @@
-import { renderCountdown, initCountdown } from '../components/Countdown.js';
+import { renderCountdown } from '../components/Countdown.js';
 import { renderMatchCard } from '../components/MatchCard.js';
 import matchesData from '../data/matches.json';
 
@@ -17,8 +17,6 @@ function getNextUpcomingDate() {
 }
 
 export function Home() {
-  setTimeout(() => initCountdown(), 0);
-
   const today = getTodayDate();
   const todayMatches = getMatchesForDate(today);
   const upcomingDate = getNextUpcomingDate();

@@ -13,6 +13,7 @@ export function renderNavbar() {
         <div class="nav-links">
           <a href="#/" class="nav-link" data-route="/">Inicio</a>
           <a href="#/groups" class="nav-link" data-route="/groups">Grupos</a>
+          <a href="#/teams" class="nav-link" data-route="/teams">Selecciones</a>
           <a href="#/schedule" class="nav-link" data-route="/schedule">Calendario</a>
         </div>
       </div>

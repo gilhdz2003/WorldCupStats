@@ -1,0 +1,610 @@
+/* === Teams Grid Page === */
+
+.teams-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: var(--spacing-lg);
+}
+
+.team-grid-card {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-lg) var(--spacing-sm);
+  text-align: center;
+  transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.team-grid-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--accent-primary);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+}
+
+.team-grid-logo-wrap {
+  width: 56px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.team-grid-logo {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.team-grid-name {
+  font-family: var(--font-headline);
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.team-grid-meta {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* === Team Page === */
+
+.team-header {
+  position: relative;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  margin-bottom: var(--spacing-xl);
+  padding: var(--spacing-2xl);
+  border: 1px solid var(--border-color);
+}
+
+.team-header-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.team-header-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xl);
+}
+
+.team-header-logo {
+  width: 80px;
+  height: 60px;
+  object-fit: contain;
+}
+
+.team-header-name {
+  font-size: 2.5rem;
+  letter-spacing: 2px;
+  line-height: 1.1;
+}
+
+.team-header-meta {
+  display: flex;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-xs);
+}
+
+.team-header-tag {
+  display: inline-block;
+  background: rgba(255,255,255,0.1);
+  padding: 2px 10px;
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  letter-spacing: 0.5px;
+}
+
+.team-coach-bar {
+  display: flex;
+  gap: var(--spacing-xl);
+  padding: var(--spacing-md) var(--spacing-lg);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--spacing-xl);
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.team-section {
+  margin-bottom: var(--spacing-2xl);
+}
+
+.team-section-title {
+  font-size: 1.1rem;
+  letter-spacing: 1px;
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-lg);
+  padding-bottom: var(--spacing-sm);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.team-no-roster {
+  color: var(--text-muted);
+  font-style: italic;
+  text-align: center;
+  padding: var(--spacing-2xl);
+}
+
+/* Players grid inside team page */
+.players-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: var(--spacing-md);
+}
+
+/* Team matches list */
+.team-matches-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.team-match-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-md);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  transition: border-color 0.2s;
+}
+
+.team-match-row:hover {
+  border-color: var(--accent-secondary);
+}
+
+.team-match-opponent {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  font-weight: 500;
+}
+
+.team-match-info {
+  display: flex;
+  gap: var(--spacing-md);
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.team-match-score {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  color: var(--accent-primary);
+}
+
+/* === Player Card Component === */
+
+.player-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-xs);
+  transition: transform 0.2s, border-color 0.2s;
+}
+
+.player-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent-secondary);
+}
+
+.player-card-lg {
+  flex-direction: row;
+  text-align: left;
+  gap: var(--spacing-md);
+  padding: var(--spacing-lg);
+}
+
+.player-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.8rem;
+  color: var(--text-primary);
+}
+
+.player-card-lg .player-avatar {
+  width: 64px;
+  height: 64px;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.player-card-name {
+  font-weight: 600;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.player-card-position {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.player-card-club {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+.player-card-stats-row {
+  display: flex;
+  gap: var(--spacing-sm);
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  margin-top: var(--spacing-xs);
+}
+
+.player-card-stats-row strong {
+  color: var(--text-primary);
+}
+
+/* === Player Page === */
+
+.player-back-link {
+  display: inline-block;
+  color: var(--accent-secondary);
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: var(--spacing-xl);
+  transition: color 0.2s;
+}
+
+.player-back-link:hover {
+  color: var(--accent-primary);
+}
+
+.player-header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xl);
+  margin-bottom: var(--spacing-2xl);
+  padding: var(--spacing-2xl);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+}
+
+.player-avatar-lg {
+  width: 96px;
+  height: 96px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: var(--text-primary);
+  flex-shrink: 0;
+}
+
+.player-header-name {
+  font-size: 2rem;
+  letter-spacing: 1px;
+  line-height: 1.1;
+}
+
+.player-header-meta {
+  display: flex;
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-xs);
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.player-header-club {
+  margin-top: var(--spacing-xs);
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}
+
+.player-section {
+  margin-bottom: var(--spacing-2xl);
+}
+
+.player-section-title {
+  font-size: 1.1rem;
+  letter-spacing: 1px;
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-lg);
+  padding-bottom: var(--spacing-sm);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.player-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: var(--spacing-md);
+}
+
+.player-stat-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-lg);
+  text-align: center;
+}
+
+.player-stat-value {
+  font-family: var(--font-headline);
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--accent-primary);
+  line-height: 1;
+}
+
+.player-stat-label {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: var(--spacing-xs);
+}
+
+.player-trophies-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.player-trophies-list li {
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: var(--bg-secondary);
+  border-radius: var(--radius-sm);
+  border-left: 3px solid var(--accent-primary);
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.player-style-text {
+  color: var(--text-secondary);
+  line-height: 1.6;
+  font-size: 0.95rem;
+}
+
+/* === Formation View Component === */
+
+.formation-panel {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.formation-label {
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  text-align: center;
+  letter-spacing: 1px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.formation-field {
+  position: relative;
+  width: 100%;
+  padding-bottom: 65%;
+  background: linear-gradient(to bottom, #1a472a 0%, #0d2818 50%, #1a472a 100%);
+  overflow: hidden;
+}
+
+.formation-center-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 1px;
+  background: rgba(255,255,255,0.15);
+}
+
+.formation-center-circle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 15%;
+  padding-bottom: 15%;
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 50%;
+}
+
+.formation-player {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  z-index: 2;
+}
+
+.formation-dot {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.6rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0 auto;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+}
+
+.formation-name {
+  font-size: 0.6rem;
+  color: rgba(255,255,255,0.8);
+  margin-top: 2px;
+  white-space: nowrap;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+}
+
+/* === Forum Widget === */
+
+.forum-widget {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-lg);
+}
+
+.forum-count {
+  display: inline-block;
+  background: var(--accent-secondary);
+  color: #fff;
+  font-size: 0.65rem;
+  padding: 1px 6px;
+  border-radius: var(--radius-full);
+  margin-left: var(--spacing-xs);
+  font-family: var(--font-body);
+  vertical-align: middle;
+}
+
+.forum-messages {
+  max-height: 300px;
+  overflow-y: auto;
+  margin-bottom: var(--spacing-md);
+}
+
+.forum-empty {
+  color: var(--text-muted);
+  text-align: center;
+  padding: var(--spacing-xl);
+  font-style: italic;
+}
+
+.forum-message {
+  padding: var(--spacing-sm) 0;
+  border-bottom: 1px solid rgba(42, 42, 74, 0.3);
+}
+
+.forum-message:last-child {
+  border-bottom: none;
+}
+
+.forum-message-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 2px;
+}
+
+.forum-author {
+  font-weight: 600;
+  font-size: 0.8rem;
+  color: var(--accent-secondary);
+}
+
+.forum-time {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+.forum-body {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+.forum-input-area {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.forum-input {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  outline: none;
+}
+
+.forum-input:focus {
+  border-color: var(--accent-secondary);
+}
+
+.forum-input-name {
+  width: 120px;
+  flex-shrink: 0;
+}
+
+.forum-input-text {
+  flex: 1;
+}
+
+.forum-submit {
+  background: var(--accent-secondary);
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.85rem;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  border: none;
+  transition: opacity 0.2s;
+  flex-shrink: 0;
+}
+
+.forum-submit:hover {
+  opacity: 0.85;
+}
+
+@media (max-width: 640px) {
+  .team-header-content {
+    flex-direction: column;
+    text-align: center;
+  }
+  .team-header-meta {
+    justify-content: center;
+  }
+  .team-coach-bar {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+  .player-header {
+    flex-direction: column;
+    text-align: center;
+  }
+  .player-header-meta {
+    justify-content: center;
+  }
+  .forum-input-area {
+    flex-wrap: wrap;
+  }
+  .forum-input-name,
+  .forum-input-text {
+    width: 100%;
+  }
+  .forum-submit {
+    width: 100%;
+  }
+  .teams-grid {
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  }
+}

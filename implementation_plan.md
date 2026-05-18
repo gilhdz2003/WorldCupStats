@@ -397,17 +397,49 @@ Mundial2026/
 
 ### Fase 4 — Foro y Comunidad (Prioridad Media)
 
-#### [NEW] src/components/ForumWidget.js
+#### [DONE] src/components/ForumWidget.js — localStorage (MVP actual)
 - Sistema de comentarios simple por partido/selección
-- Almacenamiento: localStorage (sin backend)
+- Almacenamiento: localStorage (sin backend — cada usuario ve solo sus comentarios)
 - Formato: `{ id, matchId, author, message, timestamp }`
 - Username guardado en localStorage
 - Moderación básica (filtro de palabras)
 
-#### [NEW] src/styles/pages.css
-- `.forum-thread` — Lista de mensajes
-- `.forum-input` — Input de nuevo mensaje
-- `.forum-message` — Mensaje individual con avatar placeholder
+#### [NEW] Backend de comentarios — Hostinger MySQL + PHP mini-API
+> **Decisión**: Usar MySQL incluido en el plan Hostinger Business + endpoints PHP simples.
+> **Por qué**: Proyecto personal, pocos usuarios, no justifica crear proyecto Supabase nuevo.
+> Hostinger ya tiene MySQL y PHP — todo queda en el mismo hosting sin dependencias externas.
+
+**Esquema de tabla:**
+```sql
+CREATE TABLE comments (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  thread_id VARCHAR(50) NOT NULL,   -- ej: "team-ARG", "match-760415"
+  author VARCHAR(50) NOT NULL,
+  message TEXT NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  INDEX idx_thread (thread_id)
+);
+```
+
+**Endpoints PHP:**
+- `GET /api/comments.php?thread=team-ARG` → JSON array de comentarios
+- `POST /api/comments.php` → `{ thread_id, author, message }` → inserta y retorna ID
+
+**Frontend changes:**
+- ForumWidget.js: reemplazar `localStorage` por `fetch()` a `/api/comments.php`
+- Al cargar página: GET comentarios del thread
+- Al enviar: POST nuevo comentario, re-renderizar lista
+- Fallback gracioso si la API falla (mostrar error, no romper página)
+
+**Archivos nuevos:**
+- `public/api/comments.php` — CRUD endpoint con PDO + prepared statements (SQL injection safe)
+- `public/api/config.php` — Connection string MySQL (credenciales en variables de entorno o config fuera de public_html)
+
+**Seguridad:**
+- Prepared statements (PDO) — anti SQL injection
+- `htmlspecialchars()` — anti XSS
+- Rate limiting básico (máx 5 comentarios por minuto por IP)
+- Máximo 500 caracteres por mensaje
 
 ---
 

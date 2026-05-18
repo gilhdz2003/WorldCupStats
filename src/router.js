@@ -1,15 +1,19 @@
 import { renderNavbar } from './components/Navbar.js';
 import { renderFooter } from './components/Footer.js';
 
-// Import pages
 import { Home } from './pages/Home.js';
 import { Groups } from './pages/Groups.js';
 import { Schedule } from './pages/Schedule.js';
 import { MatchPage } from './pages/MatchPage.js';
+import { Teams } from './pages/Teams.js';
+import { TeamPage, initTeamPage } from './pages/TeamPage.js';
+import { PlayerPage } from './pages/PlayerPage.js';
+import { startPolling, stopPolling } from './espn-poll.js';
 
 const routes = {
   '/': () => Home(),
   '/groups': () => Groups(),
+  '/teams': () => Teams(),
   '/schedule': () => Schedule(),
 };
 
@@ -26,32 +30,55 @@ export class Router {
   handleRoute() {
     const path = window.location.hash.slice(1) || '/';
     let renderPage;
+    let afterRender = null;
 
-    // Rutas dinámicas
     if (path.startsWith('/match/')) {
       const matchId = path.split('/')[2];
       renderPage = () => MatchPage(matchId);
+    } else if (path.startsWith('/team/')) {
+      const teamAbbr = path.split('/')[2];
+      renderPage = () => TeamPage(teamAbbr);
+      afterRender = () => initTeamPage();
+    } else if (path.startsWith('/player/')) {
+      const playerId = path.split('/')[2];
+      renderPage = () => PlayerPage(playerId);
     } else {
       renderPage = routes[path] || routes['/'];
     }
-    
-    this.appElement.innerHTML = `
-      ${renderNavbar()}
-      <main class="animate-fade-in">
-        ${renderPage()}
-      </main>
-      ${renderFooter()}
-    `;
-    
+
+    this.appElement.innerHTML = [
+      renderNavbar(),
+      '<main class="animate-fade-in">',
+      renderPage(),
+      '</main>',
+      renderFooter(),
+    ].join('');
+
     this.updateActiveLink(path);
     window.scrollTo(0, 0);
+
+    if (afterRender) setTimeout(afterRender, 0);
+
+    // Live scoring: start on home/schedule, stop otherwise
+    if (path === '/' || path === '/schedule') {
+      startPolling();
+    } else {
+      stopPolling();
+    }
+
+    if (path === '/') {
+      import('./components/Countdown.js').then(({ initCountdown }) => {
+        setTimeout(initCountdown, 0);
+      });
+    }
   }
 
   updateActiveLink(path) {
     const links = document.querySelectorAll('.nav-link');
     links.forEach(link => {
       link.classList.remove('active');
-      if (link.dataset.route === path) {
+      const route = link.dataset.route;
+      if (route === path || (route !== '/' && path.startsWith(route))) {
         link.classList.add('active');
       }
     });
