@@ -1,6 +1,7 @@
 import { renderCountdown } from '../components/Countdown.js';
 import { renderMatchCard } from '../components/MatchCard.js';
 import matchesData from '../data/matches.json';
+import { getAllLive, getLiveCount, subscribe } from '../data/live-store.js';
 
 function getTodayDate() {
   return new Date().toISOString().slice(0, 10);
@@ -16,6 +17,40 @@ function getNextUpcomingDate() {
   return dates.find(d => d >= today) || dates[0];
 }
 
+function renderLiveSection() {
+  const liveMatches = getAllLive();
+  if (liveMatches.length === 0) return '';
+
+  const cards = liveMatches.map(lm => {
+    const match = matchesData.find(m => m.id === lm.id);
+    if (!match) return '';
+    const liveMatch = {
+      ...match,
+      status: 'STATUS_IN_PROGRESS',
+      homeTeam: { ...match.homeTeam, score: lm.homeScore },
+      awayTeam: { ...match.awayTeam, score: lm.awayScore },
+    };
+    return renderMatchCard(liveMatch);
+  }).filter(Boolean).join('');
+
+  return `
+    <section class="container" style="margin-bottom: var(--spacing-3xl);">
+      <div class="live-section">
+        <div class="live-header">
+          <div class="live-pulse"></div>
+          <h2 style="font-size: 2rem; letter-spacing: 1px; color: var(--accent-danger);">
+            EN VIVO
+            <span style="font-size: 0.9rem; color: var(--text-secondary); font-weight: 400; margin-left: 8px;">${liveMatches.length} ${liveMatches.length === 1 ? 'partido' : 'partidos'}</span>
+          </h2>
+        </div>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3">
+          ${cards}
+        </div>
+      </div>
+    </section>
+  `;
+}
+
 export function Home() {
   const today = getTodayDate();
   const todayMatches = getMatchesForDate(today);
@@ -24,7 +59,6 @@ export function Home() {
     .filter(m => m.status !== 'STATUS_FULL_TIME' && m.status !== 'STATUS_POSTPONED')
     .slice(0, 6);
 
-  // If no matches today and upcoming is same date, don't duplicate
   const hasTodaySection = todayMatches.length > 0 && today !== upcomingDate;
   const displayMatches = hasTodaySection ? upcomingMatches : upcomingMatches;
 
@@ -49,6 +83,8 @@ export function Home() {
       </div>
     </section>
 
+    <div id="live-section-mount"></div>
+
     ${todayMatches.length > 0 ? `
     <section class="container" style="margin-bottom: var(--spacing-3xl);">
       <div class="flex justify-between items-center" style="margin-bottom: var(--spacing-lg);">
@@ -66,7 +102,7 @@ export function Home() {
     <section class="container" style="margin-bottom: var(--spacing-3xl);">
       <div class="flex justify-between items-center" style="margin-bottom: var(--spacing-lg);">
         <h2 style="font-size: 2rem; letter-spacing: 1px;">
-          ${todayMatches.length > 0 ? 'PRÓXIMOS PARTIDOS' : `PARTIDOS DEL ${formatDate(upcomingDate)}`}
+          ${todayMatches.length > 0 ? 'PRÓXIMOS PARTIDOS' : 'PARTIDOS DEL ' + formatDate(upcomingDate)}
         </h2>
         <a href="#/schedule" style="color: var(--accent-secondary); font-weight: 600; text-transform: uppercase; font-size: 0.9rem;">Ver Calendario Completo &rarr;</a>
       </div>
@@ -96,6 +132,19 @@ export function Home() {
       </div>
     </section>
   `;
+}
+
+export function initHomeLive() {
+  const mount = document.getElementById('live-section-mount');
+  if (!mount) return;
+
+  function refresh() {
+    const html = renderLiveSection();
+    mount.innerHTML = html;
+  }
+
+  refresh();
+  return subscribe(() => refresh());
 }
 
 function formatDate(dateStr) {

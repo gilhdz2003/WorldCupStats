@@ -1,10 +1,10 @@
 import { renderNavbar } from './components/Navbar.js';
 import { renderFooter } from './components/Footer.js';
 
-import { Home } from './pages/Home.js';
+import { Home, initHomeLive } from './pages/Home.js';
 import { Groups } from './pages/Groups.js';
 import { Schedule } from './pages/Schedule.js';
-import { MatchPage } from './pages/MatchPage.js';
+import { MatchPage, initMatchPage } from './pages/MatchPage.js';
 import { Teams } from './pages/Teams.js';
 import { TeamPage, initTeamPage } from './pages/TeamPage.js';
 import { PlayerPage } from './pages/PlayerPage.js';
@@ -35,6 +35,7 @@ export class Router {
     if (path.startsWith('/match/')) {
       const matchId = path.split('/')[2];
       renderPage = () => MatchPage(matchId);
+      afterRender = () => initMatchPage();
     } else if (path.startsWith('/team/')) {
       const teamAbbr = path.split('/')[2];
       renderPage = () => TeamPage(teamAbbr);
@@ -70,6 +71,7 @@ export class Router {
       import('./components/Countdown.js').then(({ initCountdown }) => {
         setTimeout(initCountdown, 0);
       });
+      setTimeout(initHomeLive, 0);
     }
   }
 

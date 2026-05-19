@@ -1,5 +1,6 @@
 import { renderMatchDetail } from '../components/MatchDetail.js';
 import { renderMatchCard } from '../components/MatchCard.js';
+import { renderForumWidget, initForum } from '../components/ForumWidget.js';
 import matchesData from '../data/matches.json';
 
 export function MatchPage(matchId) {
@@ -104,92 +105,17 @@ function renderBroadcastInfo(match) {
 }
 
 function renderCommentSection(match) {
-  const comments = getComments(match.id);
   return `
     <div class="comment-section" style="margin-top: var(--spacing-2xl);">
-      <h3 style="font-size: 1.3rem; letter-spacing: 1px; margin-bottom: var(--spacing-lg);">COMENTARIOS</h3>
-      <div class="comment-form">
-        <div class="comment-input-row">
-          <input type="text" id="comment-author" placeholder="Tu nombre" class="comment-input comment-input-name" maxlength="30">
-          <input type="text" id="comment-text" placeholder="Escribe un comentario..." class="comment-input comment-input-text" maxlength="280">
-          <button class="comment-submit" data-match="${escapeAttr(match.id)}">Enviar</button>
-        </div>
-      </div>
-      <div class="comment-list" id="comment-list-${escapeAttr(match.id)}">
-        ${comments.length > 0
-          ? comments.map(c => renderComment(c)).join('')
-          : '<p class="text-muted" style="padding: var(--spacing-lg) 0;">Sé el primero en comentar.</p>'
-        }
-      </div>
+      ${renderForumWidget(`match-${match.id}`)}
     </div>
   `;
-}
-
-function renderComment(c) {
-  const time = new Date(c.timestamp).toLocaleString('es-MX', {
-    day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit'
-  });
-  return `
-    <div class="comment-item">
-      <div class="comment-header">
-        <span class="comment-author">${escapeHTML(c.author)}</span>
-        <span class="comment-time">${time}</span>
-      </div>
-      <div class="comment-body">${escapeHTML(c.text)}</div>
-    </div>
-  `;
-}
-
-function getComments(matchId) {
-  try {
-    const stored = localStorage.getItem('mundial-comments-' + matchId);
-    return stored ? JSON.parse(stored) : [];
-  } catch { return []; }
-}
-
-function escapeHTML(str) {
-  const div = document.createElement('div');
-  div.textContent = str;
-  return div.innerHTML;
 }
 
 function escapeAttr(str) {
   return str.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
-// Comment submission via event delegation
-if (!window._commentListener) {
-  document.addEventListener('click', (e) => {
-    const btn = e.target.closest('.comment-submit');
-    if (!btn) return;
-    const matchId = btn.dataset.match;
-    const authorEl = document.getElementById('comment-author');
-    const textEl = document.getElementById('comment-text');
-    if (!authorEl || !textEl) return;
-
-    const author = authorEl.value.trim() || 'Anónimo';
-    const text = textEl.value.trim();
-    if (!text) return;
-
-    const comment = { author, text, timestamp: Date.now() };
-    const comments = getComments(matchId);
-    comments.push(comment);
-    localStorage.setItem('mundial-comments-' + matchId, JSON.stringify(comments));
-
-    if (author !== 'Anónimo') {
-      localStorage.setItem('mundial-username', author);
-    }
-
-    // Append new comment to list
-    const listEl = document.getElementById('comment-list-' + matchId);
-    if (listEl) {
-      const placeholder = listEl.querySelector('.text-muted');
-      if (placeholder) placeholder.remove();
-      listEl.insertAdjacentHTML('beforeend', renderComment(comment));
-    }
-
-    textEl.value = '';
-  });
-
-  window._commentListener = true;
+export function initMatchPage() {
+  initForum();
 }
