@@ -230,7 +230,7 @@ function handleGetPhases(PDO $pdo) {
     requireAdmin($pdo);
 
     $stmt = $pdo->prepare(
-        'SELECT ph.phase, ph.phase_name, ph.is_open, ph.opens_at, ph.closes_at,
+        'SELECT ph.phase, ph.is_open, ph.opens_at, ph.closes_at,
                 COUNT(m.id) as total_matches,
                 SUM(CASE WHEN m.status = ? THEN 1 ELSE 0 END) as finished_matches
          FROM q_phases ph
@@ -244,7 +244,6 @@ function handleGetPhases(PDO $pdo) {
     $phases = array_map(function ($row) {
         return [
             'phase'            => $row['phase'],
-            'phase_name'       => $row['phase_name'],
             'is_open'          => (bool) $row['is_open'],
             'opens_at'         => $row['opens_at'],
             'closes_at'        => $row['closes_at'],
