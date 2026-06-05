@@ -15,6 +15,8 @@ export function renderNavbar() {
           <a href="#/groups" class="nav-link" data-route="/groups">Grupos</a>
           <a href="#/teams" class="nav-link" data-route="/teams">Selecciones</a>
           <a href="#/schedule" class="nav-link" data-route="/schedule">Calendario</a>
+          <a href="#/quiniela" class="nav-link" data-route="/quiniela" style="color: var(--accent-primary);">🏆 Quiniela</a>
+          <button class="theme-toggle" id="q-theme-toggle" title="Cambiar tema">🌙</button>
         </div>
       </div>
     </nav>

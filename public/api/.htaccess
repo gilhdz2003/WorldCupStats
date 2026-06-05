@@ -1,0 +1,25 @@
+# Block direct access to config files
+<FilesMatch "^(config|football-config)\.php$">
+    Order Deny,Allow
+    Deny from all
+</FilesMatch>
+
+# Allow access to API endpoints
+<FilesMatch "^(comments|football-proxy|quiniela-auth|quiniela-predictions|quiniela-matches|quiniela-leaderboard|quiniela-admin|quiniela-cron)\.php$">
+    Allow from all
+</FilesMatch>
+
+# Block access to seed and schema (run once, then remove)
+<FilesMatch "^(quiniela-seed)\.php$">
+    Order Deny,Allow
+    Deny from all
+</FilesMatch>
+
+# Block access to example files and schema
+<FilesMatch "\.(example\.php|sql)$">
+    Order Deny,Allow
+    Deny from all
+</FilesMatch>
+
+# Prevent directory listing
+Options -Indexes

@@ -1,0 +1,535 @@
+<?php
+require_once __DIR__ . '/config.php';
+
+header('Content-Type: application/json; charset=utf-8');
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type, Authorization');
+header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+header('Pragma: no-cache');
+
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(204);
+    exit;
+}
+
+// --- Helper: authenticate user via Bearer token ---
+
+function getAuthUser(PDO $pdo): ?array {
+    $authHeader = $_SERVER['HTTP_AUTHORIZATION'] ?? '';
+    if (!$authHeader || !preg_match('/^Bearer\s+(.+)$/i', $authHeader, $matches)) {
+        return null;
+    }
+
+    $token = $matches[1];
+    $tokenHash = hash('sha256', $token);
+
+    $stmt = $pdo->prepare(
+        'SELECT s.user_id, s.expires_at, u.id, u.name, u.email, u.is_admin, u.email_verified
+         FROM q_sessions s
+         JOIN q_users u ON s.user_id = u.id
+         WHERE s.token_hash = ? AND s.expires_at > NOW()'
+    );
+    $stmt->execute([$tokenHash]);
+    $row = $stmt->fetch();
+
+    return $row ?: null;
+}
+
+// --- Helper: authenticate admin user ---
+
+function getAdminUser(PDO $pdo): ?array {
+    $user = getAuthUser($pdo);
+    if (!$user) {
+        return null;
+    }
+    if (!(bool) $user['is_admin']) {
+        return null;
+    }
+    return $user;
+}
+
+// --- Helper: require admin or die ---
+
+function requireAdmin(PDO $pdo): ?array {
+    $admin = getAdminUser($pdo);
+    if (!$admin) {
+        http_response_code(401);
+        echo json_encode(['error' => 'No autenticado o sin privilegios de admin']);
+        exit;
+    }
+    return $admin;
+}
+
+// --- Helper: scoring logic for a match ---
+
+function scoreMatchPredictions(PDO $pdo, int $matchId): int {
+    // Get match scores
+    $matchStmt = $pdo->prepare('SELECT home_score, away_score FROM q_matches WHERE id = ?');
+    $matchStmt->execute([$matchId]);
+    $match = $matchStmt->fetch();
+
+    if (!$match || $match['home_score'] === null) {
+        return 0;
+    }
+
+    $homeScore = (int) $match['home_score'];
+    $awayScore = (int) $match['away_score'];
+
+    // Determine actual result
+    if ($homeScore > $awayScore) {
+        $actualResult = 'home';
+    } elseif ($homeScore < $awayScore) {
+        $actualResult = 'away';
+    } else {
+        $actualResult = 'draw';
+    }
+
+    // Get all predictions for this match
+    $predStmt = $pdo->prepare(
+        'SELECT id, user_id, predicted_result, predicted_home_score, predicted_away_score
+         FROM q_predictions WHERE match_id = ?'
+    );
+    $predStmt->execute([$matchId]);
+    $predictions = $predStmt->fetchAll();
+
+    $scored = 0;
+
+    foreach ($predictions as $pred) {
+        $points = 0;
+
+        // Exact score match: 5 points
+        if (
+            (int) $pred['predicted_home_score'] === $homeScore &&
+            (int) $pred['predicted_away_score'] === $awayScore
+        ) {
+            $points = 5;
+        }
+        // Correct result (but not exact score): 3 points
+        elseif ($pred['predicted_result'] === $actualResult) {
+            $points = 3;
+        }
+        // Wrong prediction: 0 points
+
+        // Update prediction points
+        $update = $pdo->prepare(
+            'UPDATE q_predictions SET points_earned = ? WHERE id = ?'
+        );
+        $update->execute([$points, $pred['id']]);
+
+        // Insert scoring log
+        $log = $pdo->prepare(
+            'INSERT INTO q_scoring_log (match_id, user_id, predicted_result, predicted_home_score, predicted_away_score,
+                                        actual_result, actual_home_score, actual_away_score, points_earned, created_at)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())'
+        );
+        $log->execute([
+            $matchId,
+            $pred['user_id'],
+            $pred['predicted_result'],
+            $pred['predicted_home_score'],
+            $pred['predicted_away_score'],
+            $actualResult,
+            $homeScore,
+            $awayScore,
+            $points,
+        ]);
+
+        $scored++;
+    }
+
+    return $scored;
+}
+
+// --- Main routing ---
+
+$method = $_SERVER['REQUEST_METHOD'];
+$action = $_GET['action'] ?? '';
+
+if ($method === 'POST') {
+    $input = json_decode(file_get_contents('php://input'), true);
+    if (!$action && isset($input['action'])) {
+        $action = $input['action'];
+    }
+
+    switch ($action) {
+        case 'toggle-phase':
+            handleTogglePhase($pdo, $input);
+            break;
+        case 'set-score':
+            handleSetScore($pdo, $input);
+            break;
+        case 'recalculate':
+            handleRecalculate($pdo, $input);
+            break;
+        case 'reset-pin':
+            handleResetPin($pdo, $input);
+            break;
+        default:
+            http_response_code(400);
+            echo json_encode(['error' => 'Accion POST no valida. Usa: toggle-phase, set-score, recalculate, reset-pin']);
+            break;
+    }
+} elseif ($method === 'GET') {
+    switch ($action) {
+        case 'participants':
+            handleGetParticipants($pdo);
+            break;
+        case 'phases':
+            handleGetPhases($pdo);
+            break;
+        case 'export':
+            handleExport($pdo);
+            break;
+        default:
+            http_response_code(400);
+            echo json_encode(['error' => 'Accion GET no valida. Usa: participants, phases, export']);
+            break;
+    }
+} else {
+    http_response_code(405);
+    echo json_encode(['error' => 'Method not allowed']);
+}
+
+// --- Action: GET participants ---
+
+function handleGetParticipants(PDO $pdo) {
+    requireAdmin($pdo);
+
+    $stmt = $pdo->prepare(
+        'SELECT u.id, u.name, u.email, u.email_verified, u.is_admin, u.created_at,
+                COUNT(p.id) as predictions_count,
+                COALESCE(SUM(p.points_earned), 0) as total_points
+         FROM q_users u
+         LEFT JOIN q_predictions p ON u.id = p.user_id
+         GROUP BY u.id
+         ORDER BY total_points DESC, u.created_at ASC'
+    );
+    $stmt->execute();
+    $rows = $stmt->fetchAll();
+
+    $participants = array_map(function ($row) {
+        return [
+            'id'                => (int) $row['id'],
+            'name'              => $row['name'],
+            'email'             => $row['email'],
+            'email_verified'    => (bool) $row['email_verified'],
+            'is_admin'          => (bool) $row['is_admin'],
+            'total_points'      => (int) $row['total_points'],
+            'predictions_count' => (int) $row['predictions_count'],
+            'created_at'        => $row['created_at'],
+        ];
+    }, $rows);
+
+    echo json_encode(['ok' => true, 'participants' => $participants, 'count' => count($participants)]);
+}
+
+// --- Action: GET phases ---
+
+function handleGetPhases(PDO $pdo) {
+    requireAdmin($pdo);
+
+    $stmt = $pdo->prepare(
+        'SELECT ph.phase, ph.phase_name, ph.is_open, ph.opens_at, ph.closes_at,
+                COUNT(m.id) as total_matches,
+                SUM(CASE WHEN m.status = ? THEN 1 ELSE 0 END) as finished_matches
+         FROM q_phases ph
+         LEFT JOIN q_matches m ON ph.phase = m.phase
+         GROUP BY ph.phase
+         ORDER BY FIELD(ph.phase, "groups", "round_of_32", "round_of_16", "quarterfinals", "semifinals", "final")'
+    );
+    $stmt->execute(['finished']);
+    $rows = $stmt->fetchAll();
+
+    $phases = array_map(function ($row) {
+        return [
+            'phase'            => $row['phase'],
+            'phase_name'       => $row['phase_name'],
+            'is_open'          => (bool) $row['is_open'],
+            'opens_at'         => $row['opens_at'],
+            'closes_at'        => $row['closes_at'],
+            'total_matches'    => (int) $row['total_matches'],
+            'finished_matches' => (int) $row['finished_matches'],
+        ];
+    }, $rows);
+
+    echo json_encode(['ok' => true, 'phases' => $phases]);
+}
+
+// --- Action: POST toggle-phase ---
+
+function handleTogglePhase(PDO $pdo, array $input) {
+    requireAdmin($pdo);
+
+    $phase  = trim($input['phase'] ?? '');
+    $isOpen = isset($input['is_open']) ? (bool) $input['is_open'] : null;
+
+    $validPhases = ['groups', 'round_of_32', 'round_of_16', 'quarterfinals', 'semifinals', 'final'];
+    if (!in_array($phase, $validPhases)) {
+        http_response_code(400);
+        echo json_encode(['error' => "Fase invalida: $phase", 'valid' => $validPhases]);
+        return;
+    }
+
+    if ($isOpen === null) {
+        http_response_code(400);
+        echo json_encode(['error' => 'Se requiere is_open (true/false)']);
+        return;
+    }
+
+    if ($isOpen) {
+        // Opening phase: set opens_at = NOW() if was closed
+        $stmt = $pdo->prepare(
+            'UPDATE q_phases SET is_open = 1, opens_at = COALESCE(opens_at, NOW()), closes_at = NULL WHERE phase = ?'
+        );
+    } else {
+        // Closing phase: set closes_at = NOW()
+        $stmt = $pdo->prepare(
+            'UPDATE q_phases SET is_open = 0, closes_at = NOW() WHERE phase = ?'
+        );
+    }
+
+    $stmt->execute([$phase]);
+
+    // Return updated phase list
+    handleGetPhases($pdo);
+}
+
+// --- Action: POST set-score ---
+
+function handleSetScore(PDO $pdo, array $input) {
+    requireAdmin($pdo);
+
+    $matchId   = (int) ($input['match_id'] ?? 0);
+    $homeScore = (int) ($input['home_score'] ?? 0);
+    $awayScore = (int) ($input['away_score'] ?? 0);
+
+    if ($matchId <= 0) {
+        http_response_code(400);
+        echo json_encode(['error' => 'match_id requerido y valido']);
+        return;
+    }
+
+    if ($homeScore < 0 || $awayScore < 0) {
+        http_response_code(400);
+        echo json_encode(['error' => 'Scores deben ser no negativos']);
+        return;
+    }
+
+    // Verify match exists
+    $check = $pdo->prepare('SELECT id, status FROM q_matches WHERE id = ?');
+    $check->execute([$matchId]);
+    if (!$check->fetch()) {
+        http_response_code(400);
+        echo json_encode(['error' => "Partido #$matchId no encontrado"]);
+        return;
+    }
+
+    // Update match scores and lock it
+    $update = $pdo->prepare(
+        'UPDATE q_matches SET home_score = ?, away_score = ?, status = ?, is_locked = 1 WHERE id = ?'
+    );
+    $update->execute([$homeScore, $awayScore, 'finished', $matchId]);
+
+    // Score all predictions for this match
+    $pdo->beginTransaction();
+    try {
+        $scored = scoreMatchPredictions($pdo, $matchId);
+        $pdo->commit();
+    } catch (Exception $e) {
+        $pdo->rollBack();
+        http_response_code(500);
+        echo json_encode(['error' => 'Error al calcular puntos', 'detail' => $e->getMessage()]);
+        return;
+    }
+
+    echo json_encode([
+        'ok'      => true,
+        'scored'  => $scored,
+        'message' => "Marcador actualizado y $scored predicciones puntuadas.",
+    ]);
+}
+
+// --- Action: POST recalculate ---
+
+function handleRecalculate(PDO $pdo, array $input) {
+    requireAdmin($pdo);
+
+    $matchId = (int) ($input['match_id'] ?? 0);
+
+    if ($matchId <= 0) {
+        http_response_code(400);
+        echo json_encode(['error' => 'match_id requerido y valido']);
+        return;
+    }
+
+    // Verify match exists and has scores
+    $check = $pdo->prepare('SELECT id, home_score, away_score, status FROM q_matches WHERE id = ?');
+    $check->execute([$matchId]);
+    $match = $check->fetch();
+
+    if (!$match) {
+        http_response_code(400);
+        echo json_encode(['error' => "Partido #$matchId no encontrado"]);
+        return;
+    }
+
+    if ($match['home_score'] === null) {
+        http_response_code(400);
+        echo json_encode(['error' => 'Partido no tiene marcador establecido']);
+        return;
+    }
+
+    // Re-run scoring (don't change match data)
+    $pdo->beginTransaction();
+    try {
+        $recalculated = scoreMatchPredictions($pdo, $matchId);
+        $pdo->commit();
+    } catch (Exception $e) {
+        $pdo->rollBack();
+        http_response_code(500);
+        echo json_encode(['error' => 'Error al recalcular puntos', 'detail' => $e->getMessage()]);
+        return;
+    }
+
+    echo json_encode([
+        'ok'           => true,
+        'recalculated' => $recalculated,
+        'message'      => "$recalculated predicciones recalculadas para partido #$matchId.",
+    ]);
+}
+
+// --- Action: GET export (CSV) ---
+
+function handleExport(PDO $pdo) {
+    requireAdmin($pdo);
+
+    $phase = $_GET['phase'] ?? 'all';
+
+    $phaseFilter = '';
+    $params = [];
+    if ($phase !== 'all') {
+        $validPhases = ['groups', 'round_of_32', 'round_of_16', 'quarterfinals', 'semifinals', 'final'];
+        if (!in_array($phase, $validPhases)) {
+            http_response_code(400);
+            echo json_encode(['error' => "Fase invalida: $phase"]);
+            return;
+        }
+        $phaseFilter = ' AND m.phase = ?';
+        $params[] = $phase;
+    }
+
+    $sql = "SELECT u.id, u.name, u.email,
+                   COALESCE(SUM(p.points_earned), 0) as total_points,
+                   COUNT(CASE WHEN p.points_earned = 5 THEN 1 END) as exact_scores,
+                   COUNT(CASE WHEN p.points_earned >= 3 THEN 1 END) as correct_results
+            FROM q_users u
+            LEFT JOIN q_predictions p ON u.id = p.user_id
+            LEFT JOIN q_matches m ON p.match_id = m.id
+            WHERE u.email_verified = 1
+            $phaseFilter
+            GROUP BY u.id
+            ORDER BY total_points DESC, exact_scores DESC, u.created_at ASC";
+
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute($params);
+    $rows = $stmt->fetchAll();
+
+    // Assign ranks (same logic as leaderboard)
+    $leaderboard = [];
+    $currentRank = 0;
+    $prevPoints  = null;
+    $prevExact   = null;
+
+    foreach ($rows as $row) {
+        $points = (int) $row['total_points'];
+        $exact  = (int) $row['exact_scores'];
+        $correct = (int) $row['correct_results'];
+
+        if ($points !== $prevPoints || $exact !== $prevExact) {
+            $currentRank++;
+        }
+
+        $leaderboard[] = [
+            'rank'            => $currentRank,
+            'name'            => $row['name'],
+            'email'           => $row['email'],
+            'total_points'    => $points,
+            'exact_scores'    => $exact,
+            'correct_results' => $correct,
+        ];
+
+        $prevPoints = $points;
+        $prevExact  = $exact;
+    }
+
+    // Output CSV
+    header('Content-Type: text/csv; charset=utf-8');
+    header('Content-Disposition: attachment; filename="quiniela-leaderboard-' . ($phase === 'all' ? 'general' : $phase) . '.csv"');
+
+    $out = fopen('php://output', 'w');
+
+    // BOM for Excel UTF-8 compatibility
+    fwrite($out, "\xEF\xBB\xBF");
+
+    // Headers
+    fputcsv($out, ['Posicion', 'Nombre', 'Email', 'Puntos', 'Marcadores Exactos', 'Resultados Correctos']);
+
+    // Rows
+    foreach ($leaderboard as $entry) {
+        fputcsv($out, [
+            $entry['rank'],
+            $entry['name'],
+            $entry['email'],
+            $entry['total_points'],
+            $entry['exact_scores'],
+            $entry['correct_results'],
+        ]);
+    }
+
+    fclose($out);
+    exit;
+}
+
+// --- Action: POST reset-pin ---
+
+function handleResetPin(PDO $pdo, array $input) {
+    requireAdmin($pdo);
+
+    $userId = (int) ($input['user_id'] ?? 0);
+
+    if ($userId <= 0) {
+        http_response_code(400);
+        echo json_encode(['error' => 'user_id requerido y valido']);
+        return;
+    }
+
+    // Verify user exists
+    $check = $pdo->prepare('SELECT id, name, email FROM q_users WHERE id = ?');
+    $check->execute([$userId]);
+    $target = $check->fetch();
+
+    if (!$target) {
+        http_response_code(404);
+        echo json_encode(['error' => 'Usuario no encontrado']);
+        return;
+    }
+
+    // Generate new 6-digit PIN and hash it
+    $newPin = str_pad((string) random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+    $hashedPin = password_hash($newPin, PASSWORD_DEFAULT);
+
+    $stmt = $pdo->prepare('UPDATE q_users SET pin = ? WHERE id = ?');
+    $stmt->execute([$hashedPin, $userId]);
+
+    // Invalidate existing sessions so user must re-login
+    $pdo->prepare('DELETE FROM q_sessions WHERE user_id = ?')->execute([$userId]);
+
+    echo json_encode([
+        'ok'      => true,
+        'message' => "PIN reseteado para {$target['name']}",
+        'user'    => $target['name'],
+        'email'   => $target['email'],
+        'pin'     => $newPin,
+    ]);
+}

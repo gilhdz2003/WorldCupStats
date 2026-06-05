@@ -9,6 +9,10 @@ import { Teams } from './pages/Teams.js';
 import { TeamPage, initTeamPage } from './pages/TeamPage.js';
 import { PlayerPage } from './pages/PlayerPage.js';
 import { startPolling, stopPolling } from './espn-poll.js';
+import { QuinielaHome, initQuinielaHome } from './pages/QuinielaHome.js';
+import { QuinielaPredictions, initQuinielaPredictions } from './pages/QuinielaPredictions.js';
+import { QuinielaLeaderboard, initQuinielaLeaderboard } from './pages/QuinielaLeaderboard.js';
+import { QuinielaAdmin, initQuinielaAdmin } from './pages/QuinielaAdmin.js';
 
 const routes = {
   '/': () => Home(),
@@ -43,6 +47,18 @@ export class Router {
     } else if (path.startsWith('/player/')) {
       const playerId = path.split('/')[2];
       renderPage = () => PlayerPage(playerId);
+    } else if (path === '/quiniela') {
+      renderPage = () => QuinielaHome();
+      afterRender = () => initQuinielaHome();
+    } else if (path === '/quiniela/predictions') {
+      renderPage = () => QuinielaPredictions();
+      afterRender = () => initQuinielaPredictions();
+    } else if (path === '/quiniela/leaderboard') {
+      renderPage = () => QuinielaLeaderboard();
+      afterRender = () => initQuinielaLeaderboard();
+    } else if (path === '/quiniela/admin') {
+      renderPage = () => QuinielaAdmin();
+      afterRender = () => initQuinielaAdmin();
     } else {
       renderPage = routes[path] || routes['/'];
     }

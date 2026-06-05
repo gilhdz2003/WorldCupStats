@@ -1,0 +1,1002 @@
+/* ═══════════════════════════════════════════
+   QUINIELA MUNDIAL 2026 - Styles
+   Uses existing CSS variables from index.css
+   ═══════════════════════════════════════════ */
+
+/* ─── Layout ─── */
+.q-section {
+  padding: var(--spacing-xl) 0 var(--spacing-2xl);
+  min-height: 60vh;
+}
+
+.q-hero {
+  text-align: center;
+  margin-bottom: var(--spacing-2xl);
+}
+
+.q-hero-title {
+  font-family: var(--font-headline);
+  font-size: 2.5rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--accent-primary);
+  margin-bottom: var(--spacing-md);
+}
+
+.q-hero-subtitle {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  max-width: 600px;
+  margin: 0 auto var(--spacing-xl);
+}
+
+.q-page-title {
+  font-family: var(--font-headline);
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-bottom: var(--spacing-lg);
+  color: var(--text-primary);
+}
+
+.q-section-title {
+  font-family: var(--font-headline);
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: var(--spacing-md);
+  color: var(--text-secondary);
+}
+
+/* ─── Rules Card ─── */
+.q-rules-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  max-width: 600px;
+  margin: 0 auto;
+  text-align: left;
+}
+
+.q-rules-card h2 {
+  font-family: var(--font-headline);
+  font-size: 1.2rem;
+  color: var(--accent-primary);
+  margin-bottom: var(--spacing-md);
+}
+
+.q-rules-card ul {
+  list-style: none;
+  padding: 0;
+}
+
+.q-rules-card li {
+  padding: var(--spacing-sm) 0;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.q-rules-card li:last-child {
+  border-bottom: none;
+}
+
+.q-rules-card li strong {
+  color: var(--text-primary);
+}
+
+/* ─── Auth Forms ─── */
+.q-auth {
+  max-width: 440px;
+  margin: var(--spacing-xl) auto 0;
+}
+
+.q-auth-tabs {
+  display: flex;
+  gap: var(--spacing-xs);
+  margin-bottom: var(--spacing-lg);
+  background: var(--bg-secondary);
+  border-radius: var(--radius-full);
+  padding: var(--spacing-xs);
+}
+
+.q-auth-tab {
+  flex: 1;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: none;
+  border: none;
+  border-radius: var(--radius-full);
+  color: var(--text-secondary);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.q-auth-tab--active {
+  background: var(--accent-primary);
+  color: var(--bg-primary);
+  font-weight: 700;
+}
+
+.q-auth-panel {
+  display: none;
+}
+
+.q-auth-panel--active {
+  display: block;
+}
+
+.q-auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.q-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.q-form-group label {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.q-form-group input[type="email"],
+.q-form-group input[type="text"],
+.q-form-group input[type="number"],
+.q-form-group input[type="password"],
+.q-form-group select {
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  transition: border-color 0.2s;
+}
+
+.q-form-group input:focus,
+.q-form-group select:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+}
+
+.q-form-msg {
+  font-size: 0.85rem;
+  color: var(--accent-secondary);
+  text-align: center;
+  min-height: 1.5em;
+}
+
+.q-hidden {
+  display: none !important;
+}
+
+/* ─── Buttons ─── */
+.q-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-lg);
+  border: none;
+  border-radius: var(--radius-md);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-decoration: none;
+}
+
+.q-btn--primary {
+  background: var(--accent-primary);
+  color: var(--bg-primary);
+}
+
+.q-btn--primary:hover {
+  background: #f0c040;
+  transform: translateY(-1px);
+}
+
+.q-btn--primary:disabled {
+  background: var(--text-muted);
+  cursor: not-allowed;
+  transform: none;
+}
+
+.q-btn--secondary {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
+
+.q-btn--secondary:hover {
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+}
+
+.q-btn--full {
+  width: 100%;
+}
+
+.q-btn--admin {
+  border: 1px solid var(--accent-info);
+  color: var(--accent-info);
+}
+
+.q-btn--admin:hover {
+  background: var(--accent-info);
+  color: #fff;
+}
+
+.q-btn--sm {
+  font-size: 0.8rem;
+  padding: 4px 10px;
+  border-radius: 4px;
+}
+
+.q-btn--warning {
+  border: 1px solid var(--accent-primary);
+  color: var(--accent-primary);
+  background: transparent;
+}
+
+.q-btn--warning:hover {
+  background: var(--accent-primary);
+  color: #111;
+}
+
+.q-form-forgot {
+  text-align: center;
+  margin-top: var(--spacing-sm);
+  font-size: 0.85rem;
+}
+
+.q-form-forgot a {
+  color: var(--accent-primary);
+  text-decoration: none;
+}
+
+.q-form-forgot a:hover {
+  text-decoration: underline;
+}
+
+/* ─── Dashboard ─── */
+.q-welcome {
+  font-family: var(--font-headline);
+  font-size: 2rem;
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-xl);
+}
+
+.q-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-xl);
+}
+
+.q-stat-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  text-align: center;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.q-stat-card:hover {
+  border-color: var(--accent-primary);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.q-stat-icon {
+  font-size: 2rem;
+  display: block;
+  margin-bottom: var(--spacing-sm);
+}
+
+.q-stat-label {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+/* ─── Phase Tabs ─── */
+.q-phase-tabs {
+  display: flex;
+  gap: var(--spacing-sm);
+  overflow-x: auto;
+  padding-bottom: var(--spacing-sm);
+  margin-bottom: var(--spacing-lg);
+  scrollbar-width: none;
+}
+
+.q-phase-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.q-phase-tab {
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-full);
+  color: var(--text-secondary);
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.q-phase-tab--active {
+  background: var(--accent-primary);
+  color: var(--bg-primary);
+  border-color: var(--accent-primary);
+  font-weight: 700;
+}
+
+.q-phase-tab--disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.q-phase-tab--disabled:hover {
+  border-color: var(--border-color);
+}
+
+/* ─── Progress Bar ─── */
+.q-progress-bar {
+  margin-bottom: var(--spacing-lg);
+}
+
+.q-progress-text {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-sm);
+}
+
+.q-progress-track {
+  height: 6px;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.q-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+  border-radius: var(--radius-full);
+  transition: width 0.4s ease;
+}
+
+/* ─── Prediction Card ─── */
+.q-prediction-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+  transition: border-color 0.2s;
+}
+
+.q-prediction-card:hover {
+  border-color: var(--bg-tertiary);
+}
+
+.q-prediction-card--locked {
+  opacity: 0.7;
+  cursor: default;
+}
+
+.q-prediction-card--locked:hover {
+  border-color: var(--border-color);
+}
+
+.q-pred-teams {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+}
+
+.q-pred-team {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  flex: 1;
+  min-width: 0;
+}
+
+.q-pred-team--home {
+  justify-content: flex-end;
+  text-align: right;
+}
+
+.q-pred-team--away {
+  justify-content: flex-start;
+}
+
+.q-team-flag {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
+}
+
+.q-pred-team-name {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.q-pred-score {
+  font-family: var(--font-mono);
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  min-width: 24px;
+  text-align: center;
+}
+
+.q-pred-center {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  flex-shrink: 0;
+  position: relative;
+}
+
+/* ─── Option Buttons (Home/Draw/Away) ─── */
+.q-option {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  background: var(--bg-primary);
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.q-option:hover {
+  border-color: var(--accent-primary);
+  transform: scale(1.1);
+}
+
+.q-option--selected {
+  background: var(--accent-primary);
+  border-color: var(--accent-primary);
+  transform: scale(1.15);
+  box-shadow: 0 0 12px rgba(226, 181, 58, 0.4);
+}
+
+.q-option--draw.q-option--selected {
+  background: var(--accent-secondary);
+  border-color: var(--accent-secondary);
+  box-shadow: 0 0 12px rgba(0, 161, 228, 0.4);
+}
+
+/* ─── Score Inputs ─── */
+.q-pred-scores {
+  margin-top: var(--spacing-sm);
+  padding-top: var(--spacing-sm);
+  border-top: 1px solid var(--border-color);
+}
+
+.q-score-row {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.q-score-row label {
+  white-space: nowrap;
+}
+
+.q-score-input {
+  width: 50px;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  text-align: center;
+  transition: border-color 0.2s;
+}
+
+.q-score-input:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+}
+
+.q-score-hint {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+/* ─── Prediction Summary (locked cards) ─── */
+.q-pred-summary {
+  margin-top: var(--spacing-sm);
+  padding-top: var(--spacing-sm);
+  border-top: 1px solid var(--border-color);
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+/* ─── Points Badge ─── */
+.q-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 700;
+  margin-left: var(--spacing-sm);
+}
+
+.q-badge--exact {
+  background: var(--accent-primary);
+  color: var(--bg-primary);
+}
+
+.q-badge--correct {
+  background: var(--accent-success);
+  color: var(--bg-primary);
+}
+
+.q-badge--miss {
+  background: var(--accent-danger);
+  color: #fff;
+}
+
+/* ─── Date Group ─── */
+.q-date-group {
+  margin-bottom: var(--spacing-xl);
+}
+
+.q-date-heading {
+  font-family: var(--font-headline);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: capitalize;
+  margin-bottom: var(--spacing-md);
+  padding-bottom: var(--spacing-xs);
+  border-bottom: 1px solid var(--border-color);
+}
+
+/* ─── Save Bar ─── */
+.q-save-bar {
+  position: sticky;
+  bottom: 0;
+  background: var(--bg-primary);
+  border-top: 1px solid var(--border-color);
+  padding: var(--spacing-md);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-xl);
+  z-index: 10;
+}
+
+#q-save-status {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+/* ─── Leaderboard ─── */
+.q-table-wrapper {
+  overflow-x: auto;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+}
+
+.q-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.q-table thead {
+  background: var(--bg-tertiary);
+}
+
+.q-table th {
+  padding: var(--spacing-sm) var(--spacing-md);
+  text-align: left;
+  font-weight: 600;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.q-table td {
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-top: 1px solid var(--border-color);
+  color: var(--text-primary);
+}
+
+.q-table tbody tr:hover {
+  background: var(--bg-secondary);
+}
+
+.q-th-rank {
+  width: 60px;
+  text-align: center;
+}
+
+.q-th-pts,
+.q-th-exact,
+.q-th-correct {
+  text-align: center;
+  width: 80px;
+}
+
+.q-pts-cell {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--accent-primary);
+  text-align: center !important;
+}
+
+.q-rank-cell {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  text-align: center;
+  font-size: 1rem;
+}
+
+/* Leaderboard row states */
+.q-lb-row--self {
+  background: rgba(0, 161, 228, 0.1);
+  border-left: 3px solid var(--accent-secondary);
+}
+
+.q-lb-row--self td:first-child {
+  padding-left: calc(var(--spacing-md) - 3px);
+}
+
+.q-lb-row--top1 td {
+  color: var(--accent-primary);
+}
+
+.q-lb-row--top2 td {
+  color: #c0c0c0;
+}
+
+.q-lb-row--top3 td {
+  color: #cd7f32;
+}
+
+.q-self-badge {
+  font-size: 0.7rem;
+  background: var(--accent-secondary);
+  color: #fff;
+  padding: 1px 6px;
+  border-radius: var(--radius-full);
+  font-weight: 700;
+  vertical-align: middle;
+}
+
+/* Leaderboard preview */
+.q-leaderboard-preview-list {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+}
+
+.q-leader-preview-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-xs) 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.q-leader-preview-row:last-child {
+  border-bottom: none;
+}
+
+.q-leader-preview-rank {
+  font-size: 1.2rem;
+  min-width: 32px;
+  text-align: center;
+}
+
+.q-leader-preview-name {
+  flex: 1;
+  margin-left: var(--spacing-sm);
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.q-leader-preview-pts {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: var(--accent-primary);
+}
+
+.q-link {
+  display: inline-block;
+  color: var(--accent-secondary);
+  font-weight: 500;
+  margin-top: var(--spacing-sm);
+}
+
+.q-link:hover {
+  text-decoration: underline;
+}
+
+/* ─── Admin Panel ─── */
+.q-admin-section {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+}
+
+.q-admin-section h2 {
+  font-family: var(--font-headline);
+  font-size: 1.2rem;
+  color: var(--accent-primary);
+  margin-bottom: var(--spacing-lg);
+}
+
+/* Admin phase controls */
+.q-admin-phase-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-sm) 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.q-admin-phase-row:last-child {
+  border-bottom: none;
+}
+
+.q-admin-phase-name {
+  flex: 1;
+  font-weight: 500;
+}
+
+.q-admin-phase-status {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  min-width: 80px;
+  text-align: right;
+}
+
+.q-status-open {
+  color: var(--accent-success);
+}
+
+.q-status-closed {
+  color: var(--accent-danger);
+}
+
+/* Toggle switch */
+.q-toggle {
+  position: relative;
+  display: inline-block;
+  width: 48px;
+  height: 26px;
+  margin: 0 var(--spacing-md);
+  flex-shrink: 0;
+}
+
+.q-toggle input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.q-toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  inset: 0;
+  background: var(--border-color);
+  border-radius: var(--radius-full);
+  transition: 0.3s;
+}
+
+.q-toggle-slider::before {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  left: 3px;
+  bottom: 3px;
+  background: #fff;
+  border-radius: 50%;
+  transition: 0.3s;
+}
+
+.q-toggle input:checked + .q-toggle-slider {
+  background: var(--accent-success);
+}
+
+.q-toggle input:checked + .q-toggle-slider::before {
+  transform: translateX(22px);
+}
+
+/* Admin score form */
+.q-admin-score-form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--spacing-md);
+}
+
+.q-form-row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.q-form-row label {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.q-form-row input,
+.q-form-row select {
+  padding: var(--spacing-sm);
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  min-width: 120px;
+}
+
+.q-form-row select {
+  min-width: 280px;
+}
+
+/* ─── Utility ─── */
+.q-muted {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.q-error {
+  color: var(--accent-danger);
+}
+
+.q-loading {
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+.q-login-prompt {
+  text-align: center;
+  padding: var(--spacing-2xl);
+}
+
+.q-login-prompt h2 {
+  margin-bottom: var(--spacing-md);
+  color: var(--text-secondary);
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 640px) {
+  .q-hero-title {
+    font-size: 1.8rem;
+  }
+
+  .q-page-title {
+    font-size: 1.5rem;
+  }
+
+  .q-prediction-card {
+    padding: var(--spacing-sm);
+  }
+
+  .q-pred-teams {
+    flex-wrap: wrap;
+  }
+
+  .q-pred-center {
+    width: 100%;
+    justify-content: center;
+    order: -1;
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .q-pred-team--home {
+    justify-content: flex-start;
+    text-align: left;
+  }
+
+  .q-option {
+    width: 50px;
+    height: 44px;
+    font-size: 1.3rem;
+  }
+
+  .q-save-bar {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    text-align: center;
+  }
+
+  .q-admin-score-form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .q-form-row select {
+    min-width: 100%;
+  }
+
+  .q-stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .q-table {
+    font-size: 0.8rem;
+  }
+
+  .q-table th,
+  .q-table td {
+    padding: var(--spacing-xs) var(--spacing-sm);
+  }
+}
+
+@media (max-width: 480px) {
+  .q-hero-title {
+    font-size: 1.5rem;
+  }
+
+  .q-phase-tab {
+    font-size: 0.75rem;
+    padding: var(--spacing-xs) var(--spacing-sm);
+  }
+
+  .q-auth-tabs {
+    flex-direction: column;
+    border-radius: var(--radius-md);
+    padding: var(--spacing-xs);
+    gap: var(--spacing-xs);
+  }
+
+  .q-auth-tab {
+    border-radius: var(--radius-md);
+    padding: var(--spacing-sm);
+  }
+}
