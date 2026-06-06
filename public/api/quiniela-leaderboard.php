@@ -43,11 +43,14 @@ function handleGetLeaderboard(PDO $pdo) {
 
     $sql = "SELECT u.id, u.name,
                    COALESCE(SUM(p.points_earned), 0) as total_points,
-                   COUNT(CASE WHEN p.points_earned = 5 THEN 1 END) as exact_scores,
-                   COUNT(CASE WHEN p.points_earned >= 3 THEN 1 END) as correct_results
+                   COUNT(DISTINCT CASE WHEN sl.reason = 'exact_score'
+                       THEN CONCAT(sl.match_id, '-', sl.user_id) END) as exact_scores,
+                   COUNT(DISTINCT CASE WHEN sl.reason IS NOT NULL
+                       THEN CONCAT(sl.match_id, '-', sl.user_id) END) as correct_results
             FROM q_users u
             LEFT JOIN q_predictions p ON u.id = p.user_id
             LEFT JOIN q_matches m ON p.match_id = m.id
+            LEFT JOIN q_scoring_log sl ON p.match_id = sl.match_id AND p.user_id = sl.user_id
             WHERE u.email_verified = 1
             $phaseFilter
             GROUP BY u.id

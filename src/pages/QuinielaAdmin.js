@@ -1,4 +1,4 @@
-import { isLoggedIn, getUser, adminGetParticipants, adminGetPhases, adminTogglePhase, adminSetScore, adminExport, adminExportPredictions, adminResetPin, getMatches } from '../quiniela-api.js';
+import { isLoggedIn, getUser, adminGetParticipants, adminGetPhases, adminTogglePhase, adminSetScore, adminExport, adminExportPredictions, adminResetPin, adminResetMatch, getMatches } from '../quiniela-api.js';
 
 export function QuinielaAdmin() {
   const user = getUser();
@@ -23,6 +23,17 @@ export function QuinielaAdmin() {
         <h2>📝 Marcador Manual</h2>
         <div id="q-admin-score-form" class="q-admin-score-form">
           <div class="q-form-row">
+            <label>Fase:</label>
+            <select id="q-admin-phase-select">
+              <option value="groups">Fase de Grupos</option>
+              <option value="round_of_32">Ronda de 32</option>
+              <option value="round_of_16">Octavos de Final</option>
+              <option value="quarterfinals">Cuartos de Final</option>
+              <option value="semifinals">Semifinal</option>
+              <option value="final">Final</option>
+            </select>
+          </div>
+          <div class="q-form-row">
             <label>Partido:</label>
             <select id="q-admin-match-select"><option value="">Cargando partidos...</option></select>
           </div>
@@ -35,6 +46,7 @@ export function QuinielaAdmin() {
             <input type="number" id="q-admin-away-score" min="0" max="99" value="0">
           </div>
           <button id="q-admin-set-score" class="q-btn q-btn--primary">Actualizar Marcador</button>
+          <button id="q-admin-reset-match" class="q-btn q-btn--warning" style="margin-left: var(--spacing-sm);">🔄 Resetear Marcador</button>
           <span id="q-admin-score-msg"></span>
         </div>
       </div>
@@ -143,7 +155,9 @@ async function loadMatchSelect() {
   const select = document.getElementById('q-admin-match-select');
   if (!select) return;
   try {
-    const data = await getMatches('groups');
+    const phaseSelect = document.getElementById('q-admin-phase-select');
+    const phase = phaseSelect ? phaseSelect.value : 'groups';
+    const data = await getMatches(phase);
     if (data.ok && data.matches) {
       select.innerHTML = '<option value="">-- Selecciona partido --</option>' +
         data.matches.map(m => `<option value="${m.id}" data-phase="${m.phase}">${m.match_date}: ${m.home_team} vs ${m.away_team}${m.status === 'finished' ? ' ✓' : ''}</option>`).join('');
@@ -154,6 +168,12 @@ async function loadMatchSelect() {
 }
 
 function bindAdminEvents() {
+  // Phase selector → reload match dropdown
+  const phaseSelect = document.getElementById('q-admin-phase-select');
+  if (phaseSelect) {
+    phaseSelect.addEventListener('change', loadMatchSelect);
+  }
+
   const setScoreBtn = document.getElementById('q-admin-set-score');
   if (setScoreBtn) {
     setScoreBtn.addEventListener('click', async () => {
@@ -168,6 +188,27 @@ function bindAdminEvents() {
         if (res.ok) {
           msg.textContent = `✅ ${res.scored} predicciones puntuadas`;
           loadMatchSelect(); // refresh
+        } else {
+          msg.textContent = `❌ ${res.error}`;
+        }
+      } catch (err) { msg.textContent = `❌ ${err.message}`; }
+    });
+  }
+
+  // Reset match button (for validation testing)
+  const resetBtn = document.getElementById('q-admin-reset-match');
+  if (resetBtn) {
+    resetBtn.addEventListener('click', async () => {
+      const matchId = document.getElementById('q-admin-match-select').value;
+      const msg = document.getElementById('q-admin-score-msg');
+      if (!matchId) { msg.textContent = 'Selecciona un partido'; return; }
+      if (!confirm(`¿Resetear marcador del partido #${matchId}?\n\nEsto elimina el score, puntos y scoring log.`)) return;
+      msg.textContent = 'Reseteando...';
+      try {
+        const res = await adminResetMatch(matchId);
+        if (res.ok) {
+          msg.textContent = `✅ Partido #${matchId} reseteado`;
+          loadMatchSelect();
         } else {
           msg.textContent = `❌ ${res.error}`;
         }

@@ -1,6 +1,6 @@
 import { translateTeam } from '../data/team-names-es.js';
 
-export function renderPredictionCard(match, prediction, isModified) {
+export function renderPredictionCard(match, prediction, isModified, phasePoints) {
   const isLocked = match.is_locked || match.status === 'finished';
   const isFinished = match.status === 'finished';
   const predicted = prediction?.predicted_result;
@@ -12,7 +12,7 @@ export function renderPredictionCard(match, prediction, isModified) {
   if (hasResult && predicted) {
     const pts = prediction.points_earned || 0;
     if (pts > 0) {
-      const badgeClass = pts >= 5 ? 'q-badge--exact' : 'q-badge--correct';
+      const badgeClass = (phasePoints && pts === phasePoints.exact) ? 'q-badge--exact' : 'q-badge--correct';
       resultBadge = `<span class="q-badge ${badgeClass}">+${pts}</span>`;
     } else {
       resultBadge = '<span class="q-badge q-badge--miss">0</span>';

@@ -5,7 +5,10 @@ import { renderPhaseTabs } from '../components/PhaseTabs.js';
 export function QuinielaLeaderboard() {
   return `
     <section class="container q-section">
-      <h1 class="q-page-title">📊 Leaderboard</h1>
+      <div class="q-page-header">
+        <h1 class="q-page-title">📊 Leaderboard</h1>
+        <a href="#/quiniela" class="q-btn q-btn--secondary q-btn-back">🏠 Quiniela</a>
+      </div>
       <div id="q-lb-phase-tabs">${renderPhaseTabs(true)}</div>
       <div id="q-leaderboard-table"><p class="q-loading">Cargando...</p></div>
     </section>

@@ -132,7 +132,7 @@ function handlePostPredictions(PDO $pdo) {
 
             // Validate match exists and is not locked (per-match, not per-phase)
             $matchStmt = $pdo->prepare(
-                'SELECT m.id, m.is_locked
+                'SELECT m.id, m.is_locked, m.status
                  FROM q_matches m
                  WHERE m.id = ?'
             );
@@ -149,6 +149,15 @@ function handlePostPredictions(PDO $pdo) {
             if ((bool) $match['is_locked']) {
                 http_response_code(400);
                 echo json_encode(['error' => "Partido #$matchId esta bloqueado", 'match_id' => $matchId]);
+                $pdo->rollBack();
+                return;
+            }
+
+            // Block predictions once a match has started (not just when finished)
+            $allowedStatuses = ['scheduled', 'postponed'];
+            if (!in_array($match['status'], $allowedStatuses)) {
+                http_response_code(400);
+                echo json_encode(['error' => "Partido #$matchId ya comenzo o termino", 'match_id' => $matchId]);
                 $pdo->rollBack();
                 return;
             }

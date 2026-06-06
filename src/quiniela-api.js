@@ -124,6 +124,12 @@ export async function adminResetPin(userId) {
   });
 }
 
+export async function adminResetMatch(matchId) {
+  return apiFetch('quiniela-admin.php?action=reset-match', {
+    method: 'POST', body: JSON.stringify({ match_id: matchId })
+  });
+}
+
 export async function adminExport() {
   const token = getToken();
   const res = await fetch(API_BASE + 'quiniela-admin.php?action=export', {

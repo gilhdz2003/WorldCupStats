@@ -25,7 +25,7 @@ function renderLanding() {
               <span class="q-prize-medal">🥇</span>
               <div class="q-prize-info">
                 <strong>1° — 3° Lugar</strong>
-                <span>Playera oficial + Trofeo miniatura</span>
+                <span>Playera oficial + Balón oficial + Taza conmemorativa</span>
               </div>
             </div>
             <div class="q-prize-tier q-prize-tier--silver">
@@ -38,8 +38,8 @@ function renderLanding() {
             <div class="q-prize-tier q-prize-tier--more">
               <span class="q-prize-medal">🎁</span>
               <div class="q-prize-info">
-                <strong>Más premios</strong>
-                <span>Por anunciar</span>
+                <strong>6° — 10° Lugar</strong>
+                <span>Taza conmemorativa</span>
               </div>
             </div>
           </div>
@@ -55,14 +55,14 @@ function renderLanding() {
             <h3>📈 Puntos por Fase (escalonados)</h3>
             <div class="q-points-table">
               <div class="q-points-row q-points-header">
-                <span>Fase</span><span>Resultado</span><span>MARCADOR</span>
+                <span>Fase</span><span>Resultado</span><span>Marcador Extra</span>
               </div>
-              <div class="q-points-row"><span>Grupos</span><strong>3</strong><strong>5</strong></div>
-              <div class="q-points-row"><span>Ronda de 32</span><strong>4</strong><strong>7</strong></div>
-              <div class="q-points-row"><span>Octavos de Final</span><strong>5</strong><strong>10</strong></div>
-              <div class="q-points-row"><span>Cuartos de Final</span><strong>7</strong><strong>14</strong></div>
-              <div class="q-points-row"><span>Semifinal</span><strong>10</strong><strong>20</strong></div>
-              <div class="q-points-row"><span>Final</span><strong>15</strong><strong>30</strong></div>
+              <div class="q-points-row"><span>Grupos</span><strong>3</strong><strong>+2</strong></div>
+              <div class="q-points-row"><span>Ronda de 32</span><strong>4</strong><strong>+3</strong></div>
+              <div class="q-points-row"><span>Octavos de Final</span><strong>5</strong><strong>+5</strong></div>
+              <div class="q-points-row"><span>Cuartos de Final</span><strong>7</strong><strong>+7</strong></div>
+              <div class="q-points-row"><span>Semifinal</span><strong>10</strong><strong>+10</strong></div>
+              <div class="q-points-row"><span>Final</span><strong>15</strong><strong>+15</strong></div>
             </div>
           </div>
           <div class="q-rules-subsection">
@@ -112,7 +112,7 @@ function renderDashboard(user) {
                 <span class="q-prize-medal">🥇</span>
                 <div class="q-prize-info">
                   <strong>1° — 3° Lugar</strong>
-                  <span>Playera oficial + Trofeo miniatura</span>
+                  <span>Playera oficial + Balón oficial + Taza conmemorativa</span>
                 </div>
               </div>
               <div class="q-prize-tier q-prize-tier--silver">
@@ -125,8 +125,8 @@ function renderDashboard(user) {
               <div class="q-prize-tier q-prize-tier--more">
                 <span class="q-prize-medal">🎁</span>
                 <div class="q-prize-info">
-                  <strong>Más premios</strong>
-                  <span>Por anunciar</span>
+                  <strong>6° — 10° Lugar</strong>
+                  <span>Taza conmemorativa</span>
                 </div>
               </div>
             </div>
@@ -146,14 +146,14 @@ function renderDashboard(user) {
               <h3>📈 Puntos por Fase (escalonados)</h3>
               <div class="q-points-table">
                 <div class="q-points-row q-points-header">
-                  <span>Fase</span><span>Resultado</span><span>MARCADOR</span>
+                  <span>Fase</span><span>Resultado</span><span>Marcador Extra</span>
                 </div>
-                <div class="q-points-row"><span>Grupos</span><strong>3</strong><strong>5</strong></div>
-                <div class="q-points-row"><span>Ronda de 32</span><strong>4</strong><strong>7</strong></div>
-                <div class="q-points-row"><span>Octavos de Final</span><strong>5</strong><strong>10</strong></div>
-                <div class="q-points-row"><span>Cuartos de Final</span><strong>7</strong><strong>14</strong></div>
-                <div class="q-points-row"><span>Semifinal</span><strong>10</strong><strong>20</strong></div>
-                <div class="q-points-row"><span>Final</span><strong>15</strong><strong>30</strong></div>
+                <div class="q-points-row"><span>Grupos</span><strong>3</strong><strong>+2</strong></div>
+                <div class="q-points-row"><span>Ronda de 32</span><strong>4</strong><strong>+3</strong></div>
+                <div class="q-points-row"><span>Octavos de Final</span><strong>5</strong><strong>+5</strong></div>
+                <div class="q-points-row"><span>Cuartos de Final</span><strong>7</strong><strong>+7</strong></div>
+                <div class="q-points-row"><span>Semifinal</span><strong>10</strong><strong>+10</strong></div>
+                <div class="q-points-row"><span>Final</span><strong>15</strong><strong>+15</strong></div>
               </div>
             </div>
             <div class="q-rules-subsection">

@@ -111,8 +111,10 @@ function scoreMatchPredictions(PDO $pdo, int $matchId): int {
         $points = 0;
         $reason = null;
 
-        // Exact score match
+        // Exact score match (only if user actually predicted specific scores)
         if (
+            $pred['predicted_home_score'] !== null &&
+            $pred['predicted_away_score'] !== null &&
             (int) $pred['predicted_home_score'] === $homeScore &&
             (int) $pred['predicted_away_score'] === $awayScore
         ) {
@@ -132,10 +134,14 @@ function scoreMatchPredictions(PDO $pdo, int $matchId): int {
         );
         $update->execute([$points, $pred['id']]);
 
-        // Insert scoring log (only for non-zero points)
+        // Insert scoring log (only for non-zero points) — upsert to handle recalculate
         if ($points > 0 && $reason) {
             $log = $pdo->prepare(
-                'INSERT INTO q_scoring_log (match_id, user_id, points_awarded, reason) VALUES (?, ?, ?, ?)'
+                'INSERT INTO q_scoring_log (match_id, user_id, points_awarded, reason)
+                 VALUES (?, ?, ?, ?)
+                 ON DUPLICATE KEY UPDATE
+                   points_awarded = VALUES(points_awarded),
+                   reason = VALUES(reason)'
             );
             $log->execute([
                 $matchId,
@@ -149,6 +155,49 @@ function scoreMatchPredictions(PDO $pdo, int $matchId): int {
     }
 
     return $scored;
+}
+
+// --- Reset match scores and predictions (for testing/validation) ---
+
+function handleResetMatch(PDO $pdo, array $input): void {
+    $admin = requireAdmin($pdo);
+    $matchId = trim((string) ($input['match_id'] ?? ''));
+
+    if ($matchId === '') {
+        http_response_code(400);
+        echo json_encode(['error' => 'match_id requerido']);
+        return;
+    }
+
+    $pdo->beginTransaction();
+
+    try {
+        // Reset match
+        $stmt = $pdo->prepare('UPDATE q_matches SET home_score = NULL, away_score = NULL, status = "scheduled", is_locked = 0 WHERE id = ?');
+        $stmt->execute([$matchId]);
+
+        if ($stmt->rowCount() === 0) {
+            $pdo->rollBack();
+            http_response_code(404);
+            echo json_encode(['error' => "Partido #$matchId no encontrado"]);
+            return;
+        }
+
+        // Reset points on predictions
+        $pdo->prepare('UPDATE q_predictions SET points_earned = 0 WHERE match_id = ?')
+            ->execute([$matchId]);
+
+        // Clear scoring log
+        $pdo->prepare('DELETE FROM q_scoring_log WHERE match_id = ?')
+            ->execute([$matchId]);
+
+        $pdo->commit();
+        echo json_encode(['ok' => true, 'message' => "Partido #$matchId reseteado para validacion"]);
+    } catch (Exception $e) {
+        $pdo->rollBack();
+        http_response_code(500);
+        echo json_encode(['error' => 'Error al resetear partido', 'detail' => $e->getMessage()]);
+    }
 }
 
 // --- Main routing ---
@@ -174,6 +223,9 @@ if ($method === 'POST') {
             break;
         case 'reset-pin':
             handleResetPin($pdo, $input);
+            break;
+        case 'reset-match':
+            handleResetMatch($pdo, $input);
             break;
         default:
             http_response_code(400);

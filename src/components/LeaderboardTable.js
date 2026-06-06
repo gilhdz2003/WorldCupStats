@@ -9,8 +9,8 @@ export function renderLeaderboardTable(leaderboard, selfId) {
             <th class="q-th-rank">#</th>
             <th>Nombre</th>
             <th class="q-th-pts">Puntos</th>
-            <th class="q-th-exact">Exactos</th>
-            <th class="q-th-correct">Correctos</th>
+            <th class="q-th-exact">Marcadores</th>
+            <th class="q-th-correct">Resultados</th>
           </tr>
         </thead>
         <tbody>
@@ -25,8 +25,8 @@ export function renderLeaderboardTable(leaderboard, selfId) {
                 <td class="q-rank-cell">${medal}</td>
                 <td>${u.name}${isSelf ? ' <span class="q-self-badge">(TÚ)</span>' : ''}</td>
                 <td class="q-pts-cell">${u.total_points}</td>
-                <td>${u.exact_scores}</td>
-                <td>${u.correct_results}</td>
+                <td class="q-lb-num">${u.exact_scores}</td>
+                <td class="q-lb-num">${u.correct_results}</td>
               </tr>
             `;
           }).join('')}

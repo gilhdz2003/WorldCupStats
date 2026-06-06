@@ -30,7 +30,10 @@ export function QuinielaPredictions() {
 
   return `
     <section class="container q-section">
-      <h1 class="q-page-title">🎯 Mis Predicciones</h1>
+      <div class="q-page-header">
+        <h1 class="q-page-title">🎯 Mis Predicciones</h1>
+        <a href="#/quiniela" class="q-btn q-btn--secondary q-btn-back">🏠 Quiniela</a>
+      </div>
       <div id="q-phase-tabs">${renderPhaseTabs()}</div>
       <div id="q-phase-points-bar"></div>
       <div id="q-progress-bar" class="q-progress-bar"></div>
@@ -166,7 +169,7 @@ export function initQuinielaPredictions() {
           <h3 class="q-date-heading">${dateStr}</h3>
           ${dateMatches.map(m => {
             const matchId = predictionKey(m.id);
-            return renderPredictionCard(m, predictions[matchId], modified.has(matchId));
+            return renderPredictionCard(m, predictions[matchId], modified.has(matchId), PHASE_POINTS[currentPhase]);
           }).join('')}
         </div>
       `;

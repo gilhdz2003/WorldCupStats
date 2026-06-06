@@ -17,6 +17,15 @@ require_once __DIR__ . '/config.php';
 
 header('Content-Type: application/json');
 
+// Require secret key (same pattern as quiniela-seed.php)
+define('CRON_SECRET', 'quiniela2026cron');
+$auth = $_GET['key'] ?? '';
+if ($auth !== CRON_SECRET) {
+    http_response_code(403);
+    echo json_encode(['ok' => false, 'error' => 'Unauthorized']);
+    exit;
+}
+
 $scored = 0;
 $matches_updated = 0;
 $log = [];
@@ -135,9 +144,15 @@ function getPhasePoints(PDO $pdo, string $phase): array {
                 $upPred = $pdo->prepare('UPDATE q_predictions SET points_earned = ? WHERE id = ?');
                 $upPred->execute([$points, $pred['id']]);
 
-                // Log scoring
+                // Log scoring — upsert to handle recalculate
                 if ($points > 0) {
-                    $logStmt = $pdo->prepare('INSERT INTO q_scoring_log (match_id, user_id, points_awarded, reason) VALUES (?, ?, ?, ?)');
+                    $logStmt = $pdo->prepare(
+                        'INSERT INTO q_scoring_log (match_id, user_id, points_awarded, reason)
+                         VALUES (?, ?, ?, ?)
+                         ON DUPLICATE KEY UPDATE
+                           points_awarded = VALUES(points_awarded),
+                           reason = VALUES(reason)'
+                    );
                     $logStmt->execute([$matchId, $pred['user_id'], $points, $reason]);
                     $scored++;
                 }
