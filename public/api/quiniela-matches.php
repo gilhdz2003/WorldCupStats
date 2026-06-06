@@ -96,7 +96,7 @@ function handleGetMatches(PDO $pdo) {
 
     $matches = array_map(function ($row) {
         $match = [
-            'id'         => (int) $row['id'],
+            'id'         => (string) $row['id'],
             'phase'      => $row['phase'],
             'group_label' => $row['group_label'],
             'home_team'  => $row['home_team'],

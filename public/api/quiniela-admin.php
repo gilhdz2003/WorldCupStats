@@ -63,9 +63,19 @@ function requireAdmin(PDO $pdo): ?array {
 
 // --- Helper: scoring logic for a match ---
 
+function getPhasePoints(PDO $pdo, string $phase): array {
+    $stmt = $pdo->prepare('SELECT points_correct, points_exact FROM q_phases WHERE phase = ?');
+    $stmt->execute([$phase]);
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    return [
+        'correct' => (int) ($row['points_correct'] ?? 3),
+        'exact'   => (int) ($row['points_exact'] ?? 5),
+    ];
+}
+
 function scoreMatchPredictions(PDO $pdo, int $matchId): int {
-    // Get match scores
-    $matchStmt = $pdo->prepare('SELECT home_score, away_score FROM q_matches WHERE id = ?');
+    // Get match scores and phase
+    $matchStmt = $pdo->prepare('SELECT home_score, away_score, phase FROM q_matches WHERE id = ?');
     $matchStmt->execute([$matchId]);
     $match = $matchStmt->fetch();
 
@@ -75,6 +85,8 @@ function scoreMatchPredictions(PDO $pdo, int $matchId): int {
 
     $homeScore = (int) $match['home_score'];
     $awayScore = (int) $match['away_score'];
+    $phase = $match['phase'];
+    $phasePoints = getPhasePoints($pdo, $phase);
 
     // Determine actual result
     if ($homeScore > $awayScore) {
@@ -97,17 +109,20 @@ function scoreMatchPredictions(PDO $pdo, int $matchId): int {
 
     foreach ($predictions as $pred) {
         $points = 0;
+        $reason = null;
 
-        // Exact score match: 5 points
+        // Exact score match
         if (
             (int) $pred['predicted_home_score'] === $homeScore &&
             (int) $pred['predicted_away_score'] === $awayScore
         ) {
-            $points = 5;
+            $points = $phasePoints['exact'];
+            $reason = 'exact_score';
         }
-        // Correct result (but not exact score): 3 points
+        // Correct result (but not exact score)
         elseif ($pred['predicted_result'] === $actualResult) {
-            $points = 3;
+            $points = $phasePoints['correct'];
+            $reason = 'correct_result';
         }
         // Wrong prediction: 0 points
 
@@ -117,23 +132,18 @@ function scoreMatchPredictions(PDO $pdo, int $matchId): int {
         );
         $update->execute([$points, $pred['id']]);
 
-        // Insert scoring log
-        $log = $pdo->prepare(
-            'INSERT INTO q_scoring_log (match_id, user_id, predicted_result, predicted_home_score, predicted_away_score,
-                                        actual_result, actual_home_score, actual_away_score, points_earned, created_at)
-             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())'
-        );
-        $log->execute([
-            $matchId,
-            $pred['user_id'],
-            $pred['predicted_result'],
-            $pred['predicted_home_score'],
-            $pred['predicted_away_score'],
-            $actualResult,
-            $homeScore,
-            $awayScore,
-            $points,
-        ]);
+        // Insert scoring log (only for non-zero points)
+        if ($points > 0 && $reason) {
+            $log = $pdo->prepare(
+                'INSERT INTO q_scoring_log (match_id, user_id, points_awarded, reason) VALUES (?, ?, ?, ?)'
+            );
+            $log->execute([
+                $matchId,
+                $pred['user_id'],
+                $points,
+                $reason,
+            ]);
+        }
 
         $scored++;
     }
@@ -181,9 +191,12 @@ if ($method === 'POST') {
         case 'export':
             handleExport($pdo);
             break;
+        case 'export-predictions':
+            handleExportPredictions($pdo);
+            break;
         default:
             http_response_code(400);
-            echo json_encode(['error' => 'Accion GET no valida. Usa: participants, phases, export']);
+            echo json_encode(['error' => 'Accion GET no valida. Usa: participants, phases, export, export-predictions']);
             break;
     }
 } else {
@@ -398,6 +411,89 @@ function handleRecalculate(PDO $pdo, array $input) {
     ]);
 }
 
+// --- Action: GET export-predictions (CSV backup of ALL predictions) ---
+
+function handleExportPredictions(PDO $pdo) {
+    requireAdmin($pdo);
+
+    $phase = $_GET['phase'] ?? 'all';
+
+    $phaseFilter = '';
+    $params = [];
+    if ($phase !== 'all') {
+        $validPhases = ['groups', 'round_of_32', 'round_of_16', 'quarterfinals', 'semifinals', 'final'];
+        if (!in_array($phase, $validPhases)) {
+            http_response_code(400);
+            echo json_encode(['error' => "Fase invalida: $phase"]);
+            return;
+        }
+        $phaseFilter = ' AND m.phase = ?';
+        $params[] = $phase;
+    }
+
+    // Full dump: users + predictions + matches + scores
+    $sql = "SELECT u.name AS usuario, u.email,
+                   m.id AS match_id, m.phase, m.home_team, m.away_team,
+                   m.match_date, m.match_time,
+                   m.home_score, m.away_score, m.status AS match_status,
+                   p.predicted_result, p.predicted_home_score, p.predicted_away_score,
+                   p.points_earned,
+                   p.created_at AS prediccion_creada
+            FROM q_predictions p
+            JOIN q_users u ON p.user_id = u.id
+            JOIN q_matches m ON p.match_id = m.id
+            WHERE 1=1
+            $phaseFilter
+            ORDER BY u.name, m.match_date, m.match_time";
+
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute($params);
+    $rows = $stmt->fetchAll();
+
+    // Output CSV
+    $timestamp = date('Y-m-d');
+    header('Content-Type: text/csv; charset=utf-8');
+    header('Content-Disposition: attachment; filename="quiniela-backup-predicciones-' . $timestamp . '.csv"');
+
+    $out = fopen('php://output', 'w');
+
+    // BOM for Excel UTF-8 compatibility
+    fwrite($out, "\xEF\xBB\xBF");
+
+    // Headers
+    fputcsv($out, [
+        'Usuario', 'Email', 'Match ID', 'Fase', 'Local', 'Visita',
+        'Fecha Partido', 'Hora Partido', 'Marcador Local', 'Marcador Visita',
+        'Estado Partido', 'Prediccion', 'Score Predicho Local', 'Score Predicho Visita',
+        'Puntos Ganados', 'Fecha Prediccion'
+    ]);
+
+    // Rows
+    foreach ($rows as $row) {
+        fputcsv($out, [
+            $row['usuario'],
+            $row['email'],
+            $row['match_id'],
+            $row['phase'],
+            $row['home_team'],
+            $row['away_team'],
+            $row['match_date'],
+            $row['match_time'],
+            $row['home_score'] !== null ? (int) $row['home_score'] : '',
+            $row['away_score'] !== null ? (int) $row['away_score'] : '',
+            $row['match_status'],
+            $row['predicted_result'],
+            $row['predicted_home_score'] !== null ? (int) $row['predicted_home_score'] : '',
+            $row['predicted_away_score'] !== null ? (int) $row['predicted_away_score'] : '',
+            (int) $row['points_earned'],
+            $row['prediccion_creada'],
+        ]);
+    }
+
+    fclose($out);
+    exit;
+}
+
 // --- Action: GET export (CSV) ---
 
 function handleExport(PDO $pdo) {
@@ -420,11 +516,12 @@ function handleExport(PDO $pdo) {
 
     $sql = "SELECT u.id, u.name, u.email,
                    COALESCE(SUM(p.points_earned), 0) as total_points,
-                   COUNT(CASE WHEN p.points_earned = 5 THEN 1 END) as exact_scores,
-                   COUNT(CASE WHEN p.points_earned >= 3 THEN 1 END) as correct_results
+                   COALESCE(SUM(CASE WHEN sl.reason = 'exact_score' THEN 1 ELSE 0 END), 0) as exact_scores,
+                   COALESCE(SUM(CASE WHEN sl.reason IS NOT NULL THEN 1 ELSE 0 END), 0) as correct_results
             FROM q_users u
             LEFT JOIN q_predictions p ON u.id = p.user_id
             LEFT JOIN q_matches m ON p.match_id = m.id
+            LEFT JOIN q_scoring_log sl ON p.match_id = sl.match_id AND p.user_id = sl.user_id
             WHERE u.email_verified = 1
             $phaseFilter
             GROUP BY u.id

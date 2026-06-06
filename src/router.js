@@ -1,4 +1,4 @@
-import { renderNavbar } from './components/Navbar.js';
+import { renderNavbar, initNavbar } from './components/Navbar.js';
 import { renderFooter } from './components/Footer.js';
 
 import { Home, initHomeLive } from './pages/Home.js';
@@ -72,6 +72,7 @@ export class Router {
     ].join('');
 
     this.updateActiveLink(path);
+    initNavbar();
     window.scrollTo(0, 0);
 
     if (afterRender) setTimeout(afterRender, 0);

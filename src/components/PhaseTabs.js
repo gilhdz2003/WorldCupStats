@@ -1,8 +1,8 @@
 const PHASES = [
   { key: 'groups', label: 'Fase de Grupos', icon: '🌍' },
-  { key: 'round_of_32', label: 'Octavos', icon: '⚽' },
-  { key: 'round_of_16', label: 'Cuartos', icon: '🏆' },
-  { key: 'quarterfinals', label: 'Cuartos', icon: '🏆' },
+  { key: 'round_of_32', label: 'Ronda de 32', icon: '⚽' },
+  { key: 'round_of_16', label: 'Octavos de Final', icon: '🏆' },
+  { key: 'quarterfinals', label: 'Cuartos de Final', icon: '🏆' },
   { key: 'semifinals', label: 'Semifinal', icon: '🥇' },
   { key: 'final', label: 'Final', icon: '👑' },
 ];

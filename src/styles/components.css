@@ -19,12 +19,61 @@
 
 @media (max-width: 640px) {
   .navbar .container {
-    flex-direction: column;
-    gap: var(--spacing-md);
+    flex-direction: row;
   }
-  .navbar .nav-links {
-    width: 100%;
+
+  .nav-hamburger {
+    display: flex;
+    align-items: center;
     justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    flex-shrink: 0;
+  }
+
+  .navbar .nav-links {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: var(--spacing-xl);
+    background: rgba(10, 10, 26, 0.97);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    z-index: 99;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+  }
+
+  .navbar .nav-links.nav-mobile-open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .navbar .nav-link {
+    font-size: 1.3rem;
+    padding: var(--spacing-md);
+  }
+
+  .navbar .theme-toggle {
+    font-size: 1.5rem;
+  }
+
+  .nav-mobile-overlay {
+    display: none;
+  }
+
+  .nav-mobile-overlay.nav-overlay-visible {
+    display: block;
   }
 }
 
@@ -52,6 +101,16 @@
 
 .navbar .nav-link:hover, .navbar .nav-link.active {
   color: var(--text-primary);
+}
+
+/* Hamburger button — hidden on desktop */
+.nav-hamburger {
+  display: none;
+}
+
+/* Mobile overlay — hidden on desktop */
+.nav-mobile-overlay {
+  display: none;
 }
 
 /* Group Card */

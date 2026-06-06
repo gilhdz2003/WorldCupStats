@@ -71,7 +71,7 @@ function handleGetPredictions(PDO $pdo) {
 
     $predictions = array_map(function ($row) {
         return [
-            'match_id'            => (int) $row['match_id'],
+            'match_id'            => (string) $row['match_id'],
             'predicted_result'    => $row['predicted_result'],
             'predicted_home_score' => $row['predicted_home_score'] !== null ? (int) $row['predicted_home_score'] : null,
             'predicted_away_score' => $row['predicted_away_score'] !== null ? (int) $row['predicted_away_score'] : null,
@@ -118,16 +118,22 @@ function handlePostPredictions(PDO $pdo) {
 
     try {
         foreach ($input['predictions'] as $pred) {
-            $matchId = (int) ($pred['match_id'] ?? 0);
+            $matchId = trim((string) ($pred['match_id'] ?? ''));
             $result  = trim($pred['predicted_result'] ?? '');
             $homeScore = isset($pred['predicted_home_score']) ? (int) $pred['predicted_home_score'] : null;
             $awayScore = isset($pred['predicted_away_score']) ? (int) $pred['predicted_away_score'] : null;
 
-            // Validate match exists and is not locked
+            if ($matchId === '') {
+                http_response_code(400);
+                echo json_encode(['error' => 'match_id requerido y valido']);
+                $pdo->rollBack();
+                return;
+            }
+
+            // Validate match exists and is not locked (per-match, not per-phase)
             $matchStmt = $pdo->prepare(
-                'SELECT m.id, m.is_locked, m.phase, p.is_open
+                'SELECT m.id, m.is_locked
                  FROM q_matches m
-                 JOIN q_phases p ON m.phase = p.phase
                  WHERE m.id = ?'
             );
             $matchStmt->execute([$matchId]);
@@ -143,13 +149,6 @@ function handlePostPredictions(PDO $pdo) {
             if ((bool) $match['is_locked']) {
                 http_response_code(400);
                 echo json_encode(['error' => "Partido #$matchId esta bloqueado", 'match_id' => $matchId]);
-                $pdo->rollBack();
-                return;
-            }
-
-            if (!(bool) $match['is_open']) {
-                http_response_code(400);
-                echo json_encode(['error' => "Fase {$match['phase']} esta cerrada", 'match_id' => $matchId]);
                 $pdo->rollBack();
                 return;
             }

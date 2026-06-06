@@ -6,3 +6,5 @@ dist/
 subirahostinger/
 public/api/config.php
 public/api/football-config.php
+dist/api/config.php
+dist/api/football-config.php

@@ -66,7 +66,9 @@ CREATE TABLE q_phases (
     phase ENUM('groups','round_of_32','round_of_16','quarterfinals','semifinals','final') NOT NULL UNIQUE,
     is_open TINYINT(1) DEFAULT 0,
     opens_at DATETIME DEFAULT NULL,
-    closes_at DATETIME DEFAULT NULL
+    closes_at DATETIME DEFAULT NULL,
+    points_correct INT NOT NULL DEFAULT 3,
+    points_exact INT NOT NULL DEFAULT 5
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Scoring audit log

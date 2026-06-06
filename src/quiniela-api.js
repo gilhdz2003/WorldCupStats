@@ -28,7 +28,10 @@ async function apiFetch(url, options = {}) {
   if (token) headers['Authorization'] = 'Bearer ' + token;
   const res = await fetch(API_BASE + url, { ...options, headers: { ...headers, ...options.headers } });
   const data = await res.json();
-  if (!res.ok) throw new Error(data.error || 'Error de servidor');
+  if (!res.ok) {
+    if (res.status === 401) clearSession();
+    throw new Error(data.error || 'Error de servidor');
+  }
   return data;
 }
 
@@ -124,6 +127,17 @@ export async function adminResetPin(userId) {
 export async function adminExport() {
   const token = getToken();
   const res = await fetch(API_BASE + 'quiniela-admin.php?action=export', {
+    headers: { 'Authorization': 'Bearer ' + token }
+  });
+  return res;
+}
+
+export async function adminExportPredictions(phase) {
+  const token = getToken();
+  const url = phase && phase !== 'all'
+    ? `quiniela-admin.php?action=export-predictions&phase=${phase}`
+    : 'quiniela-admin.php?action=export-predictions';
+  const res = await fetch(API_BASE + url, {
     headers: { 'Authorization': 'Bearer ' + token }
   });
   return res;

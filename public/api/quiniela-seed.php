@@ -2,7 +2,7 @@
 /**
  * Quiniela Mundial 2026 - Seed Script
  *
- * Seeds q_matches (100 matches) and q_phases (6 rows) into the database.
+ * Seeds q_matches (104 matches) and q_phases (6 rows) into the database.
  * All match data is hardcoded from the official ESPN schedule.
  *
  * Usage: quiniela-seed.php?key=mundial2026seed
@@ -156,27 +156,34 @@ $matches = [
     ['760509', '2026-07-07', '2026-07-07 16:00:00', 'Round of 32 14 Winner',              'Round of 32 16 Winner',              null],
     ['760508', '2026-07-07', '2026-07-07 20:00:00', 'Round of 32 13 Winner',              'Round of 32 15 Winner',              null],
 
-    // ═══════════════ QUARTERFINALS (2 matches) ═══════════════
-    // "Round of 16" in name, dates 2026-07-09 / 2026-07-10
+    // ═══════════════ QUARTERFINALS (4 matches) ═══════════════
+    // "Round of 16 X Winner" teams, dates 2026-07-09 to 2026-07-12
 
     ['760510', '2026-07-09', '2026-07-09 20:00:00', 'Round of 16 1 Winner',               'Round of 16 2 Winner',               null],
     ['760511', '2026-07-10', '2026-07-10 19:00:00', 'Round of 16 5 Winner',               'Round of 16 6 Winner',               null],
-
-    // ═══════════════ SEMIFINALS (1 match) ═══════════════
-    // "Round of 16" in name, date 2026-07-11
-
     ['760512', '2026-07-11', '2026-07-11 21:00:00', 'Round of 16 3 Winner',               'Round of 16 4 Winner',               null],
+    ['760513', '2026-07-12', '2026-07-12 01:00:00', 'Round of 16 7 Winner',               'Round of 16 8 Winner',               null],
+
+    // ═══════════════ SEMIFINALS (2 matches) ═══════════════
+    // "Quarterfinal X Winner" teams
+
+    ['760514', '2026-07-14', '2026-07-14 19:00:00', 'Quarterfinal 1 Winner',              'Quarterfinal 2 Winner',              null],
+    ['760515', '2026-07-15', '2026-07-15 19:00:00', 'Quarterfinal 3 Winner',              'Quarterfinal 4 Winner',              null],
+
+    // ═══════════════ THIRD PLACE (1 match) ═══════════════
+    // "Semifinal X Loser" — stored as 'final' phase (same tier, no ENUM change needed)
+
+    ['760516', '2026-07-18', '2026-07-18 21:00:00', 'Semifinal 1 Loser',                 'Semifinal 2 Loser',                 null],
 
     // ═══════════════ FINAL (1 match) ═══════════════
-    // "Round of 16" in name, date 2026-07-12
+    // "Semifinal X Winner"
 
-    ['760513', '2026-07-12', '2026-07-12 01:00:00', 'Round of 16 7 Winner',               'Round of 16 8 Winner',               null],
+    ['760517', '2026-07-19', '2026-07-19 19:00:00', 'Semifinal 1 Winner',                 'Semifinal 2 Winner',                 null],
 ];
 
 // ── Phase determination logic ─────────────────────────────────
+// Uses team name patterns instead of fragile date heuristics.
 function determinePhase(string $homeTeam, string $date): string {
-    // Group stage: has group_label (checked via caller)
-    // This function is only called for knockout rounds
     if (strpos($homeTeam, 'Group') !== false) {
         return 'round_of_32';
     }
@@ -184,15 +191,14 @@ function determinePhase(string $homeTeam, string $date): string {
         return 'round_of_16';
     }
     if (strpos($homeTeam, 'Round of 16') !== false) {
-        if ($date === '2026-07-09' || $date === '2026-07-10') {
-            return 'quarterfinals';
-        }
-        if ($date === '2026-07-11') {
-            return 'semifinals';
-        }
-        if ($date === '2026-07-12') {
-            return 'final';
-        }
+        return 'quarterfinals';
+    }
+    if (strpos($homeTeam, 'Quarterfinal') !== false) {
+        return 'semifinals';
+    }
+    if (strpos($homeTeam, 'Semifinal') !== false) {
+        // Both 3rd place (Loser) and Final (Winner) are 'final' phase
+        return 'final';
     }
     return 'groups'; // fallback
 }
@@ -236,17 +242,17 @@ try {
 
     // ── Seed q_phases ────────────────────────────────────────
     $phasesStmt = $pdo->prepare(
-        'INSERT INTO q_phases (phase, is_open, opens_at, closes_at)
-         VALUES (?, ?, ?, ?)'
+        'INSERT INTO q_phases (phase, is_open, opens_at, closes_at, points_correct, points_exact)
+         VALUES (?, ?, ?, ?, ?, ?)'
     );
 
     $phases = [
-        ['groups',       0, '2026-06-05 00:00:00', null],
-        ['round_of_32',  0, null,                    null],
-        ['round_of_16',  0, null,                    null],
-        ['quarterfinals',0, null,                    null],
-        ['semifinals',   0, null,                    null],
-        ['final',        0, null,                    null],
+        ['groups',       0, '2026-06-05 00:00:00', null, 3,  5],
+        ['round_of_32',  0, null,                    null, 4,  7],
+        ['round_of_16',  0, null,                    null, 5,  10],
+        ['quarterfinals',0, null,                    null, 7,  14],
+        ['semifinals',   0, null,                    null, 10, 20],
+        ['final',        0, null,                    null, 15, 30],
     ];
 
     $phaseCount = 0;

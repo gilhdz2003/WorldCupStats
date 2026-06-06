@@ -15,19 +15,70 @@ function renderLanding() {
       <div class="q-hero">
         <h1 class="q-hero-title">🏆 QUINIELA Grupo MB MUNDIAL 2026</h1>
         <p class="q-hero-subtitle">Predice los resultados de cada partido y gana puntos. ¡Los mejores 3 se llevan premios!</p>
-        <div class="q-rules-card">
-          <h2>📋 Reglas</h2>
-          <ul>
-            <li>Por cada partido, predice: <strong>ganador local</strong>, <strong>empate</strong> o <strong>ganador visita</strong></li>
-            <li>Opcionalmente, ingresa el <strong>marcador exacto</strong> para puntos extra</li>
-            <li><strong>3 puntos</strong> si atinas al resultado (quién gana o empate)</li>
-            <li><strong>5 puntos</strong> si atinas al marcador exacto</li>
-            <li>Puedes editar tus predicciones hasta que inicie cada partido</li>
-            <li>Las fases se abren conforme avanza el torneo</li>
-          </ul>
-        </div>
       </div>
       <div id="q-auth-container">${renderQuinielaAuth()}</div>
+      <div class="q-prizes-rules-card q-landing-info">
+        <div class="q-prizes-section">
+          <h2 class="q-prizes-title">🏆 Premios</h2>
+          <div class="q-prizes-tiers">
+            <div class="q-prize-tier q-prize-tier--gold">
+              <span class="q-prize-medal">🥇</span>
+              <div class="q-prize-info">
+                <strong>1° — 3° Lugar</strong>
+                <span>Playera oficial + Trofeo miniatura</span>
+              </div>
+            </div>
+            <div class="q-prize-tier q-prize-tier--silver">
+              <span class="q-prize-medal">🥈</span>
+              <div class="q-prize-info">
+                <strong>4° — 5° Lugar</strong>
+                <span>Balón oficial del Mundial 2026</span>
+              </div>
+            </div>
+            <div class="q-prize-tier q-prize-tier--more">
+              <span class="q-prize-medal">🎁</span>
+              <div class="q-prize-info">
+                <strong>Más premios</strong>
+                <span>Por anunciar</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="q-rules-divider"></div>
+        <div class="q-rules-collapsible" style="animation: none;">
+          <ul class="q-rules-list">
+            <li>Por cada partido, predice: <strong>ganador local</strong>, <strong>empate</strong> o <strong>ganador visita</strong></li>
+            <li>Ingresa el <strong>marcador exacto</strong> para obtener puntos bonus sobre el resultado</li>
+            <li>Puedes editar tus predicciones <strong>hasta que inicie cada partido</strong></li>
+          </ul>
+          <div class="q-rules-subsection">
+            <h3>📈 Puntos por Fase (escalonados)</h3>
+            <div class="q-points-table">
+              <div class="q-points-row q-points-header">
+                <span>Fase</span><span>Resultado</span><span>MARCADOR</span>
+              </div>
+              <div class="q-points-row"><span>Grupos</span><strong>3</strong><strong>5</strong></div>
+              <div class="q-points-row"><span>Ronda de 32</span><strong>4</strong><strong>7</strong></div>
+              <div class="q-points-row"><span>Octavos de Final</span><strong>5</strong><strong>10</strong></div>
+              <div class="q-points-row"><span>Cuartos de Final</span><strong>7</strong><strong>14</strong></div>
+              <div class="q-points-row"><span>Semifinal</span><strong>10</strong><strong>20</strong></div>
+              <div class="q-points-row"><span>Final</span><strong>15</strong><strong>30</strong></div>
+            </div>
+          </div>
+          <div class="q-rules-subsection">
+            <h3>⚖️ Criterios de Desempate</h3>
+            <ol class="q-tiebreaker-list">
+              <li>Mayor número de <strong>marcadores exactos</strong></li>
+              <li>Mayor número de <strong>resultados correctos</strong></li>
+              <li><strong>Antigüedad de registro</strong> (primer participante gana)</li>
+            </ol>
+          </div>
+          <div class="q-rules-subsection">
+            <h3>⏱️ Tiempo de Resultado</h3>
+            <p>Todos los resultados se consideran en <strong>tiempo oficial de 90 minutos</strong>. No cuentan tiempos extras ni penales. Si un partido se define por penales, el resultado oficial para la quiniela es <strong>empate</strong>.</p>
+          </div>
+        </div>
+      </div>
     </section>
   `;
 }
@@ -53,6 +104,72 @@ function renderDashboard(user) {
           </a>` : ''}
         </div>
         <div id="q-leaderboard-preview"></div>
+        <div class="q-prizes-rules-card">
+          <div class="q-prizes-section">
+            <h2 class="q-prizes-title">🏆 Premios</h2>
+            <div class="q-prizes-tiers">
+              <div class="q-prize-tier q-prize-tier--gold">
+                <span class="q-prize-medal">🥇</span>
+                <div class="q-prize-info">
+                  <strong>1° — 3° Lugar</strong>
+                  <span>Playera oficial + Trofeo miniatura</span>
+                </div>
+              </div>
+              <div class="q-prize-tier q-prize-tier--silver">
+                <span class="q-prize-medal">🥈</span>
+                <div class="q-prize-info">
+                  <strong>4° — 5° Lugar</strong>
+                  <span>Balón oficial del Mundial 2026</span>
+                </div>
+              </div>
+              <div class="q-prize-tier q-prize-tier--more">
+                <span class="q-prize-medal">🎁</span>
+                <div class="q-prize-info">
+                  <strong>Más premios</strong>
+                  <span>Por anunciar</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="q-rules-divider"></div>
+          <button id="q-toggle-rules" class="q-rules-toggle">
+            <span>📋 Ver Reglas del Concurso</span>
+            <span class="q-rules-arrow">▼</span>
+          </button>
+          <div id="q-rules-collapsible" class="q-rules-collapsible" hidden>
+            <ul class="q-rules-list">
+              <li>Por cada partido, predice: <strong>ganador local</strong>, <strong>empate</strong> o <strong>ganador visita</strong></li>
+              <li>Opcionalmente, ingresa el <strong>marcador exacto</strong> para puntos extra</li>
+              <li>Puedes editar tus predicciones <strong>hasta que inicie cada partido</strong></li>
+            </ul>
+            <div class="q-rules-subsection">
+              <h3>📈 Puntos por Fase (escalonados)</h3>
+              <div class="q-points-table">
+                <div class="q-points-row q-points-header">
+                  <span>Fase</span><span>Resultado</span><span>MARCADOR</span>
+                </div>
+                <div class="q-points-row"><span>Grupos</span><strong>3</strong><strong>5</strong></div>
+                <div class="q-points-row"><span>Ronda de 32</span><strong>4</strong><strong>7</strong></div>
+                <div class="q-points-row"><span>Octavos de Final</span><strong>5</strong><strong>10</strong></div>
+                <div class="q-points-row"><span>Cuartos de Final</span><strong>7</strong><strong>14</strong></div>
+                <div class="q-points-row"><span>Semifinal</span><strong>10</strong><strong>20</strong></div>
+                <div class="q-points-row"><span>Final</span><strong>15</strong><strong>30</strong></div>
+              </div>
+            </div>
+            <div class="q-rules-subsection">
+              <h3>⚖️ Criterios de Desempate</h3>
+              <ol class="q-tiebreaker-list">
+                <li>Mayor número de <strong>marcadores exactos</strong></li>
+                <li>Mayor número de <strong>resultados correctos</strong></li>
+                <li><strong>Antigüedad de registro</strong> (primer participante gana)</li>
+              </ol>
+            </div>
+            <div class="q-rules-subsection">
+              <h3>⏱️ Tiempo de Resultado</h3>
+              <p>Todos los resultados se consideran en <strong>tiempo oficial de 90 minutos</strong>. No cuentan tiempos extras ni penales. Si un partido se define por penales, el resultado oficial para la quiniela es <strong>empate</strong>.</p>
+            </div>
+          </div>
+        </div>
         <button id="q-logout-btn" class="q-btn q-btn--secondary">Cerrar Sesión</button>
       </div>
     </section>
@@ -72,6 +189,20 @@ export function initQuinielaHome() {
       window.location.hash = '#/quiniela';
     });
     loadLeaderboardPreview();
+  }
+
+  // Bind rules toggle
+  const toggleBtn = document.getElementById('q-toggle-rules');
+  const rulesPanel = document.getElementById('q-rules-collapsible');
+  if (toggleBtn && rulesPanel) {
+    toggleBtn.addEventListener('click', () => {
+      const isHidden = rulesPanel.hidden;
+      rulesPanel.hidden = !isHidden;
+      toggleBtn.querySelector('.q-rules-arrow').textContent = isHidden ? '▲' : '▼';
+      toggleBtn.querySelector('span').textContent = isHidden
+        ? '📋 Ocultar Reglas del Concurso'
+        : '📋 Ver Reglas del Concurso';
+    });
   }
 }
 

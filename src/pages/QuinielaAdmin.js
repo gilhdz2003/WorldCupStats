@@ -1,4 +1,4 @@
-import { isLoggedIn, getUser, adminGetParticipants, adminGetPhases, adminTogglePhase, adminSetScore, adminExport, adminResetPin, getMatches } from '../quiniela-api.js';
+import { isLoggedIn, getUser, adminGetParticipants, adminGetPhases, adminTogglePhase, adminSetScore, adminExport, adminExportPredictions, adminResetPin, getMatches } from '../quiniela-api.js';
 
 export function QuinielaAdmin() {
   const user = getUser();
@@ -46,7 +46,12 @@ export function QuinielaAdmin() {
 
       <div class="q-admin-section">
         <h2>📤 Exportar</h2>
-        <button id="q-admin-export" class="q-btn q-btn--secondary">Descargar Leaderboard CSV</button>
+        <button id="q-admin-export" class="q-btn q-btn--secondary">📊 Descargar Leaderboard CSV</button>
+        <div style="margin-top: var(--spacing-md);">
+          <h3 style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: var(--spacing-sm);">💾 Backup de Predicciones</h3>
+          <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: var(--spacing-sm);">CSV con todas las predicciones de todos los usuarios. Descarga diaria para respaldo.</p>
+          <button id="q-admin-export-predictions" class="q-btn q-btn--secondary">📋 Backup Predicciones (Todas)</button>
+        </div>
       </div>
     </section>
   `;
@@ -66,8 +71,8 @@ async function loadPhases() {
     const data = await adminGetPhases();
     if (!data.ok) { container.innerHTML = '<p class="q-error">Error cargando fases</p>'; return; }
     const phaseLabels = {
-      groups: 'Fase de Grupos', round_of_32: 'Octavos (R32)', round_of_16: 'Cuartos (R16)',
-      quarterfinals: 'Cuartos de Final', semifinals: 'Semifinal', final: 'Gran Final'
+      groups: 'Fase de Grupos', round_of_32: 'Ronda de 32', round_of_16: 'Octavos de Final',
+      quarterfinals: 'Cuartos de Final', semifinals: 'Semifinal', final: 'Final'
     };
     container.innerHTML = data.phases.map(p => `
       <div class="q-admin-phase-row">
@@ -181,6 +186,30 @@ function bindAdminEvents() {
         a.href = url; a.download = 'leaderboard-quiniela.csv';
         a.click(); URL.revokeObjectURL(url);
       } catch (err) { alert('Error exportando: ' + err.message); }
+    });
+  }
+
+  // Backup de predicciones (todas)
+  const exportPredsBtn = document.getElementById('q-admin-export-predictions');
+  if (exportPredsBtn) {
+    exportPredsBtn.addEventListener('click', async () => {
+      const originalText = exportPredsBtn.textContent;
+      exportPredsBtn.textContent = 'Descargando...';
+      exportPredsBtn.disabled = true;
+      try {
+        const res = await adminExportPredictions();
+        if (!res.ok) throw new Error('Error del servidor');
+        const blob = await res.blob();
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        const today = new Date().toISOString().split('T')[0];
+        a.href = url; a.download = `backup-predicciones-${today}.csv`;
+        a.click(); URL.revokeObjectURL(url);
+      } catch (err) { alert('Error exportando predicciones: ' + err.message); }
+      finally {
+        exportPredsBtn.textContent = originalText;
+        exportPredsBtn.disabled = false;
+      }
     });
   }
 

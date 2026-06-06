@@ -4,11 +4,20 @@ import { renderPhaseTabs } from '../components/PhaseTabs.js';
 
 const PHASE_LABELS = {
   groups: 'Fase de Grupos',
-  round_of_32: 'Octavos de Final',
-  round_of_16: 'Cuartos de Final',
+  round_of_32: 'Ronda de 32',
+  round_of_16: 'Octavos de Final',
   quarterfinals: 'Cuartos de Final',
   semifinals: 'Semifinal',
-  final: 'Gran Final'
+  final: 'Final'
+};
+
+const PHASE_POINTS = {
+  groups:       { correct: 3, exact: 5 },
+  round_of_32:  { correct: 4, exact: 7 },
+  round_of_16:  { correct: 5, exact: 10 },
+  quarterfinals: { correct: 7, exact: 14 },
+  semifinals:   { correct: 10, exact: 20 },
+  final:        { correct: 15, exact: 30 },
 };
 
 export function QuinielaPredictions() {
@@ -23,6 +32,7 @@ export function QuinielaPredictions() {
     <section class="container q-section">
       <h1 class="q-page-title">🎯 Mis Predicciones</h1>
       <div id="q-phase-tabs">${renderPhaseTabs()}</div>
+      <div id="q-phase-points-bar"></div>
       <div id="q-progress-bar" class="q-progress-bar"></div>
       <div id="q-predictions-list"></div>
       <div id="q-save-bar" class="q-save-bar">
@@ -38,6 +48,20 @@ export function initQuinielaPredictions() {
   let matches = [];
   let predictions = {};
   let modified = new Set();
+
+  function predictionKey(matchId) {
+    return String(matchId);
+  }
+
+  function normalizePrediction(pred, matchId = pred.match_id) {
+    return {
+      match_id: predictionKey(matchId),
+      predicted_result: pred.predicted_result,
+      predicted_home_score: pred.predicted_home_score,
+      predicted_away_score: pred.predicted_away_score,
+      points_earned: pred.points_earned,
+    };
+  }
 
   // Bind phase tabs
   const tabsContainer = document.getElementById('q-phase-tabs');
@@ -59,14 +83,46 @@ export function initQuinielaPredictions() {
     saveBtn.addEventListener('click', saveAllPredictions);
   }
 
+  function renderPhasePointsBar() {
+    const container = document.getElementById('q-phase-points-bar');
+    if (!container) return;
+    const pts = PHASE_POINTS[currentPhase] || { correct: 3, exact: 5 };
+    const label = PHASE_LABELS[currentPhase] || currentPhase;
+    container.innerHTML = `
+      <div class="q-phase-points-bar">
+        <span class="q-phase-points-label">${label}:</span>
+        <span>Resultado <strong>${pts.correct}</strong> pts</span>
+        <span class="q-phase-points-sep">·</span>
+        <span>Marcador exacto <strong>${pts.exact - pts.correct}</strong> pts extra</span>
+      </div>
+    `;
+  }
+
   async function loadPhaseData() {
     try {
-      const [matchesData, predsData] = await Promise.all([getMatches(currentPhase), getMyPredictions()]);
+      const [matchesData, predictionsData] = await Promise.all([
+        getMatches(currentPhase),
+        getMyPredictions(),
+      ]);
+
       matches = matchesData.matches || [];
-      const userPreds = predsData.predictions || [];
       predictions = {};
-      userPreds.forEach(p => { predictions[p.match_id] = p; });
+
+      // Authoritative source: authenticated predictions endpoint.
+      (predictionsData.predictions || []).forEach(pred => {
+        predictions[predictionKey(pred.match_id)] = normalizePrediction(pred);
+      });
+
+      // Fallback for deployments where quiniela-matches.php already includes predictions.
+      matches.forEach(m => {
+        const matchId = predictionKey(m.id);
+        if (!predictions[matchId] && m.prediction) {
+          predictions[matchId] = normalizePrediction(m.prediction, matchId);
+        }
+      });
+
       renderPhase();
+      renderPhasePointsBar();
     } catch (err) {
       document.getElementById('q-predictions-list').innerHTML = `<p class="q-error">Error cargando datos: ${err.message}</p>`;
     }
@@ -86,7 +142,7 @@ export function initQuinielaPredictions() {
 
     // Count predicted
     const phaseMatches = matches.filter(m => m.phase === currentPhase);
-    const predictedCount = phaseMatches.filter(m => predictions[m.match_id]?.predicted_result).length;
+    const predictedCount = phaseMatches.filter(m => predictions[predictionKey(m.id)]?.predicted_result).length;
     const total = phaseMatches.length;
 
     const progressPct = total > 0 ? Math.round((predictedCount / total) * 100) : 0;
@@ -108,7 +164,10 @@ export function initQuinielaPredictions() {
       return `
         <div class="q-date-group">
           <h3 class="q-date-heading">${dateStr}</h3>
-          ${dateMatches.map(m => renderPredictionCard(m, predictions[m.match_id], modified.has(m.match_id))).join('')}
+          ${dateMatches.map(m => {
+            const matchId = predictionKey(m.id);
+            return renderPredictionCard(m, predictions[matchId], modified.has(matchId));
+          }).join('')}
         </div>
       `;
     }).join('');

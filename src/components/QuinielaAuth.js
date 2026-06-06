@@ -25,8 +25,8 @@ export function renderQuinielaAuth() {
       <div id="q-register-panel" class="q-auth-panel">
         <form id="q-register-form" class="q-auth-form">
           <div class="q-form-group">
-            <label for="q-reg-name">Nombre</label>
-            <input type="text" id="q-reg-name" required placeholder="Tu nombre" maxlength="100">
+            <label for="q-reg-name">Nombre y Apellido</label>
+            <input type="text" id="q-reg-name" required placeholder="Ej: Juan Pérez" maxlength="100">
           </div>
           <div class="q-form-group">
             <label for="q-reg-email">Email</label>

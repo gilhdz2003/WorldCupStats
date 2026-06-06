@@ -42,6 +42,17 @@ try {
 
     $pdo->beginTransaction();
 
+// Helper: get phase-specific point values
+function getPhasePoints(PDO $pdo, string $phase): array {
+    $stmt = $pdo->prepare('SELECT points_correct, points_exact FROM q_phases WHERE phase = ?');
+    $stmt->execute([$phase]);
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    return [
+        'correct' => (int) ($row['points_correct'] ?? 3),
+        'exact'   => (int) ($row['points_exact'] ?? 5),
+    ];
+}
+
     foreach ($espnData['events'] as $event) {
         $espnId = (string) $event['id'];
 
@@ -93,6 +104,13 @@ try {
                 $actualResult = 'draw';
             }
 
+            // Get match phase for escalating points
+            $phaseStmt = $pdo->prepare('SELECT phase FROM q_matches WHERE id = ?');
+            $phaseStmt->execute([$matchId]);
+            $matchRow = $phaseStmt->fetch(PDO::FETCH_ASSOC);
+            $matchPhase = $matchRow ? $matchRow['phase'] : 'groups';
+            $phasePoints = getPhasePoints($pdo, $matchPhase);
+
             // Calculate points for all predictions on this match
             $predStmt = $pdo->prepare('SELECT id, user_id, predicted_result, predicted_home_score, predicted_away_score FROM q_predictions WHERE match_id = ?');
             $predStmt->execute([$matchId]);
@@ -106,10 +124,10 @@ try {
                 if ($pred['predicted_home_score'] !== null && $pred['predicted_away_score'] !== null
                     && (int) $pred['predicted_home_score'] === $homeScore
                     && (int) $pred['predicted_away_score'] === $awayScore) {
-                    $points = 5;
+                    $points = $phasePoints['exact'];
                     $reason = 'exact_score';
                 } elseif ($pred['predicted_result'] === $actualResult) {
-                    $points = 3;
+                    $points = $phasePoints['correct'];
                     $reason = 'correct_result';
                 }
 
