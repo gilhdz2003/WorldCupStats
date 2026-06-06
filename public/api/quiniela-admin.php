@@ -200,6 +200,27 @@ function handleResetMatch(PDO $pdo, array $input): void {
     }
 }
 
+// --- Global predictions lock ---
+
+function handleGetConfig(PDO $pdo): void {
+    requireAdmin($pdo);
+    $stmt = $pdo->prepare("SELECT key_name, value FROM q_config WHERE key_name = 'predictions_locked'");
+    $stmt->execute();
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    echo json_encode([
+        'ok' => true,
+        'predictions_locked' => $row ? (bool) ((int) $row['value']) : false,
+    ]);
+}
+
+function handleToggleLock(PDO $pdo, array $input): void {
+    requireAdmin($pdo);
+    $locked = isset($input['locked']) ? (int) $input['locked'] : 0;
+    $pdo->prepare("INSERT INTO q_config (key_name, value) VALUES ('predictions_locked', ?) ON DUPLICATE KEY UPDATE value = ?")
+        ->execute([$locked, $locked]);
+    echo json_encode(['ok' => true, 'predictions_locked' => (bool) $locked]);
+}
+
 // --- Main routing ---
 
 $method = $_SERVER['REQUEST_METHOD'];
@@ -227,6 +248,9 @@ if ($method === 'POST') {
         case 'reset-match':
             handleResetMatch($pdo, $input);
             break;
+        case 'toggle-lock':
+            handleToggleLock($pdo, $input);
+            break;
         default:
             http_response_code(400);
             echo json_encode(['error' => 'Accion POST no valida. Usa: toggle-phase, set-score, recalculate, reset-pin']);
@@ -245,6 +269,9 @@ if ($method === 'POST') {
             break;
         case 'export-predictions':
             handleExportPredictions($pdo);
+            break;
+        case 'config':
+            handleGetConfig($pdo);
             break;
         default:
             http_response_code(400);

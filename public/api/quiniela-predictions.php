@@ -102,6 +102,16 @@ function handlePostPredictions(PDO $pdo) {
         return;
     }
 
+    // Check global predictions lock (admin master switch)
+    $lockStmt = $pdo->prepare("SELECT value FROM q_config WHERE key_name = 'predictions_locked'");
+    $lockStmt->execute();
+    $lockRow = $lockStmt->fetch(PDO::FETCH_ASSOC);
+    if ($lockRow && (int) $lockRow['value'] === 1) {
+        http_response_code(403);
+        echo json_encode(['error' => 'Las predicciones estan bloqueadas temporalmente por el administrador']);
+        return;
+    }
+
     $input = json_decode(file_get_contents('php://input'), true);
     if (!$input || !isset($input['predictions']) || !is_array($input['predictions'])) {
         http_response_code(400);

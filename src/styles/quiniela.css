@@ -870,6 +870,23 @@
   border-bottom: none;
 }
 
+.q-admin-global-lock-row {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.q-admin-lock-label {
+  font-weight: 600;
+}
+
+.q-lock-warning {
+  margin-top: var(--spacing-sm);
+  font-size: 0.85rem;
+  color: var(--error, #e74c3c);
+  font-weight: 500;
+}
+
 .q-admin-phase-name {
   flex: 1;
   font-weight: 500;

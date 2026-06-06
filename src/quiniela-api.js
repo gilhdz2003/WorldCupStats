@@ -130,6 +130,16 @@ export async function adminResetMatch(matchId) {
   });
 }
 
+export async function adminGetConfig() {
+  return apiFetch('quiniela-admin.php?action=config');
+}
+
+export async function adminToggleLock(locked) {
+  return apiFetch('quiniela-admin.php?action=toggle-lock', {
+    method: 'POST', body: JSON.stringify({ locked: locked ? 1 : 0 })
+  });
+}
+
 export async function adminExport() {
   const token = getToken();
   const res = await fetch(API_BASE + 'quiniela-admin.php?action=export', {

@@ -1,4 +1,4 @@
-import { isLoggedIn, getUser, adminGetParticipants, adminGetPhases, adminTogglePhase, adminSetScore, adminExport, adminExportPredictions, adminResetPin, adminResetMatch, getMatches } from '../quiniela-api.js';
+import { isLoggedIn, getUser, adminGetParticipants, adminGetPhases, adminTogglePhase, adminSetScore, adminExport, adminExportPredictions, adminResetPin, adminResetMatch, adminGetConfig, adminToggleLock, getMatches } from '../quiniela-api.js';
 
 export function QuinielaAdmin() {
   const user = getUser();
@@ -13,6 +13,11 @@ export function QuinielaAdmin() {
   return `
     <section class="container q-section">
       <h1 class="q-page-title">⚙️ Panel de Administración</h1>
+
+      <div class="q-admin-section">
+        <h2>🔒 Control Global</h2>
+        <div id="q-admin-global-lock"><p class="q-loading">Cargando...</p></div>
+      </div>
 
       <div class="q-admin-section">
         <h2>🎛️ Control de Fases</h2>
@@ -70,10 +75,55 @@ export function QuinielaAdmin() {
 }
 
 export function initQuinielaAdmin() {
+  loadGlobalLock();
   loadPhases();
   loadParticipants();
   loadMatchSelect();
   bindAdminEvents();
+}
+
+async function loadGlobalLock() {
+  const container = document.getElementById('q-admin-global-lock');
+  if (!container) return;
+  try {
+    const data = await adminGetConfig();
+    if (!data.ok) { container.innerHTML = '<p class="q-error">Error cargando config</p>'; return; }
+    const locked = data.predictions_locked;
+    container.innerHTML = `
+      <div class="q-admin-global-lock-row">
+        <span class="q-admin-lock-label">Predicciones:</span>
+        <label class="q-toggle">
+          <input type="checkbox" id="q-global-lock-toggle" ${locked ? 'checked' : ''}>
+          <span class="q-toggle-slider"></span>
+        </label>
+        <span class="q-admin-lock-status ${locked ? 'q-status-closed' : 'q-status-open'}">${locked ? '🔒 BLOQUEADAS' : '✅ ABIERTAS'}</span>
+      </div>
+      <p class="q-lock-warning" style="display:${locked ? 'block' : 'none'}">Nadie puede enviar ni editar predicciones mientras este switch esté activo.</p>
+    `;
+    document.getElementById('q-global-lock-toggle').addEventListener('change', async () => {
+      const isLocked = document.getElementById('q-global-lock-toggle').checked;
+      const confirmMsg = isLocked
+        ? '⚠️ ¿Bloquear TODAS las predicciones?\n\nNadie podrá enviar ni editar predicciones.'
+        : '¿Desbloquear predicciones?\n\nLos usuarios podrán volver a predecir.';
+      if (!confirm(confirmMsg)) {
+        document.getElementById('q-global-lock-toggle').checked = !isLocked;
+        return;
+      }
+      try {
+        await adminToggleLock(isLocked);
+        const statusEl = container.querySelector('.q-admin-lock-status');
+        const warning = container.querySelector('.q-lock-warning');
+        statusEl.textContent = isLocked ? '🔒 BLOQUEADAS' : '✅ ABIERTAS';
+        statusEl.className = `q-admin-lock-status ${isLocked ? 'q-status-closed' : 'q-status-open'}`;
+        warning.style.display = isLocked ? 'block' : 'none';
+      } catch (err) {
+        alert('Error: ' + err.message);
+        document.getElementById('q-global-lock-toggle').checked = !isLocked;
+      }
+    });
+  } catch (err) {
+    container.innerHTML = `<p class="q-error">${err.message}</p>`;
+  }
 }
 
 async function loadPhases() {
