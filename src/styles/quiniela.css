@@ -626,7 +626,81 @@
   color: var(--text-secondary);
 }
 
-/* ─── Points Badge ─── */
+/* ─── Final Score (finished matches, center column) ─── */
+.q-final-score {
+  font-family: var(--font-mono);
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: 2px;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.15);
+}
+
+/* ─── Result Points Section ─── */
+.q-result-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: var(--spacing-sm) var(--spacing-md);
+  margin-top: var(--spacing-sm);
+  border-radius: var(--radius-lg);
+  animation: q-result-pop 0.4s ease-out;
+}
+
+.q-result-section--exact {
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.15), rgba(212, 175, 55, 0.08));
+  border: 1.5px solid rgba(212, 175, 55, 0.4);
+}
+
+.q-result-section--correct {
+  background: linear-gradient(135deg, rgba(46, 125, 50, 0.12), rgba(46, 125, 50, 0.06));
+  border: 1.5px solid rgba(46, 125, 50, 0.3);
+}
+
+.q-result-section--miss {
+  background: linear-gradient(135deg, rgba(192, 57, 43, 0.12), rgba(192, 57, 43, 0.06));
+  border: 1.5px solid rgba(192, 57, 43, 0.3);
+}
+
+.q-result-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--text-secondary);
+}
+
+.q-result-pts {
+  font-family: var(--font-mono);
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: 1px;
+}
+
+.q-result-pts--exact {
+  color: #D4AF37;
+  text-shadow: 0 0 12px rgba(212, 175, 55, 0.4);
+}
+
+.q-result-pts--correct {
+  color: #2E7D32;
+  text-shadow: 0 0 10px rgba(46, 125, 50, 0.3);
+}
+
+.q-result-pts--miss {
+  color: #C0392B;
+  font-size: 1.8rem;
+}
+
+@keyframes q-result-pop {
+  0% { transform: scale(0.8); opacity: 0; }
+  60% { transform: scale(1.05); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* ─── Points Badge (deprecated, kept for mobile fallback) ─── */
 .q-badge {
   display: inline-flex;
   align-items: center;

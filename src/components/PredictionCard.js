@@ -7,15 +7,23 @@ export function renderPredictionCard(match, prediction, isModified, phasePoints)
   const lockedClass = isLocked ? ' q-prediction-card--locked' : '';
   const hasResult = isFinished && match.home_score !== null;
 
-  // Determine if user got points
-  let resultBadge = '';
+  // Determine if user got points — build result section
+  let resultSection = '';
   if (hasResult && predicted) {
     const pts = prediction.points_earned || 0;
+    const isExact = phasePoints && pts === phasePoints.exact;
     if (pts > 0) {
-      const badgeClass = (phasePoints && pts === phasePoints.exact) ? 'q-badge--exact' : 'q-badge--correct';
-      resultBadge = `<span class="q-badge ${badgeClass}">+${pts}</span>`;
+      resultSection = `
+        <div class="q-result-section ${isExact ? 'q-result-section--exact' : 'q-result-section--correct'}">
+          <span class="q-result-label">Puntos Obtenidos</span>
+          <span class="q-result-pts ${isExact ? 'q-result-pts--exact' : 'q-result-pts--correct'}">+${pts}</span>
+        </div>`;
     } else {
-      resultBadge = '<span class="q-badge q-badge--miss">0</span>';
+      resultSection = `
+        <div class="q-result-section q-result-section--miss">
+          <span class="q-result-label">Puntos Obtenidos</span>
+          <span class="q-result-pts q-result-pts--miss">0</span>
+        </div>`;
     }
   }
 
@@ -30,11 +38,10 @@ export function renderPredictionCard(match, prediction, isModified, phasePoints)
             ${!isLocked ? `
               <input type="number" class="q-score-input q-score-home" min="0" max="99" placeholder="-" value="${prediction?.predicted_home_score ?? ''}">
             ` : ''}
-            ${hasResult ? `<span class="q-pred-score">${match.home_score}</span>` : ''}
           </div>
         </div>
 
-        <!-- Center: option buttons OR locked display -->
+        <!-- Center: option buttons OR result display -->
         <div class="q-pred-center">
           ${!isLocked ? `
             <button class="q-option q-option--home ${predicted === 'home' ? 'q-option--selected' : ''}" data-result="home" title="Gana Local">🏠<span class="q-option-label">Local</span></button>
@@ -45,8 +52,10 @@ export function renderPredictionCard(match, prediction, isModified, phasePoints)
           ${!isLocked ? `
             <button class="q-option q-option--away ${predicted === 'away' ? 'q-option--selected' : ''}" data-result="away" title="Gana Visita">✈️<span class="q-option-label">Visita</span></button>
           ` : ''}
-          ${isLocked ? (hasResult ? `${match.home_score} - ${match.away_score}` : '🔒') : ''}
-          ${resultBadge}
+          ${isLocked && hasResult ? `
+            <span class="q-final-score">${match.home_score} - ${match.away_score}</span>
+          ` : ''}
+          ${isLocked && !hasResult ? '🔒' : ''}
         </div>
 
         <!-- Away team: score input + name + flag -->
@@ -56,11 +65,11 @@ export function renderPredictionCard(match, prediction, isModified, phasePoints)
             ${!isLocked ? `
               <input type="number" class="q-score-input q-score-away" min="0" max="99" placeholder="-" value="${prediction?.predicted_away_score ?? ''}">
             ` : ''}
-            ${hasResult ? `<span class="q-pred-score">${match.away_score}</span>` : ''}
           </div>
           <img src="${match.away_logo || `/logos/${match.away_abbr?.toLowerCase() || 'xxx'}.png`}" alt="" class="q-team-flag" onerror="this.style.display='none'">
         </div>
       </div>
+      ${resultSection}
       ${isLocked && predicted ? `
         <div class="q-pred-summary">
           Tu predicción: ${predicted === 'home' ? 'Gana ' + translateTeam(match.home_team) : predicted === 'away' ? 'Gana ' + translateTeam(match.away_team) : 'Empate'}
