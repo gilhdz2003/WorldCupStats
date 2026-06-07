@@ -646,6 +646,8 @@
   margin-top: var(--spacing-sm);
   border-radius: var(--radius-lg);
   animation: q-result-pop 0.4s ease-out;
+  position: relative;
+  overflow: visible;
 }
 
 .q-result-section--exact {
@@ -725,6 +727,104 @@
 .q-badge--miss {
   background: var(--accent-danger);
   color: #fff;
+}
+
+/* ─── Sports Ticker ─── */
+.q-ticker {
+  overflow: hidden;
+  margin-bottom: var(--spacing-md);
+  padding: var(--spacing-sm) 0;
+  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.q-ticker-track {
+  display: flex;
+  animation: q-ticker-scroll 40s linear infinite;
+  width: max-content;
+}
+
+.q-ticker-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-xs) var(--spacing-lg);
+  white-space: nowrap;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.q-ticker-item--placeholder {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  color: var(--accent-primary);
+  font-weight: 600;
+  justify-content: center;
+  width: 100%;
+  text-align: center;
+  padding: var(--spacing-md) var(--spacing-lg);
+}
+
+.q-ticker-home,
+.q-ticker-away {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.q-ticker-score {
+  color: var(--accent-primary);
+  font-weight: 700;
+}
+
+.q-ticker-badge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  background: var(--accent-secondary);
+  color: var(--bg-primary);
+  padding: 1px 5px;
+  border-radius: var(--radius-full);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+@keyframes q-ticker-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* ─── Card Shine Hover ─── */
+.q-prediction-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.q-prediction-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.08),
+    transparent
+  );
+  transition: none;
+  pointer-events: none;
+}
+
+.q-prediction-card:hover::after {
+  animation: q-card-shine 0.6s ease-out;
+  left: 150%;
+}
+
+@keyframes q-card-shine {
+  0% { left: -100%; }
+  100% { left: 150%; }
 }
 
 /* ─── Date Group ─── */
@@ -1103,26 +1203,66 @@
     padding: var(--spacing-sm);
   }
 
-  .q-pred-teams {
+  /* Open cards: keep wrapped layout (score on top, buttons below) */
+  .q-prediction-card:not(.q-prediction-card--locked) .q-pred-teams {
     flex-wrap: wrap;
   }
 
-  .q-pred-center {
+  .q-prediction-card:not(.q-prediction-card--locked) .q-pred-center {
     width: 100%;
     justify-content: center;
     order: -1;
     margin-bottom: var(--spacing-sm);
   }
 
-  .q-pred-team--home {
+  .q-prediction-card:not(.q-prediction-card--locked) .q-pred-team--home {
     justify-content: flex-start;
     text-align: left;
   }
 
-  .q-pred-team-info {
+  .q-prediction-card:not(.q-prediction-card--locked) .q-pred-team-info {
     flex-direction: row;
     align-items: baseline;
     gap: var(--spacing-xs);
+  }
+
+  /* Locked cards: horizontal layout — flag · name · SCORE · name · flag */
+  .q-prediction-card--locked .q-pred-teams {
+    flex-wrap: nowrap;
+    gap: var(--spacing-xs);
+  }
+
+  .q-prediction-card--locked .q-pred-center {
+    width: auto;
+    flex-shrink: 0;
+    order: 0;
+    margin: 0 var(--spacing-xs);
+  }
+
+  .q-prediction-card--locked .q-pred-team {
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  .q-prediction-card--locked .q-pred-team--home {
+    justify-content: flex-end;
+    text-align: right;
+  }
+
+  .q-prediction-card--locked .q-pred-team-name {
+    font-size: 0.85rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .q-prediction-card--locked .q-team-flag {
+    width: 26px;
+    height: 26px;
+  }
+
+  .q-prediction-card--locked .q-final-score {
+    font-size: 1.3rem;
   }
 
   .q-score-input {
@@ -1464,4 +1604,57 @@
   .q-points-row strong {
     font-size: 0.85rem;
   }
+}
+
+/* ─── Mini Confetti (Exact Score Celebration) ─── */
+@keyframes q-confetti-fall {
+  0% {
+    opacity: 1;
+    transform: translateY(0) rotate(0deg) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(40px) rotate(360deg) scale(0.3);
+  }
+}
+
+@keyframes q-confetti-burst {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) rotate(0deg);
+  }
+  25% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--q-confetti-x), var(--q-confetti-y)) rotate(720deg);
+  }
+}
+
+.q-confetti-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  z-index: 10;
+  overflow: visible;
+}
+
+.q-confetti-particle {
+  position: absolute;
+  width: var(--q-confetti-size, 6px);
+  height: var(--q-confetti-size, 6px);
+  border-radius: 1px;
+  animation: q-confetti-burst var(--q-confetti-dur, 0.7s) ease-out forwards;
+  animation-delay: var(--q-confetti-delay, 0s);
+  opacity: 0;
+}
+
+/* Gold sparkle variant (circular) */
+.q-confetti-particle--sparkle {
+  border-radius: 50%;
+  box-shadow: 0 0 3px var(--q-confetti-color, #D4AF37);
 }

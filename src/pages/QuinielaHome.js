@@ -1,5 +1,20 @@
-import { isLoggedIn, getUser, login, register, getLeaderboard, logout } from '../quiniela-api.js';
+import { isLoggedIn, getUser, login, register, getLeaderboard, getMatches, logout } from '../quiniela-api.js';
 import { renderQuinielaAuth } from '../components/QuinielaAuth.js';
+import { renderSportsTicker } from '../components/SportsTicker.js';
+
+// Animate a number from 0 to target using requestAnimationFrame
+function animateCounter(el, target, duration = 800) {
+  if (!el || target <= 0) { el.textContent = target + ' pts'; return; }
+  const start = performance.now();
+  const ease = t => t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+  function step(now) {
+    const progress = Math.min((now - start) / duration, 1);
+    const value = Math.round(target * ease(progress));
+    el.textContent = value + ' pts';
+    if (progress < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
 
 export function QuinielaHome() {
   if (isLoggedIn()) {
@@ -88,6 +103,7 @@ function renderDashboard(user) {
     <section class="container q-section">
       <div class="q-dashboard">
         <h1 class="q-welcome">¡Hola, ${user.name}! 👋</h1>
+        <div id="q-sports-ticker"></div>
         <div class="q-stats-grid">
           <a href="#/quiniela/predictions" class="q-stat-card">
             <span class="q-stat-icon">🎯</span>
@@ -189,6 +205,7 @@ export function initQuinielaHome() {
       window.location.hash = '#/quiniela';
     });
     loadLeaderboardPreview();
+    loadSportsTicker();
   }
 
   // Bind rules toggle
@@ -300,14 +317,32 @@ async function loadLeaderboardPreview() {
             <div class="q-leader-preview-row">
               <span class="q-leader-preview-rank">${i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : `#${i + 1}`}</span>
               <span class="q-leader-preview-name">${u.name}</span>
-              <span class="q-leader-preview-pts">${u.total_points} pts</span>
+              <span class="q-leader-preview-pts" data-target="${u.total_points}">0 pts</span>
             </div>
           `).join('')}
         </div>
         <a href="#/quiniela/leaderboard" class="q-link">Ver leaderboard completo →</a>
       `;
+
+      // Animate point counters
+      container.querySelectorAll('.q-leader-preview-pts[data-target]').forEach(el => {
+        animateCounter(el, parseInt(el.dataset.target), 800);
+      });
     }
   } catch (e) {
     container.innerHTML = '<p class="q-muted">Leaderboard disponible cuando inicie el torneo</p>';
+  }
+}
+
+async function loadSportsTicker() {
+  const container = document.getElementById('q-sports-ticker');
+  if (!container) return;
+  try {
+    const data = await getMatches();
+    const matches = data.matches || [];
+    container.innerHTML = renderSportsTicker(matches, null);
+  } catch (e) {
+    // Silently fail — ticker is decorative
+    container.innerHTML = '';
   }
 }

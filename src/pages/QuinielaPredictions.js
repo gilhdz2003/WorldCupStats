@@ -167,9 +167,10 @@ export function initQuinielaPredictions() {
       return `
         <div class="q-date-group">
           <h3 class="q-date-heading">${dateStr}</h3>
-          ${dateMatches.map(m => {
+          ${dateMatches.map((m, i) => {
             const matchId = predictionKey(m.id);
-            return renderPredictionCard(m, predictions[matchId], modified.has(matchId), PHASE_POINTS[currentPhase]);
+            const stagger = i < 12 ? ` animate-slide-up stagger-${(i % 4) + 1}` : '';
+            return `<div class="${stagger}">${renderPredictionCard(m, predictions[matchId], modified.has(matchId), PHASE_POINTS[currentPhase])}</div>`;
           }).join('')}
         </div>
       `;
@@ -177,6 +178,9 @@ export function initQuinielaPredictions() {
 
     // Bind prediction card events
     bindCardEvents();
+
+    // Trigger mini confetti on exact score results
+    triggerExactConfetti();
   }
 
   function bindCardEvents() {
@@ -257,4 +261,46 @@ export function initQuinielaPredictions() {
 
   // Load initial phase
   loadPhaseData();
+}
+
+/**
+ * Mini confetti burst on exact score prediction cards.
+ * Creates 12 small golden particles that burst outward from the result section,
+ * then auto-cleans after animation completes.
+ */
+function triggerExactConfetti() {
+  const exactSections = document.querySelectorAll('.q-result-section--exact');
+  exactSections.forEach(section => {
+    // Skip if already confetti'd this session
+    if (section.querySelector('.q-confetti-container')) return;
+
+    const container = document.createElement('div');
+    container.className = 'q-confetti-container';
+    section.appendChild(container);
+
+    const colors = ['#D4AF37', '#FFD700', '#FFC107', '#FFEB3B', '#FFF8E1', '#E8B923'];
+    const particleCount = 12;
+
+    for (let i = 0; i < particleCount; i++) {
+      const particle = document.createElement('div');
+      const angle = (i / particleCount) * Math.PI * 2 + (Math.random() * 0.5 - 0.25);
+      const distance = 25 + Math.random() * 20;
+      const x = Math.cos(angle) * distance;
+      const y = Math.sin(angle) * distance - 10; // bias upward
+      const isSparkle = i % 3 === 0;
+
+      particle.className = `q-confetti-particle${isSparkle ? ' q-confetti-particle--sparkle' : ''}`;
+      particle.style.setProperty('--q-confetti-x', `${x}px`);
+      particle.style.setProperty('--q-confetti-y', `${y}px`);
+      particle.style.setProperty('--q-confetti-color', colors[i % colors.length]);
+      particle.style.setProperty('--q-confetti-delay', `${Math.random() * 0.15}s`);
+      particle.style.setProperty('--q-confetti-dur', `${0.5 + Math.random() * 0.3}s`);
+      particle.style.setProperty('--q-confetti-size', `${4 + Math.random() * 4}px`);
+      particle.style.backgroundColor = colors[i % colors.length];
+      container.appendChild(particle);
+    }
+
+    // Auto-cleanup after animations complete (~1s)
+    setTimeout(() => container.remove(), 1200);
+  });
 }

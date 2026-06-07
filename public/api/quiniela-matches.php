@@ -55,6 +55,7 @@ function handleGetMatches(PDO $pdo) {
     if ($user) {
         // Authenticated: include user prediction via LEFT JOIN
         $sql = 'SELECT m.id, m.phase, m.group_label, m.home_team, m.away_team,
+                       m.home_abbr, m.away_abbr,
                        m.match_date, m.match_time, m.home_score, m.away_score,
                        m.status, m.is_locked,
                        p.predicted_result, p.predicted_home_score, p.predicted_away_score, p.points_earned
@@ -65,6 +66,7 @@ function handleGetMatches(PDO $pdo) {
     } else {
         // Public: no predictions
         $sql = 'SELECT m.id, m.phase, m.group_label, m.home_team, m.away_team,
+                       m.home_abbr, m.away_abbr,
                        m.match_date, m.match_time, m.home_score, m.away_score,
                        m.status, m.is_locked,
                        NULL as predicted_result, NULL as predicted_home_score, NULL as predicted_away_score, NULL as points_earned
@@ -101,6 +103,8 @@ function handleGetMatches(PDO $pdo) {
             'group_label' => $row['group_label'],
             'home_team'  => $row['home_team'],
             'away_team'  => $row['away_team'],
+            'home_abbr'  => $row['home_abbr'],
+            'away_abbr'  => $row['away_abbr'],
             'match_date' => $row['match_date'],
             'match_time' => $row['match_time'],
             'home_score' => $row['home_score'] !== null ? (int) $row['home_score'] : null,
