@@ -3170,5 +3170,129 @@
       "Tele",
       "Peacock"
     ]
+  },
+  {
+    "id": "760514",
+    "date": "2026-07-14",
+    "time": "2026-07-15T00:00:00Z",
+    "status": "STATUS_SCHEDULED",
+    "statusDetail": "Tue, July 14th at 8:00 PM EDT",
+    "homeTeam": {
+      "name": "Quarterfinal 1 Winner",
+      "abbreviation": "QF1 Winner",
+      "logo": "/logos/qf1 winner.png",
+      "score": "0",
+      "espnId": "19282"
+    },
+    "awayTeam": {
+      "name": "Quarterfinal 2 Winner",
+      "abbreviation": "QF2 Winner",
+      "logo": "/logos/qf2 winner.png",
+      "score": "0",
+      "espnId": "19283"
+    },
+    "venue": {
+      "name": "AT&T Stadium",
+      "city": "Arlington, Texas",
+      "capacity": 0
+    },
+    "broadcasts": [
+      "FOX",
+      "Tele",
+      "Peacock"
+    ]
+  },
+  {
+    "id": "760515",
+    "date": "2026-07-15",
+    "time": "2026-07-16T00:00:00Z",
+    "status": "STATUS_SCHEDULED",
+    "statusDetail": "Wed, July 15th at 8:00 PM EDT",
+    "homeTeam": {
+      "name": "Quarterfinal 3 Winner",
+      "abbreviation": "QF3 Winner",
+      "logo": "/logos/qf3 winner.png",
+      "score": "0",
+      "espnId": "19284"
+    },
+    "awayTeam": {
+      "name": "Quarterfinal 4 Winner",
+      "abbreviation": "QF4 Winner",
+      "logo": "/logos/qf4 winner.png",
+      "score": "0",
+      "espnId": "19285"
+    },
+    "venue": {
+      "name": "Lucas Oil Stadium",
+      "city": "Indianapolis, Indiana",
+      "capacity": 0
+    },
+    "broadcasts": [
+      "FOX",
+      "Tele",
+      "Peacock"
+    ]
+  },
+  {
+    "id": "760516",
+    "date": "2026-07-18",
+    "time": "2026-07-19T02:00:00Z",
+    "status": "STATUS_SCHEDULED",
+    "statusDetail": "Sat, July 18th at 10:00 PM EDT",
+    "homeTeam": {
+      "name": "Semifinal 1 Loser",
+      "abbreviation": "SF1 Loser",
+      "logo": "/logos/sf1 loser.png",
+      "score": "0",
+      "espnId": "19286"
+    },
+    "awayTeam": {
+      "name": "Semifinal 2 Loser",
+      "abbreviation": "SF2 Loser",
+      "logo": "/logos/sf2 loser.png",
+      "score": "0",
+      "espnId": "19287"
+    },
+    "venue": {
+      "name": "Hard Rock Stadium",
+      "city": "Miami Gardens, Florida",
+      "capacity": 0
+    },
+    "broadcasts": [
+      "FOX",
+      "Tele",
+      "Peacock"
+    ]
+  },
+  {
+    "id": "760517",
+    "date": "2026-07-19",
+    "time": "2026-07-20T01:00:00Z",
+    "status": "STATUS_SCHEDULED",
+    "statusDetail": "Sun, July 19th at 9:00 PM EDT",
+    "homeTeam": {
+      "name": "Semifinal 1 Winner",
+      "abbreviation": "SF1 Winner",
+      "logo": "/logos/sf1 winner.png",
+      "score": "0",
+      "espnId": "19288"
+    },
+    "awayTeam": {
+      "name": "Semifinal 2 Winner",
+      "abbreviation": "SF2 Winner",
+      "logo": "/logos/sf2 winner.png",
+      "score": "0",
+      "espnId": "19289"
+    },
+    "venue": {
+      "name": "MetLife Stadium",
+      "city": "East Rutherford, New Jersey",
+      "capacity": 0
+    },
+    "broadcasts": [
+      "FOX",
+      "Tele",
+      "Peacock"
+    ]
   }
 ]

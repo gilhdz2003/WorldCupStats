@@ -3,7 +3,7 @@ import { renderFooter } from './components/Footer.js';
 
 import { Home, initHomeLive } from './pages/Home.js';
 import { Groups } from './pages/Groups.js';
-import { Schedule } from './pages/Schedule.js';
+import { Schedule, initSchedule } from './pages/Schedule.js';
 import { MatchPage, initMatchPage } from './pages/MatchPage.js';
 import { Teams } from './pages/Teams.js';
 import { TeamPage, initTeamPage } from './pages/TeamPage.js';
@@ -47,6 +47,9 @@ export class Router {
     } else if (path.startsWith('/player/')) {
       const playerId = path.split('/')[2];
       renderPage = () => PlayerPage(playerId);
+    } else if (path === '/schedule') {
+      renderPage = () => Schedule();
+      afterRender = () => initSchedule();
     } else if (path === '/quiniela') {
       renderPage = () => QuinielaHome();
       afterRender = () => initQuinielaHome();

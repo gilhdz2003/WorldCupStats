@@ -33,7 +33,7 @@ export function Schedule() {
         </div>
       </div>
 
-      <div class="flex justify-center" style="margin-bottom: var(--spacing-xl);">
+      <div class="date-nav" id="date-nav-container" style="margin-bottom: var(--spacing-xl);">
         ${renderDateNav(initialDate)}
       </div>
 
@@ -68,7 +68,13 @@ if (!window._scheduleListener) {
       const listEl = document.getElementById('matches-list');
       const navEl = document.getElementById('date-nav-container');
       if (listEl) listEl.innerHTML = getMatchesHTML(date, currentGroup);
-      if (navEl) navEl.innerHTML = renderDateNav(date);
+      if (navEl) {
+        navEl.innerHTML = renderDateNav(date);
+        requestAnimationFrame(() => {
+          const activeTab = navEl.querySelector('.date-tab.active');
+          activeTab?.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        });
+      }
     }
   });
 
@@ -91,4 +97,15 @@ if (!window._scheduleListener) {
   });
 
   window._scheduleListener = true;
+}
+
+export function initSchedule() {
+  const navEl = document.getElementById('date-nav-container');
+  if (!navEl) return;
+  const activeTab = navEl.querySelector('.date-tab.active');
+  if (activeTab) {
+    requestAnimationFrame(() => {
+      activeTab.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+    });
+  }
 }

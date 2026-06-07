@@ -17,16 +17,10 @@ function getMatchDates() {
 
 export function renderDateNav(activeDate) {
   const dates = getMatchDates();
-  const tabs = dates.map(d => `
+  return dates.map(d => `
     <button class="date-tab ${d.id === activeDate ? 'active' : ''}" data-date="${d.id}">
       <span class="date-day">${d.day}</span>
       <span class="date-date">${d.label}</span>
     </button>
   `).join('');
-
-  return `
-    <div class="date-nav" id="date-nav-container">
-      ${tabs}
-    </div>
-  `;
 }
