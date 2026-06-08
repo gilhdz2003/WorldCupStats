@@ -204,13 +204,14 @@ function handleResetMatch(PDO $pdo, array $input): void {
 
 function handleGetConfig(PDO $pdo): void {
     requireAdmin($pdo);
-    $stmt = $pdo->prepare("SELECT key_name, value FROM q_config WHERE key_name = 'predictions_locked'");
+    $stmt = $pdo->prepare("SELECT key_name, value FROM q_config WHERE key_name IN ('predictions_locked', 'registration_locked')");
     $stmt->execute();
-    $row = $stmt->fetch(PDO::FETCH_ASSOC);
-    echo json_encode([
-        'ok' => true,
-        'predictions_locked' => $row ? (bool) ((int) $row['value']) : false,
-    ]);
+    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $config = ['predictions_locked' => false, 'registration_locked' => false];
+    foreach ($rows as $row) {
+        $config[$row['key_name']] = (bool) ((int) $row['value']);
+    }
+    echo json_encode(['ok' => true] + $config);
 }
 
 function handleToggleLock(PDO $pdo, array $input): void {
@@ -219,6 +220,14 @@ function handleToggleLock(PDO $pdo, array $input): void {
     $pdo->prepare("INSERT INTO q_config (key_name, value) VALUES ('predictions_locked', ?) ON DUPLICATE KEY UPDATE value = ?")
         ->execute([$locked, $locked]);
     echo json_encode(['ok' => true, 'predictions_locked' => (bool) $locked]);
+}
+
+function handleToggleRegistration(PDO $pdo, array $input): void {
+    requireAdmin($pdo);
+    $locked = isset($input['locked']) ? (int) $input['locked'] : 0;
+    $pdo->prepare("INSERT INTO q_config (key_name, value) VALUES ('registration_locked', ?) ON DUPLICATE KEY UPDATE value = ?")
+        ->execute([$locked, $locked]);
+    echo json_encode(['ok' => true, 'registration_locked' => (bool) $locked]);
 }
 
 // --- Main routing ---
@@ -250,6 +259,9 @@ if ($method === 'POST') {
             break;
         case 'toggle-lock':
             handleToggleLock($pdo, $input);
+            break;
+        case 'toggle-registration':
+            handleToggleRegistration($pdo, $input);
             break;
         default:
             http_response_code(400);

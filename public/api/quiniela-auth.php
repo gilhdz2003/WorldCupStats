@@ -74,6 +74,16 @@ function getAuthUser(PDO $pdo): ?array {
 // --- Action handlers ---
 
 function handleRegister(PDO $pdo, array $input) {
+    // Check registration lock (admin switch)
+    $lockStmt = $pdo->prepare("SELECT value FROM q_config WHERE key_name = 'registration_locked'");
+    $lockStmt->execute();
+    $lockRow = $lockStmt->fetch(PDO::FETCH_ASSOC);
+    if ($lockRow && (int) $lockRow['value'] === 1) {
+        http_response_code(403);
+        echo json_encode(['error' => 'Los registros están cerrados temporalmente']);
+        return;
+    }
+
     $name  = trim($input['name'] ?? '');
     $email = trim($input['email'] ?? '');
 

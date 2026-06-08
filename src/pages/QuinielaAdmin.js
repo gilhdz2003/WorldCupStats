@@ -1,4 +1,4 @@
-import { isLoggedIn, getUser, adminGetParticipants, adminGetPhases, adminTogglePhase, adminSetScore, adminExport, adminExportPredictions, adminResetPin, adminResetMatch, adminGetConfig, adminToggleLock, getMatches } from '../quiniela-api.js';
+import { isLoggedIn, getUser, adminGetParticipants, adminGetPhases, adminTogglePhase, adminSetScore, adminExport, adminExportPredictions, adminResetPin, adminResetMatch, adminGetConfig, adminToggleLock, adminToggleRegistration, getMatches } from '../quiniela-api.js';
 
 export function QuinielaAdmin() {
   const user = getUser();
@@ -88,18 +88,30 @@ async function loadGlobalLock() {
   try {
     const data = await adminGetConfig();
     if (!data.ok) { container.innerHTML = '<p class="q-error">Error cargando config</p>'; return; }
-    const locked = data.predictions_locked;
+    const predLocked = data.predictions_locked;
+    const regLocked = data.registration_locked;
     container.innerHTML = `
       <div class="q-admin-global-lock-row">
         <span class="q-admin-lock-label">Predicciones:</span>
         <label class="q-toggle">
-          <input type="checkbox" id="q-global-lock-toggle" ${locked ? 'checked' : ''}>
+          <input type="checkbox" id="q-global-lock-toggle" ${predLocked ? 'checked' : ''}>
           <span class="q-toggle-slider"></span>
         </label>
-        <span class="q-admin-lock-status ${locked ? 'q-status-closed' : 'q-status-open'}">${locked ? '🔒 BLOQUEADAS' : '✅ ABIERTAS'}</span>
+        <span class="q-admin-lock-status ${predLocked ? 'q-status-closed' : 'q-status-open'}">${predLocked ? '🔒 BLOQUEADAS' : '✅ ABIERTAS'}</span>
       </div>
-      <p class="q-lock-warning" style="display:${locked ? 'block' : 'none'}">Nadie puede enviar ni editar predicciones mientras este switch esté activo.</p>
+      <p class="q-lock-warning" style="display:${predLocked ? 'block' : 'none'}">Nadie puede enviar ni editar predicciones mientras este switch esté activo.</p>
+      <div class="q-admin-global-lock-row">
+        <span class="q-admin-lock-label">Registros:</span>
+        <label class="q-toggle">
+          <input type="checkbox" id="q-reg-lock-toggle" ${regLocked ? 'checked' : ''}>
+          <span class="q-toggle-slider"></span>
+        </label>
+        <span class="q-admin-lock-status ${regLocked ? 'q-status-closed' : 'q-status-open'}" id="q-reg-lock-status">${regLocked ? '🔒 CERRADOS' : '✅ ABIERTOS'}</span>
+      </div>
+      <p class="q-lock-warning" style="display:${regLocked ? 'block' : 'none'}">Nadie podrá registrarse como nuevo participante.</p>
     `;
+
+    // Predictions toggle
     document.getElementById('q-global-lock-toggle').addEventListener('change', async () => {
       const isLocked = document.getElementById('q-global-lock-toggle').checked;
       const confirmMsg = isLocked
@@ -111,7 +123,7 @@ async function loadGlobalLock() {
       }
       try {
         await adminToggleLock(isLocked);
-        const statusEl = container.querySelector('.q-admin-lock-status');
+        const statusEl = container.querySelector('#q-global-lock-toggle').closest('.q-admin-global-lock-row').querySelector('.q-admin-lock-status');
         const warning = container.querySelector('.q-lock-warning');
         statusEl.textContent = isLocked ? '🔒 BLOQUEADAS' : '✅ ABIERTAS';
         statusEl.className = `q-admin-lock-status ${isLocked ? 'q-status-closed' : 'q-status-open'}`;
@@ -119,6 +131,30 @@ async function loadGlobalLock() {
       } catch (err) {
         alert('Error: ' + err.message);
         document.getElementById('q-global-lock-toggle').checked = !isLocked;
+      }
+    });
+
+    // Registration toggle
+    document.getElementById('q-reg-lock-toggle').addEventListener('change', async () => {
+      const isLocked = document.getElementById('q-reg-lock-toggle').checked;
+      const confirmMsg = isLocked
+        ? '⚠️ ¿Cerrar registros?\n\nNadie podrá registrarse como nuevo participante.'
+        : '¿Reabrir registros?\n\nNuevos participantes podrán registrarse.';
+      if (!confirm(confirmMsg)) {
+        document.getElementById('q-reg-lock-toggle').checked = !isLocked;
+        return;
+      }
+      try {
+        await adminToggleRegistration(isLocked);
+        const statusEl = document.getElementById('q-reg-lock-status');
+        const rows = container.querySelectorAll('.q-admin-global-lock-row');
+        const warnings = container.querySelectorAll('.q-lock-warning');
+        statusEl.textContent = isLocked ? '🔒 CERRADOS' : '✅ ABIERTOS';
+        statusEl.className = `q-admin-lock-status ${isLocked ? 'q-status-closed' : 'q-status-open'}`;
+        warnings[1].style.display = isLocked ? 'block' : 'none';
+      } catch (err) {
+        alert('Error: ' + err.message);
+        document.getElementById('q-reg-lock-toggle').checked = !isLocked;
       }
     });
   } catch (err) {

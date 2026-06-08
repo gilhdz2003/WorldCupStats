@@ -140,6 +140,12 @@ export async function adminToggleLock(locked) {
   });
 }
 
+export async function adminToggleRegistration(locked) {
+  return apiFetch('quiniela-admin.php?action=toggle-registration', {
+    method: 'POST', body: JSON.stringify({ locked: locked ? 1 : 0 })
+  });
+}
+
 export async function adminExport() {
   const token = getToken();
   const res = await fetch(API_BASE + 'quiniela-admin.php?action=export', {
