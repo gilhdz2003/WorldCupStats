@@ -127,22 +127,29 @@ function renderDashboard(user) {
               <div class="q-prize-tier q-prize-tier--gold">
                 <span class="q-prize-medal">🥇</span>
                 <div class="q-prize-info">
-                  <strong>1° — 3° Lugar</strong>
-                  <span>Playera oficial + Balón oficial + Taza conmemorativa</span>
+                  <strong>1° Lugar</strong>
+                  <span>Playera oficial del Tri o tu equipo favorito</span>
                 </div>
               </div>
               <div class="q-prize-tier q-prize-tier--silver">
                 <span class="q-prize-medal">🥈</span>
                 <div class="q-prize-info">
-                  <strong>4° — 5° Lugar</strong>
+                  <strong>2° — 3° Lugar</strong>
                   <span>Balón oficial del Mundial 2026</span>
                 </div>
               </div>
               <div class="q-prize-tier q-prize-tier--more">
                 <span class="q-prize-medal">🎁</span>
                 <div class="q-prize-info">
+                  <strong>4° — 5° Lugar</strong>
+                  <span>Termo Conmemorativo del Mundial</span>
+                </div>
+              </div>
+              <div class="q-prize-tier q-prize-tier--more">
+                <span class="q-prize-medal">🎁</span>
+                <div class="q-prize-info">
                   <strong>6° — 10° Lugar</strong>
-                  <span>Taza conmemorativa</span>
+                  <span>Taza Conmemorativa del Mundial</span>
                 </div>
               </div>
             </div>

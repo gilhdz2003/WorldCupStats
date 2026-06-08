@@ -1,16 +1,17 @@
 <?php
 /**
- * Quiniela Auto-Scoring Cron
+ * Quiniela Auto-Scoring + Auto-Lock Cron
  *
  * Call via cron-job.org every 5 minutes during the tournament.
- * URL: https://mundial2026.com/api/quiniela-cron.php
+ * URL: https://darkblue-locust-891705.hostingersite.com/api/quiniela-cron.php
  *
  * This script:
- * 1. Fetches the ESPN scoreboard for FIFA World Cup
- * 2. Finds matches that are STATUS_FULL_TIME but not yet scored in q_matches
- * 3. Updates match scores and locks them
- * 4. Calculates points for all predictions on those matches
- * 5. Logs results to q_scoring_log
+ * 1. Auto-locks matches at kickoff (match_time <= NOW) to block late predictions
+ * 2. Fetches the ESPN scoreboard for FIFA World Cup
+ * 3. Finds matches that are STATUS_FULL_TIME but not yet scored in q_matches
+ * 4. Updates match scores and locks them
+ * 5. Calculates points for all predictions on those matches
+ * 6. Logs results to q_scoring_log
  */
 
 require_once __DIR__ . '/config.php';
@@ -28,9 +29,24 @@ if ($auth !== CRON_SECRET) {
 
 $scored = 0;
 $matches_updated = 0;
+$locked = 0;
 $log = [];
 
 try {
+    // === PHASE 1: Auto-lock matches at kickoff ===
+    // Lock any scheduled match whose kickoff time has passed (match_time in UTC)
+    $lockStmt = $pdo->prepare(
+        "UPDATE q_matches
+         SET is_locked = 1, status = 'in_progress'
+         WHERE status = 'scheduled' AND match_time <= UTC_TIMESTAMP()"
+    );
+    $lockStmt->execute();
+    $locked = $lockStmt->rowCount();
+    if ($locked > 0) {
+        $log[] = "Auto-locked $locked match(es) at kickoff";
+    }
+
+    // === PHASE 2: Score finished matches via ESPN ===
     // Fetch ESPN scoreboard
     $ctx = stream_context_create([
         'http' => ['timeout' => 15, 'ignore_errors' => true],
@@ -166,6 +182,7 @@ function getPhasePoints(PDO $pdo, string $phase): array {
 
     echo json_encode([
         'ok' => true,
+        'matches_locked' => $locked,
         'matches_updated' => $matches_updated,
         'predictions_scored' => $scored,
         'timestamp' => date('Y-m-d H:i:s'),
