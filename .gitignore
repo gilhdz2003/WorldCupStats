@@ -8,3 +8,16 @@ public/api/config.php
 public/api/football-config.php
 dist/api/config.php
 dist/api/football-config.php
+
+# --- Datos personales de participantes (PII): NUNCA al repo publico ---
+q_users.csv
+participantes-emails*.txt
+backup-predicciones-*.csv
+liga-especial-groups.csv
+
+# --- Materiales de invitacion (se quedan fuera del repo) ---
+Invitacion-Quiniela-*
+
+# --- Backups y archivos temporales ---
+*.bak
+.~lock.*
