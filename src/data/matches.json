@@ -33,7 +33,7 @@
   },
   {
     "id": "760414",
-    "date": "2026-06-12",
+    "date": "2026-06-11",
     "time": "2026-06-12T02:00Z",
     "status": "STATUS_SCHEDULED",
     "statusDetail": "Thu, June 11th at 10:00 PM EDT",
@@ -97,7 +97,7 @@
   },
   {
     "id": "760417",
-    "date": "2026-06-13",
+    "date": "2026-06-12",
     "time": "2026-06-13T01:00Z",
     "status": "STATUS_SCHEDULED",
     "statusDetail": "Fri, June 12th at 9:00 PM EDT",
@@ -185,7 +185,7 @@
       "capacity": 0
     },
     "broadcasts": [
-      "FS1",
+      "FOX",
       "Tele",
       "Peacock"
     ],
@@ -193,7 +193,7 @@
   },
   {
     "id": "760418",
-    "date": "2026-06-14",
+    "date": "2026-06-13",
     "time": "2026-06-14T01:00Z",
     "status": "STATUS_SCHEDULED",
     "statusDetail": "Sat, June 13th at 9:00 PM EDT",
@@ -217,7 +217,7 @@
       "capacity": 0
     },
     "broadcasts": [
-      "FS1",
+      "FOX",
       "Tele",
       "Peacock"
     ],
@@ -225,7 +225,7 @@
   },
   {
     "id": "760421",
-    "date": "2026-06-14",
+    "date": "2026-06-13",
     "time": "2026-06-14T04:00Z",
     "status": "STATUS_SCHEDULED",
     "statusDetail": "Sun, June 13th at 12:00 AM EDT",
@@ -237,7 +237,7 @@
       "espnId": "628"
     },
     "awayTeam": {
-      "name": "Türkiye",
+      "name": "T\u00fcrkiye",
       "abbreviation": "TUR",
       "logo": "/logos/tur.png",
       "score": "0",
@@ -269,7 +269,7 @@
       "espnId": "481"
     },
     "awayTeam": {
-      "name": "Curacao",
+      "name": "Cura\u00e7ao",
       "abbreviation": "CUW",
       "logo": "/logos/cuw.png",
       "score": "0",
@@ -353,7 +353,7 @@
   },
   {
     "id": "760424",
-    "date": "2026-06-15",
+    "date": "2026-06-14",
     "time": "2026-06-15T02:00Z",
     "status": "STATUS_SCHEDULED",
     "statusDetail": "Sun, June 14th at 10:00 PM EDT",
@@ -481,7 +481,7 @@
   },
   {
     "id": "760427",
-    "date": "2026-06-16",
+    "date": "2026-06-15",
     "time": "2026-06-16T01:00Z",
     "status": "STATUS_SCHEDULED",
     "statusDetail": "Mon, June 15th at 9:00 PM EDT",
@@ -577,7 +577,7 @@
   },
   {
     "id": "760433",
-    "date": "2026-06-17",
+    "date": "2026-06-16",
     "time": "2026-06-17T01:00Z",
     "status": "STATUS_SCHEDULED",
     "statusDetail": "Tue, June 16th at 9:00 PM EDT",
@@ -609,7 +609,7 @@
   },
   {
     "id": "760431",
-    "date": "2026-06-17",
+    "date": "2026-06-16",
     "time": "2026-06-17T04:00Z",
     "status": "STATUS_SCHEDULED",
     "statusDetail": "Wed, June 16th at 12:00 AM EDT",
@@ -737,7 +737,7 @@
   },
   {
     "id": "760436",
-    "date": "2026-06-18",
+    "date": "2026-06-17",
     "time": "2026-06-18T02:00Z",
     "status": "STATUS_SCHEDULED",
     "statusDetail": "Wed, June 17th at 10:00 PM EDT",
@@ -865,7 +865,7 @@
   },
   {
     "id": "760441",
-    "date": "2026-06-19",
+    "date": "2026-06-18",
     "time": "2026-06-19T01:00Z",
     "status": "STATUS_SCHEDULED",
     "statusDetail": "Thu, June 18th at 9:00 PM EDT",
@@ -961,7 +961,7 @@
   },
   {
     "id": "760444",
-    "date": "2026-06-20",
+    "date": "2026-06-19",
     "time": "2026-06-20T00:30Z",
     "status": "STATUS_SCHEDULED",
     "statusDetail": "Fri, June 19th at 8:30 PM EDT",
@@ -993,12 +993,12 @@
   },
   {
     "id": "760443",
-    "date": "2026-06-20",
+    "date": "2026-06-19",
     "time": "2026-06-20T03:00Z",
     "status": "STATUS_SCHEDULED",
     "statusDetail": "Fri, June 19th at 11:00 PM EDT",
     "homeTeam": {
-      "name": "Türkiye",
+      "name": "T\u00fcrkiye",
       "abbreviation": "TUR",
       "logo": "/logos/tur.png",
       "score": "0",
@@ -1089,7 +1089,7 @@
   },
   {
     "id": "760446",
-    "date": "2026-06-21",
+    "date": "2026-06-20",
     "time": "2026-06-21T00:00Z",
     "status": "STATUS_SCHEDULED",
     "statusDetail": "Sat, June 20th at 8:00 PM EDT",
@@ -1101,7 +1101,7 @@
       "espnId": "209"
     },
     "awayTeam": {
-      "name": "Curacao",
+      "name": "Cura\u00e7ao",
       "abbreviation": "CUW",
       "logo": "/logos/cuw.png",
       "score": "0",
@@ -1121,7 +1121,7 @@
   },
   {
     "id": "760449",
-    "date": "2026-06-21",
+    "date": "2026-06-20",
     "time": "2026-06-21T04:00Z",
     "status": "STATUS_SCHEDULED",
     "statusDetail": "Sun, June 20th at 12:00 AM EDT",
@@ -1249,7 +1249,7 @@
   },
   {
     "id": "760452",
-    "date": "2026-06-22",
+    "date": "2026-06-21",
     "time": "2026-06-22T01:00Z",
     "status": "STATUS_SCHEDULED",
     "statusDetail": "Sun, June 21st at 9:00 PM EDT",
@@ -1345,7 +1345,7 @@
   },
   {
     "id": "760454",
-    "date": "2026-06-23",
+    "date": "2026-06-22",
     "time": "2026-06-23T00:00Z",
     "status": "STATUS_SCHEDULED",
     "statusDetail": "Mon, June 22nd at 8:00 PM EDT",
@@ -1377,7 +1377,7 @@
   },
   {
     "id": "760455",
-    "date": "2026-06-23",
+    "date": "2026-06-22",
     "time": "2026-06-23T03:00Z",
     "status": "STATUS_SCHEDULED",
     "statusDetail": "Mon, June 22nd at 11:00 PM EDT",
@@ -1505,7 +1505,7 @@
   },
   {
     "id": "760459",
-    "date": "2026-06-24",
+    "date": "2026-06-23",
     "time": "2026-06-24T02:00Z",
     "status": "STATUS_SCHEDULED",
     "statusDetail": "Tue, June 23rd at 10:00 PM EDT",
@@ -1665,7 +1665,7 @@
   },
   {
     "id": "760467",
-    "date": "2026-06-25",
+    "date": "2026-06-24",
     "time": "2026-06-25T01:00Z",
     "status": "STATUS_SCHEDULED",
     "statusDetail": "Wed, June 24th at 9:00 PM EDT",
@@ -1697,7 +1697,7 @@
   },
   {
     "id": "760466",
-    "date": "2026-06-25",
+    "date": "2026-06-24",
     "time": "2026-06-25T01:00Z",
     "status": "STATUS_SCHEDULED",
     "statusDetail": "Wed, June 24th at 9:00 PM EDT",
@@ -1734,7 +1734,7 @@
     "status": "STATUS_SCHEDULED",
     "statusDetail": "Thu, June 25th at 4:00 PM EDT",
     "homeTeam": {
-      "name": "Curacao",
+      "name": "Cura\u00e7ao",
       "abbreviation": "CUW",
       "logo": "/logos/cuw.png",
       "score": "0",
@@ -1857,7 +1857,7 @@
   },
   {
     "id": "760469",
-    "date": "2026-06-26",
+    "date": "2026-06-25",
     "time": "2026-06-26T02:00Z",
     "status": "STATUS_SCHEDULED",
     "statusDetail": "Thu, June 25th at 10:00 PM EDT",
@@ -1889,12 +1889,12 @@
   },
   {
     "id": "760470",
-    "date": "2026-06-26",
+    "date": "2026-06-25",
     "time": "2026-06-26T02:00Z",
     "status": "STATUS_SCHEDULED",
     "statusDetail": "Thu, June 25th at 10:00 PM EDT",
     "homeTeam": {
-      "name": "Türkiye",
+      "name": "T\u00fcrkiye",
       "abbreviation": "TUR",
       "logo": "/logos/tur.png",
       "score": "0",
@@ -1985,7 +1985,7 @@
   },
   {
     "id": "760478",
-    "date": "2026-06-27",
+    "date": "2026-06-26",
     "time": "2026-06-27T00:00Z",
     "status": "STATUS_SCHEDULED",
     "statusDetail": "Fri, June 26th at 8:00 PM EDT",
@@ -2017,7 +2017,7 @@
   },
   {
     "id": "760479",
-    "date": "2026-06-27",
+    "date": "2026-06-26",
     "time": "2026-06-27T00:00Z",
     "status": "STATUS_SCHEDULED",
     "statusDetail": "Fri, June 26th at 8:00 PM EDT",
@@ -2049,7 +2049,7 @@
   },
   {
     "id": "760476",
-    "date": "2026-06-27",
+    "date": "2026-06-26",
     "time": "2026-06-27T03:00Z",
     "status": "STATUS_SCHEDULED",
     "statusDetail": "Fri, June 26th at 11:00 PM EDT",
@@ -2081,7 +2081,7 @@
   },
   {
     "id": "760477",
-    "date": "2026-06-27",
+    "date": "2026-06-26",
     "time": "2026-06-27T03:00Z",
     "status": "STATUS_SCHEDULED",
     "statusDetail": "Fri, June 26th at 11:00 PM EDT",
@@ -2241,7 +2241,7 @@
   },
   {
     "id": "760484",
-    "date": "2026-06-28",
+    "date": "2026-06-27",
     "time": "2026-06-28T02:00Z",
     "status": "STATUS_SCHEDULED",
     "statusDetail": "Sat, June 27th at 10:00 PM EDT",
@@ -2273,7 +2273,7 @@
   },
   {
     "id": "760483",
-    "date": "2026-06-28",
+    "date": "2026-06-27",
     "time": "2026-06-28T02:00Z",
     "status": "STATUS_SCHEDULED",
     "statusDetail": "Sat, June 27th at 10:00 PM EDT",
@@ -2332,7 +2332,8 @@
       "FOX",
       "Tele",
       "Peacock"
-    ]
+    ],
+    "group": ""
   },
   {
     "id": "760487",
@@ -2363,7 +2364,8 @@
       "FOX",
       "Tele",
       "Peacock"
-    ]
+    ],
+    "group": ""
   },
   {
     "id": "760489",
@@ -2394,11 +2396,12 @@
       "FOX",
       "Tele",
       "Peacock"
-    ]
+    ],
+    "group": ""
   },
   {
     "id": "760488",
-    "date": "2026-06-30",
+    "date": "2026-06-29",
     "time": "2026-06-30T01:00Z",
     "status": "STATUS_SCHEDULED",
     "statusDetail": "Mon, June 29th at 9:00 PM EDT",
@@ -2425,7 +2428,8 @@
       "FOX",
       "Tele",
       "Peacock"
-    ]
+    ],
+    "group": ""
   },
   {
     "id": "760490",
@@ -2456,7 +2460,8 @@
       "FOX",
       "Tele",
       "Peacock"
-    ]
+    ],
+    "group": ""
   },
   {
     "id": "760492",
@@ -2487,11 +2492,12 @@
       "FOX",
       "Tele",
       "Peacock"
-    ]
+    ],
+    "group": ""
   },
   {
     "id": "760491",
-    "date": "2026-07-01",
+    "date": "2026-06-30",
     "time": "2026-07-01T01:00Z",
     "status": "STATUS_SCHEDULED",
     "statusDetail": "Tue, June 30th at 9:00 PM EDT",
@@ -2518,7 +2524,8 @@
       "FOX",
       "Tele",
       "Peacock"
-    ]
+    ],
+    "group": ""
   },
   {
     "id": "760495",
@@ -2549,7 +2556,8 @@
       "FOX",
       "Tele",
       "Peacock"
-    ]
+    ],
+    "group": ""
   },
   {
     "id": "760493",
@@ -2580,11 +2588,12 @@
       "FS1",
       "Tele",
       "Peacock"
-    ]
+    ],
+    "group": ""
   },
   {
     "id": "760494",
-    "date": "2026-07-02",
+    "date": "2026-07-01",
     "time": "2026-07-02T00:00Z",
     "status": "STATUS_SCHEDULED",
     "statusDetail": "Wed, July 1st at 8:00 PM EDT",
@@ -2611,7 +2620,8 @@
       "FOX",
       "Tele",
       "Peacock"
-    ]
+    ],
+    "group": ""
   },
   {
     "id": "760497",
@@ -2642,7 +2652,8 @@
       "FOX",
       "Tele",
       "Peacock"
-    ]
+    ],
+    "group": ""
   },
   {
     "id": "760496",
@@ -2673,11 +2684,12 @@
       "FOX",
       "Tele",
       "Peacock"
-    ]
+    ],
+    "group": ""
   },
   {
     "id": "760498",
-    "date": "2026-07-03",
+    "date": "2026-07-02",
     "time": "2026-07-03T03:00Z",
     "status": "STATUS_SCHEDULED",
     "statusDetail": "Thu, July 2nd at 11:00 PM EDT",
@@ -2704,7 +2716,8 @@
       "FS1",
       "Tele",
       "Peacock"
-    ]
+    ],
+    "group": ""
   },
   {
     "id": "760499",
@@ -2735,7 +2748,8 @@
       "FOX",
       "Tele",
       "Peacock"
-    ]
+    ],
+    "group": ""
   },
   {
     "id": "760500",
@@ -2766,11 +2780,12 @@
       "FOX",
       "Tele",
       "Peacock"
-    ]
+    ],
+    "group": ""
   },
   {
     "id": "760501",
-    "date": "2026-07-04",
+    "date": "2026-07-03",
     "time": "2026-07-04T01:30Z",
     "status": "STATUS_SCHEDULED",
     "statusDetail": "Fri, July 3rd at 9:30 PM EDT",
@@ -2797,7 +2812,8 @@
       "FOX",
       "Tele",
       "Peacock"
-    ]
+    ],
+    "group": ""
   },
   {
     "id": "760502",
@@ -2828,7 +2844,8 @@
       "FOX",
       "Tele",
       "Peacock"
-    ]
+    ],
+    "group": ""
   },
   {
     "id": "760503",
@@ -2859,7 +2876,8 @@
       "FOX",
       "Tele",
       "Peacock"
-    ]
+    ],
+    "group": ""
   },
   {
     "id": "760504",
@@ -2890,11 +2908,12 @@
       "FOX",
       "Tele",
       "Peacock"
-    ]
+    ],
+    "group": ""
   },
   {
     "id": "760505",
-    "date": "2026-07-06",
+    "date": "2026-07-05",
     "time": "2026-07-06T00:00Z",
     "status": "STATUS_SCHEDULED",
     "statusDetail": "Sun, July 5th at 8:00 PM EDT",
@@ -2921,7 +2940,8 @@
       "FOX",
       "Tele",
       "Peacock"
-    ]
+    ],
+    "group": ""
   },
   {
     "id": "760506",
@@ -2952,11 +2972,12 @@
       "FOX",
       "Tele",
       "Peacock"
-    ]
+    ],
+    "group": ""
   },
   {
     "id": "760507",
-    "date": "2026-07-07",
+    "date": "2026-07-06",
     "time": "2026-07-07T00:00Z",
     "status": "STATUS_SCHEDULED",
     "statusDetail": "Mon, July 6th at 8:00 PM EDT",
@@ -2983,7 +3004,8 @@
       "FOX",
       "Tele",
       "Peacock"
-    ]
+    ],
+    "group": ""
   },
   {
     "id": "760509",
@@ -3014,7 +3036,8 @@
       "FOX",
       "Tele",
       "Peacock"
-    ]
+    ],
+    "group": ""
   },
   {
     "id": "760508",
@@ -3045,7 +3068,8 @@
       "FOX",
       "Tele",
       "Peacock"
-    ]
+    ],
+    "group": ""
   },
   {
     "id": "760510",
@@ -3076,7 +3100,8 @@
       "FOX",
       "Tele",
       "Peacock"
-    ]
+    ],
+    "group": ""
   },
   {
     "id": "760511",
@@ -3107,7 +3132,8 @@
       "FOX",
       "Tele",
       "Peacock"
-    ]
+    ],
+    "group": ""
   },
   {
     "id": "760512",
@@ -3138,11 +3164,12 @@
       "FOX",
       "Tele",
       "Peacock"
-    ]
+    ],
+    "group": ""
   },
   {
     "id": "760513",
-    "date": "2026-07-12",
+    "date": "2026-07-11",
     "time": "2026-07-12T01:00Z",
     "status": "STATUS_SCHEDULED",
     "statusDetail": "Sat, July 11th at 9:00 PM EDT",
@@ -3169,27 +3196,28 @@
       "FOX",
       "Tele",
       "Peacock"
-    ]
+    ],
+    "group": ""
   },
   {
     "id": "760514",
     "date": "2026-07-14",
-    "time": "2026-07-15T00:00:00Z",
+    "time": "2026-07-14T19:00Z",
     "status": "STATUS_SCHEDULED",
-    "statusDetail": "Tue, July 14th at 8:00 PM EDT",
+    "statusDetail": "Tue, July 14th at 3:00 PM EDT",
     "homeTeam": {
       "name": "Quarterfinal 1 Winner",
-      "abbreviation": "QF1 Winner",
-      "logo": "/logos/qf1 winner.png",
+      "abbreviation": "QFW1",
+      "logo": "/logos/qfw1.png",
       "score": "0",
-      "espnId": "19282"
+      "espnId": "17631"
     },
     "awayTeam": {
       "name": "Quarterfinal 2 Winner",
-      "abbreviation": "QF2 Winner",
-      "logo": "/logos/qf2 winner.png",
+      "abbreviation": "QFW2",
+      "logo": "/logos/qfw2.png",
       "score": "0",
-      "espnId": "19283"
+      "espnId": "17629"
     },
     "venue": {
       "name": "AT&T Stadium",
@@ -3200,58 +3228,60 @@
       "FOX",
       "Tele",
       "Peacock"
-    ]
+    ],
+    "group": ""
   },
   {
     "id": "760515",
     "date": "2026-07-15",
-    "time": "2026-07-16T00:00:00Z",
+    "time": "2026-07-15T19:00Z",
     "status": "STATUS_SCHEDULED",
-    "statusDetail": "Wed, July 15th at 8:00 PM EDT",
+    "statusDetail": "Wed, July 15th at 3:00 PM EDT",
     "homeTeam": {
       "name": "Quarterfinal 3 Winner",
-      "abbreviation": "QF3 Winner",
-      "logo": "/logos/qf3 winner.png",
+      "abbreviation": "QFW3",
+      "logo": "/logos/qfw3.png",
       "score": "0",
-      "espnId": "19284"
+      "espnId": "17630"
     },
     "awayTeam": {
       "name": "Quarterfinal 4 Winner",
-      "abbreviation": "QF4 Winner",
-      "logo": "/logos/qf4 winner.png",
+      "abbreviation": "QW4",
+      "logo": "/logos/qw4.png",
       "score": "0",
-      "espnId": "19285"
+      "espnId": "17632"
     },
     "venue": {
-      "name": "Lucas Oil Stadium",
-      "city": "Indianapolis, Indiana",
+      "name": "Mercedes-Benz Stadium",
+      "city": "Atlanta, Georgia",
       "capacity": 0
     },
     "broadcasts": [
       "FOX",
       "Tele",
       "Peacock"
-    ]
+    ],
+    "group": ""
   },
   {
     "id": "760516",
     "date": "2026-07-18",
-    "time": "2026-07-19T02:00:00Z",
+    "time": "2026-07-18T21:00Z",
     "status": "STATUS_SCHEDULED",
-    "statusDetail": "Sat, July 18th at 10:00 PM EDT",
+    "statusDetail": "Sat, July 18th at 5:00 PM EDT",
     "homeTeam": {
       "name": "Semifinal 1 Loser",
-      "abbreviation": "SF1 Loser",
-      "logo": "/logos/sf1 loser.png",
+      "abbreviation": "SF L1",
+      "logo": "/logos/sf l1.png",
       "score": "0",
-      "espnId": "19286"
+      "espnId": "5958"
     },
     "awayTeam": {
       "name": "Semifinal 2 Loser",
-      "abbreviation": "SF2 Loser",
-      "logo": "/logos/sf2 loser.png",
+      "abbreviation": "SF L2",
+      "logo": "/logos/sf l2.png",
       "score": "0",
-      "espnId": "19287"
+      "espnId": "5959"
     },
     "venue": {
       "name": "Hard Rock Stadium",
@@ -3262,27 +3292,28 @@
       "FOX",
       "Tele",
       "Peacock"
-    ]
+    ],
+    "group": ""
   },
   {
     "id": "760517",
     "date": "2026-07-19",
-    "time": "2026-07-20T01:00:00Z",
+    "time": "2026-07-19T19:00Z",
     "status": "STATUS_SCHEDULED",
-    "statusDetail": "Sun, July 19th at 9:00 PM EDT",
+    "statusDetail": "Sun, July 19th at 3:00 PM EDT",
     "homeTeam": {
       "name": "Semifinal 1 Winner",
-      "abbreviation": "SF1 Winner",
-      "logo": "/logos/sf1 winner.png",
+      "abbreviation": "SFW1",
+      "logo": "/logos/sfw1.png",
       "score": "0",
-      "espnId": "19288"
+      "espnId": "5960"
     },
     "awayTeam": {
       "name": "Semifinal 2 Winner",
-      "abbreviation": "SF2 Winner",
-      "logo": "/logos/sf2 winner.png",
+      "abbreviation": "SFW2",
+      "logo": "/logos/sfw2.png",
       "score": "0",
-      "espnId": "19289"
+      "espnId": "5961"
     },
     "venue": {
       "name": "MetLife Stadium",
@@ -3293,6 +3324,7 @@
       "FOX",
       "Tele",
       "Peacock"
-    ]
+    ],
+    "group": ""
   }
 ]

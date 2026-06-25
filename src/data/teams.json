@@ -6,8 +6,8 @@
     "slug": "alg",
     "color": "5bbd19",
     "alternateColor": "000000",
-    "logo": "https://a.espncdn.com/i/teamlogos/countries/500/alg.png",
-    "logoLocal": "/logos/alg.png"
+    "logo": "/logos/alg.png",
+    "logoEspn": "https://a.espncdn.com/i/teamlogos/countries/500/alg.png"
   },
   {
     "id": "202",
@@ -16,8 +16,8 @@
     "slug": "arg",
     "color": "74acdf",
     "alternateColor": "173e69",
-    "logo": "https://a.espncdn.com/i/teamlogos/countries/500/arg.png",
-    "logoLocal": "/logos/arg.png"
+    "logo": "/logos/arg.png",
+    "logoEspn": "https://a.espncdn.com/i/teamlogos/countries/500/arg.png"
   },
   {
     "id": "628",
@@ -26,8 +26,8 @@
     "slug": "aus",
     "color": "2a2d7c",
     "alternateColor": "ed2f31",
-    "logo": "https://a.espncdn.com/i/teamlogos/countries/500/aus.png",
-    "logoLocal": "/logos/aus.png"
+    "logo": "/logos/aus.png",
+    "logoEspn": "https://a.espncdn.com/i/teamlogos/countries/500/aus.png"
   },
   {
     "id": "474",
@@ -36,8 +36,8 @@
     "slug": "aut",
     "color": "d72b2c",
     "alternateColor": "ffffff",
-    "logo": "https://a.espncdn.com/i/teamlogos/countries/500/aut.png",
-    "logoLocal": "/logos/aut.png"
+    "logo": "/logos/aut.png",
+    "logoEspn": "https://a.espncdn.com/i/teamlogos/countries/500/aut.png"
   },
   {
     "id": "459",
@@ -46,8 +46,8 @@
     "slug": "bel",
     "color": "ef3340",
     "alternateColor": "d7e9f6",
-    "logo": "https://a.espncdn.com/i/teamlogos/countries/500/bel.png",
-    "logoLocal": "/logos/bel.png"
+    "logo": "/logos/bel.png",
+    "logoEspn": "https://a.espncdn.com/i/teamlogos/countries/500/bel.png"
   },
   {
     "id": "452",
@@ -56,8 +56,8 @@
     "slug": "bih",
     "color": "112855",
     "alternateColor": "ffffff",
-    "logo": "https://a.espncdn.com/i/teamlogos/countries/500/bih.png",
-    "logoLocal": "/logos/bih.png"
+    "logo": "/logos/bih.png",
+    "logoEspn": "https://a.espncdn.com/i/teamlogos/countries/500/bih.png"
   },
   {
     "id": "205",
@@ -66,8 +66,8 @@
     "slug": "bra",
     "color": "fee000",
     "alternateColor": "009c37",
-    "logo": "https://a.espncdn.com/i/teamlogos/countries/500/bra.png",
-    "logoLocal": "/logos/bra.png"
+    "logo": "/logos/bra.png",
+    "logoEspn": "https://a.espncdn.com/i/teamlogos/countries/500/bra.png"
   },
   {
     "id": "206",
@@ -76,8 +76,8 @@
     "slug": "can",
     "color": "ed2224",
     "alternateColor": "ffffff",
-    "logo": "https://a.espncdn.com/i/teamlogos/countries/500/can.png",
-    "logoLocal": "/logos/can.png"
+    "logo": "/logos/can.png",
+    "logoEspn": "https://a.espncdn.com/i/teamlogos/countries/500/can.png"
   },
   {
     "id": "2597",
@@ -86,8 +86,8 @@
     "slug": "cpv",
     "color": "0000ff",
     "alternateColor": "EF3340",
-    "logo": "https://a.espncdn.com/i/teamlogos/countries/500/cpv.png",
-    "logoLocal": "/logos/cpv.png"
+    "logo": "/logos/cpv.png",
+    "logoEspn": "https://a.espncdn.com/i/teamlogos/countries/500/cpv.png"
   },
   {
     "id": "208",
@@ -96,8 +96,8 @@
     "slug": "col",
     "color": "fbd632",
     "alternateColor": "21418c",
-    "logo": "https://a.espncdn.com/i/teamlogos/countries/500/col.png",
-    "logoLocal": "/logos/col.png"
+    "logo": "/logos/col.png",
+    "logoEspn": "https://a.espncdn.com/i/teamlogos/countries/500/col.png"
   },
   {
     "id": "2850",
@@ -106,8 +106,8 @@
     "slug": "rdc",
     "color": "418fde",
     "alternateColor": "C60000",
-    "logo": "https://a.espncdn.com/i/teamlogos/countries/500/cod.png",
-    "logoLocal": "/logos/cod.png"
+    "logo": "/logos/cod.png",
+    "logoEspn": "https://a.espncdn.com/i/teamlogos/countries/500/cod.png"
   },
   {
     "id": "477",
@@ -116,18 +116,18 @@
     "slug": "cro",
     "color": "ff0000",
     "alternateColor": "0c2fff",
-    "logo": "https://a.espncdn.com/i/teamlogos/countries/500/cro.png",
-    "logoLocal": "/logos/cro.png"
+    "logo": "/logos/cro.png",
+    "logoEspn": "https://a.espncdn.com/i/teamlogos/countries/500/cro.png"
   },
   {
     "id": "11678",
-    "name": "Curacao",
+    "name": "Curaçao",
     "abbreviation": "CUW",
     "slug": "fifa.curacao",
     "color": "0537e4",
     "alternateColor": "000000",
-    "logo": "https://a.espncdn.com/i/teamlogos/countries/500/cuw.png",
-    "logoLocal": "/logos/cuw.png"
+    "logo": "/logos/cuw.png",
+    "logoEspn": "https://a.espncdn.com/i/teamlogos/countries/500/cuw.png"
   },
   {
     "id": "450",
@@ -136,8 +136,8 @@
     "slug": "cze",
     "color": "d7141a",
     "alternateColor": "ffffff",
-    "logo": "https://a.espncdn.com/i/teamlogos/countries/500/cze.png",
-    "logoLocal": "/logos/cze.png"
+    "logo": "/logos/cze.png",
+    "logoEspn": "https://a.espncdn.com/i/teamlogos/countries/500/cze.png"
   },
   {
     "id": "209",
@@ -146,8 +146,8 @@
     "slug": "ecu",
     "color": "ffdd00",
     "alternateColor": "034ea2",
-    "logo": "https://a.espncdn.com/i/teamlogos/countries/500/ecu.png",
-    "logoLocal": "/logos/ecu.png"
+    "logo": "/logos/ecu.png",
+    "logoEspn": "https://a.espncdn.com/i/teamlogos/countries/500/ecu.png"
   },
   {
     "id": "2620",
@@ -156,8 +156,8 @@
     "slug": "egy",
     "color": "D20300",
     "alternateColor": "000000",
-    "logo": "https://a.espncdn.com/i/teamlogos/countries/500/egy.png",
-    "logoLocal": "/logos/egy.png"
+    "logo": "/logos/egy.png",
+    "logoEspn": "https://a.espncdn.com/i/teamlogos/countries/500/egy.png"
   },
   {
     "id": "448",
@@ -165,9 +165,9 @@
     "abbreviation": "ENG",
     "slug": "eng",
     "color": "ffffff",
-    "alternateColor": "4a2942",
-    "logo": "https://a.espncdn.com/i/teamlogos/countries/500/eng.png",
-    "logoLocal": "/logos/eng.png"
+    "alternateColor": "EA1F29",
+    "logo": "/logos/eng.png",
+    "logoEspn": "https://a.espncdn.com/i/teamlogos/countries/500/eng.png"
   },
   {
     "id": "478",
@@ -176,8 +176,8 @@
     "slug": "fra",
     "color": "0c2fff",
     "alternateColor": "ffffff",
-    "logo": "https://a.espncdn.com/i/teamlogos/countries/500/fra.png",
-    "logoLocal": "/logos/fra.png"
+    "logo": "/logos/fra.png",
+    "logoEspn": "https://a.espncdn.com/i/teamlogos/countries/500/fra.png"
   },
   {
     "id": "481",
@@ -186,8 +186,8 @@
     "slug": "ger",
     "color": "000000",
     "alternateColor": "db41a9",
-    "logo": "https://a.espncdn.com/i/teamlogos/countries/500/ger.png",
-    "logoLocal": "/logos/ger.png"
+    "logo": "/logos/ger.png",
+    "logoEspn": "https://a.espncdn.com/i/teamlogos/countries/500/ger.png"
   },
   {
     "id": "4469",
@@ -196,8 +196,8 @@
     "slug": "gha",
     "color": "ce2931",
     "alternateColor": "fbd632",
-    "logo": "https://a.espncdn.com/i/teamlogos/countries/500/gha.png",
-    "logoLocal": "/logos/gha.png"
+    "logo": "/logos/gha.png",
+    "logoEspn": "https://a.espncdn.com/i/teamlogos/countries/500/gha.png"
   },
   {
     "id": "2654",
@@ -206,8 +206,8 @@
     "slug": "hai",
     "color": "0033a0",
     "alternateColor": "D20300",
-    "logo": "https://a.espncdn.com/i/teamlogos/countries/500/hai.png",
-    "logoLocal": "/logos/hai.png"
+    "logo": "/logos/hai.png",
+    "logoEspn": "https://a.espncdn.com/i/teamlogos/countries/500/hai.png"
   },
   {
     "id": "469",
@@ -216,8 +216,8 @@
     "slug": "irn",
     "color": "da0000",
     "alternateColor": "239f40",
-    "logo": "https://a.espncdn.com/i/teamlogos/countries/500/irn.png",
-    "logoLocal": "/logos/irn.png"
+    "logo": "/logos/irn.png",
+    "logoEspn": "https://a.espncdn.com/i/teamlogos/countries/500/irn.png"
   },
   {
     "id": "4375",
@@ -226,8 +226,8 @@
     "slug": "irq",
     "color": "00843d",
     "alternateColor": "CE1126",
-    "logo": "https://a.espncdn.com/i/teamlogos/countries/500/irq.png",
-    "logoLocal": "/logos/irq.png"
+    "logo": "/logos/irq.png",
+    "logoEspn": "https://a.espncdn.com/i/teamlogos/countries/500/irq.png"
   },
   {
     "id": "4789",
@@ -236,8 +236,8 @@
     "slug": "civ",
     "color": "d48c00",
     "alternateColor": "5bbd19",
-    "logo": "https://a.espncdn.com/i/teamlogos/countries/500/civ.png",
-    "logoLocal": "/logos/civ.png"
+    "logo": "/logos/civ.png",
+    "logoEspn": "https://a.espncdn.com/i/teamlogos/countries/500/civ.png"
   },
   {
     "id": "627",
@@ -246,8 +246,8 @@
     "slug": "jpn",
     "color": "ed1c24",
     "alternateColor": "ffffff",
-    "logo": "https://a.espncdn.com/i/teamlogos/countries/500/jpn.png",
-    "logoLocal": "/logos/jpn.png"
+    "logo": "/logos/jpn.png",
+    "logoEspn": "https://a.espncdn.com/i/teamlogos/countries/500/jpn.png"
   },
   {
     "id": "2917",
@@ -256,8 +256,8 @@
     "slug": "jor",
     "color": "E70000",
     "alternateColor": "000000",
-    "logo": "https://a.espncdn.com/i/teamlogos/countries/500/jor.png",
-    "logoLocal": "/logos/jor.png"
+    "logo": "/logos/jor.png",
+    "logoEspn": "https://a.espncdn.com/i/teamlogos/countries/500/jor.png"
   },
   {
     "id": "203",
@@ -266,8 +266,8 @@
     "slug": "mex",
     "color": "006847",
     "alternateColor": "ffffff",
-    "logo": "https://a.espncdn.com/i/teamlogos/countries/500/mex.png",
-    "logoLocal": "/logos/mex.png"
+    "logo": "/logos/mex.png",
+    "logoEspn": "https://a.espncdn.com/i/teamlogos/countries/500/mex.png"
   },
   {
     "id": "2869",
@@ -276,8 +276,8 @@
     "slug": "mar",
     "color": "009060",
     "alternateColor": "df2027",
-    "logo": "https://a.espncdn.com/i/teamlogos/countries/500/mar.png",
-    "logoLocal": "/logos/mar.png"
+    "logo": "/logos/mar.png",
+    "logoEspn": "https://a.espncdn.com/i/teamlogos/countries/500/mar.png"
   },
   {
     "id": "449",
@@ -286,8 +286,8 @@
     "slug": "ned",
     "color": "fb5d00",
     "alternateColor": "010080",
-    "logo": "https://a.espncdn.com/i/teamlogos/countries/500/ned.png",
-    "logoLocal": "/logos/ned.png"
+    "logo": "/logos/ned.png",
+    "logoEspn": "https://a.espncdn.com/i/teamlogos/countries/500/ned.png"
   },
   {
     "id": "2666",
@@ -296,8 +296,8 @@
     "slug": "nzl",
     "color": "273476",
     "alternateColor": "ffffff",
-    "logo": "https://a.espncdn.com/i/teamlogos/countries/500/nzl.png",
-    "logoLocal": "/logos/nzl.png"
+    "logo": "/logos/nzl.png",
+    "logoEspn": "https://a.espncdn.com/i/teamlogos/countries/500/nzl.png"
   },
   {
     "id": "464",
@@ -306,8 +306,8 @@
     "slug": "nor",
     "color": "ef2b2d",
     "alternateColor": "002868",
-    "logo": "https://a.espncdn.com/i/teamlogos/countries/500/nor.png",
-    "logoLocal": "/logos/nor.png"
+    "logo": "/logos/nor.png",
+    "logoEspn": "https://a.espncdn.com/i/teamlogos/countries/500/nor.png"
   },
   {
     "id": "2659",
@@ -316,8 +316,8 @@
     "slug": "pan",
     "color": "d21034",
     "alternateColor": "005293",
-    "logo": "https://a.espncdn.com/i/teamlogos/countries/500/pan.png",
-    "logoLocal": "/logos/pan.png"
+    "logo": "/logos/pan.png",
+    "logoEspn": "https://a.espncdn.com/i/teamlogos/countries/500/pan.png"
   },
   {
     "id": "210",
@@ -326,8 +326,8 @@
     "slug": "par",
     "color": "ea2300",
     "alternateColor": "0c2fff",
-    "logo": "https://a.espncdn.com/i/teamlogos/countries/500/par.png",
-    "logoLocal": "/logos/par.png"
+    "logo": "/logos/par.png",
+    "logoEspn": "https://a.espncdn.com/i/teamlogos/countries/500/par.png"
   },
   {
     "id": "482",
@@ -336,8 +336,8 @@
     "slug": "por",
     "color": "da291c",
     "alternateColor": "d7e9f6",
-    "logo": "https://a.espncdn.com/i/teamlogos/countries/500/por.png",
-    "logoLocal": "/logos/por.png"
+    "logo": "/logos/por.png",
+    "logoEspn": "https://a.espncdn.com/i/teamlogos/countries/500/por.png"
   },
   {
     "id": "4398",
@@ -346,8 +346,8 @@
     "slug": "qat",
     "color": "691a40",
     "alternateColor": "691a40",
-    "logo": "https://a.espncdn.com/i/teamlogos/countries/500/qat.png",
-    "logoLocal": "/logos/qat.png"
+    "logo": "/logos/qat.png",
+    "logoEspn": "https://a.espncdn.com/i/teamlogos/countries/500/qat.png"
   },
   {
     "id": "655",
@@ -356,8 +356,8 @@
     "slug": "ksa",
     "color": "dddddd",
     "alternateColor": "006233",
-    "logo": "https://a.espncdn.com/i/teamlogos/countries/500/ksa.png",
-    "logoLocal": "/logos/ksa.png"
+    "logo": "/logos/ksa.png",
+    "logoEspn": "https://a.espncdn.com/i/teamlogos/countries/500/ksa.png"
   },
   {
     "id": "580",
@@ -366,8 +366,8 @@
     "slug": "sco",
     "color": "1a2d69",
     "alternateColor": "dcf5f7",
-    "logo": "https://a.espncdn.com/i/teamlogos/countries/500/sco.png",
-    "logoLocal": "/logos/sco.png"
+    "logo": "/logos/sco.png",
+    "logoEspn": "https://a.espncdn.com/i/teamlogos/countries/500/sco.png"
   },
   {
     "id": "654",
@@ -376,8 +376,8 @@
     "slug": "sen",
     "color": "00853f",
     "alternateColor": "fdef42",
-    "logo": "https://a.espncdn.com/i/teamlogos/countries/500/sen.png",
-    "logoLocal": "/logos/sen.png"
+    "logo": "/logos/sen.png",
+    "logoEspn": "https://a.espncdn.com/i/teamlogos/countries/500/sen.png"
   },
   {
     "id": "467",
@@ -386,8 +386,8 @@
     "slug": "rsa",
     "color": "087d5a",
     "alternateColor": "fbb516",
-    "logo": "https://a.espncdn.com/i/teamlogos/countries/500/rsa.png",
-    "logoLocal": "/logos/rsa.png"
+    "logo": "/logos/rsa.png",
+    "logoEspn": "https://a.espncdn.com/i/teamlogos/countries/500/rsa.png"
   },
   {
     "id": "451",
@@ -396,8 +396,8 @@
     "slug": "kors",
     "color": "ce2028",
     "alternateColor": "1e4384",
-    "logo": "https://a.espncdn.com/i/teamlogos/countries/500/kor.png",
-    "logoLocal": "/logos/kor.png"
+    "logo": "/logos/kor.png",
+    "logoEspn": "https://a.espncdn.com/i/teamlogos/countries/500/kor.png"
   },
   {
     "id": "164",
@@ -406,8 +406,8 @@
     "slug": "esp",
     "color": "c60b1e",
     "alternateColor": "f1ff91",
-    "logo": "https://a.espncdn.com/i/teamlogos/countries/500/esp.png",
-    "logoLocal": "/logos/esp.png"
+    "logo": "/logos/esp.png",
+    "logoEspn": "https://a.espncdn.com/i/teamlogos/countries/500/esp.png"
   },
   {
     "id": "466",
@@ -416,8 +416,8 @@
     "slug": "swe",
     "color": "fecb00",
     "alternateColor": "006aa7",
-    "logo": "https://a.espncdn.com/i/teamlogos/countries/500/swe.png",
-    "logoLocal": "/logos/swe.png"
+    "logo": "/logos/swe.png",
+    "logoEspn": "https://a.espncdn.com/i/teamlogos/countries/500/swe.png"
   },
   {
     "id": "475",
@@ -426,8 +426,8 @@
     "slug": "sui",
     "color": "d72b2c",
     "alternateColor": "ffffff",
-    "logo": "https://a.espncdn.com/i/teamlogos/countries/500/sui.png",
-    "logoLocal": "/logos/sui.png"
+    "logo": "/logos/sui.png",
+    "logoEspn": "https://a.espncdn.com/i/teamlogos/countries/500/sui.png"
   },
   {
     "id": "659",
@@ -436,8 +436,8 @@
     "slug": "tun",
     "color": "D20300",
     "alternateColor": "000000",
-    "logo": "https://a.espncdn.com/i/teamlogos/countries/500/tun.png",
-    "logoLocal": "/logos/tun.png"
+    "logo": "/logos/tun.png",
+    "logoEspn": "https://a.espncdn.com/i/teamlogos/countries/500/tun.png"
   },
   {
     "id": "465",
@@ -446,8 +446,8 @@
     "slug": "tur",
     "color": "ffffff",
     "alternateColor": "ef3340",
-    "logo": "https://a.espncdn.com/i/teamlogos/countries/500/tur.png",
-    "logoLocal": "/logos/tur.png"
+    "logo": "/logos/tur.png",
+    "logoEspn": "https://a.espncdn.com/i/teamlogos/countries/500/tur.png"
   },
   {
     "id": "660",
@@ -456,8 +456,8 @@
     "slug": "usa",
     "color": "213065",
     "alternateColor": "d42339",
-    "logo": "https://a.espncdn.com/i/teamlogos/countries/500/usa.png",
-    "logoLocal": "/logos/usa.png"
+    "logo": "/logos/usa.png",
+    "logoEspn": "https://a.espncdn.com/i/teamlogos/countries/500/usa.png"
   },
   {
     "id": "212",
@@ -466,8 +466,8 @@
     "slug": "uru",
     "color": "003da5",
     "alternateColor": "ffffff",
-    "logo": "https://a.espncdn.com/i/teamlogos/countries/500/uru.png",
-    "logoLocal": "/logos/uru.png"
+    "logo": "/logos/uru.png",
+    "logoEspn": "https://a.espncdn.com/i/teamlogos/countries/500/uru.png"
   },
   {
     "id": "2570",
@@ -476,7 +476,7 @@
     "slug": "uzb",
     "color": "0081d6",
     "alternateColor": "1EB53A",
-    "logo": "https://a.espncdn.com/i/teamlogos/countries/500/uzb.png",
-    "logoLocal": "/logos/uzb.png"
+    "logo": "/logos/uzb.png",
+    "logoEspn": "https://a.espncdn.com/i/teamlogos/countries/500/uzb.png"
   }
 ]

@@ -5,6 +5,14 @@ export function renderPredictionCard(match, prediction, isModified, phasePoints)
   const isFinished = match.status === 'finished';
   const predicted = prediction?.predicted_result;
   const lockedClass = isLocked ? ' q-prediction-card--locked' : '';
+
+  // Derive display result from scores when available (handles edited predictions
+  // where scores changed but predicted_result was not synced)
+  const homeScore = prediction?.predicted_home_score;
+  const awayScore = prediction?.predicted_away_score;
+  const displayResult = (homeScore != null && awayScore != null)
+    ? (homeScore > awayScore ? 'home' : awayScore > homeScore ? 'away' : 'draw')
+    : predicted;
   const hasResult = isFinished && match.home_score !== null;
 
   // Determine if user got points — build result section
@@ -70,10 +78,13 @@ export function renderPredictionCard(match, prediction, isModified, phasePoints)
         </div>
       </div>
       ${resultSection}
-      ${isLocked && predicted ? `
+      ${!isLocked && predicted && (homeScore == null || awayScore == null) ? `
+        <div class="q-pred-incomplete-hint">⚠️ Ingresa el marcador</div>
+      ` : ''}
+      ${isLocked && displayResult ? `
         <div class="q-pred-summary">
-          Tu predicción: ${predicted === 'home' ? 'Gana ' + translateTeam(match.home_team) : predicted === 'away' ? 'Gana ' + translateTeam(match.away_team) : 'Empate'}
-          ${prediction.predicted_home_score != null ? ` (${prediction.predicted_home_score}-${prediction.predicted_away_score})` : ''}
+          Tu predicción: ${displayResult === 'home' ? 'Gana ' + translateTeam(match.home_team) : displayResult === 'away' ? 'Gana ' + translateTeam(match.away_team) : 'Empate'}
+          ${homeScore != null ? ` (${homeScore}-${awayScore})` : ''}
         </div>
       ` : ''}
     </div>

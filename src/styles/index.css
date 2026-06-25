@@ -170,6 +170,10 @@
 [data-theme="light"] .q-hero-title {
   color: #1a1a2e;
 }
+[data-theme="light"] .q-points-summary {
+  background: #ffffff;
+  border-color: #e0e0e8;
+}
 
 *, *::before, *::after {
   box-sizing: border-box;
