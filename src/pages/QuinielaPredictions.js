@@ -34,9 +34,10 @@ export function QuinielaPredictions() {
         <h1 class="q-page-title">🎯 Mis Predicciones</h1>
         <a href="#/quiniela" class="q-btn q-btn--secondary q-btn-back">🏠 Quiniela</a>
       </div>
-      <div id="q-phase-tabs">${renderPhaseTabs()}</div>
+      <div id="q-phase-tabs"><p class="q-loading">Cargando fases…</p></div>
       <div id="q-phase-points-bar"></div>
       <div id="q-progress-bar" class="q-progress-bar"></div>
+      <div id="q-points-summary"></div>
       <div id="q-predictions-list"></div>
       <div id="q-save-bar" class="q-save-bar">
         <span id="q-save-status"></span>
@@ -48,6 +49,7 @@ export function QuinielaPredictions() {
 
 export function initQuinielaPredictions() {
   let currentPhase = 'groups';
+  let openPhases = [];
   let matches = [];
   let predictions = {};
   let modified = new Set();
@@ -63,7 +65,79 @@ export function initQuinielaPredictions() {
       predicted_home_score: pred.predicted_home_score,
       predicted_away_score: pred.predicted_away_score,
       points_earned: pred.points_earned,
+      phase: pred.phase || null,
+      status: pred.status || null,
     };
+  }
+
+  function isPredictionComplete(pred) {
+    return pred?.predicted_result != null &&
+      pred?.predicted_home_score != null &&
+      pred?.predicted_away_score != null;
+  }
+
+  function updateCardCompleteness(card, matchId) {
+    const pred = predictions[matchId];
+    card.classList.toggle('q-prediction-card--incomplete',
+      !!(pred?.predicted_result && (pred?.predicted_home_score == null || pred?.predicted_away_score == null)));
+  }
+
+  function computePointsSummary() {
+    let totalPoints = 0, totalFinished = 0;
+    let phasePoints = 0, phaseExact = 0, phaseCorrect = 0, phaseMiss = 0, phaseFinished = 0;
+
+    for (const matchId in predictions) {
+      const pred = predictions[matchId];
+      if (pred.status !== 'finished') continue;
+
+      const pts = pred.points_earned || 0;
+      const phaseConfig = PHASE_POINTS[pred.phase] || { correct: 3, exact: 5 };
+
+      totalPoints += pts;
+      totalFinished++;
+
+      if (pred.phase === currentPhase) {
+        phasePoints += pts;
+        phaseFinished++;
+        if (pts === phaseConfig.exact) phaseExact++;
+        else if (pts === phaseConfig.correct) phaseCorrect++;
+        else phaseMiss++;
+      }
+    }
+
+    return { totalPoints, totalFinished, phasePoints, phaseExact, phaseCorrect, phaseMiss, phaseFinished };
+  }
+
+  function renderPointsSummary() {
+    const container = document.getElementById('q-points-summary');
+    if (!container) return;
+
+    const data = computePointsSummary();
+    if (data.totalFinished === 0) { container.innerHTML = ''; return; }
+
+    const phaseLabel = PHASE_LABELS[currentPhase] || currentPhase;
+
+    container.innerHTML = `
+      <div class="q-points-summary animate-fade-in">
+        <div class="q-points-summary__total">
+          <span class="q-points-summary__label">Total Acumulado</span>
+          <span class="q-points-summary__value q-result-pts q-result-pts--exact">${data.totalPoints}</span>
+          <span class="q-points-summary__sublabel">${data.totalFinished} partido${data.totalFinished !== 1 ? 's' : ''} evaluado${data.totalFinished !== 1 ? 's' : ''}</span>
+        </div>
+        <div class="q-points-summary__divider"></div>
+        <div class="q-points-summary__phase">
+          <span class="q-points-summary__label">${phaseLabel}</span>
+          <span class="q-points-summary__value q-result-pts q-result-pts--correct">${data.phasePoints}</span>
+          <div class="q-points-summary__breakdown">
+            <span class="q-points-summary__exact">🎯 ${data.phaseExact} exacto${data.phaseExact !== 1 ? 's' : ''}</span>
+            <span class="q-points-summary__sep">·</span>
+            <span class="q-points-summary__correct-res">✅ ${data.phaseCorrect} resultado${data.phaseCorrect !== 1 ? 's' : ''}</span>
+            <span class="q-points-summary__sep">·</span>
+            <span class="q-points-summary__miss">❌ ${data.phaseMiss} fallado${data.phaseMiss !== 1 ? 's' : ''}</span>
+          </div>
+        </div>
+      </div>
+    `;
   }
 
   // Bind phase tabs
@@ -111,6 +185,11 @@ export function initQuinielaPredictions() {
       matches = matchesData.matches || [];
       predictions = {};
 
+      // Keep tabs synced in case the admin opened/closed phases since last load.
+      if (Array.isArray(matchesData.open_phases)) {
+        syncTabs(matchesData.open_phases);
+      }
+
       // Authoritative source: authenticated predictions endpoint.
       (predictionsData.predictions || []).forEach(pred => {
         predictions[predictionKey(pred.match_id)] = normalizePrediction(pred);
@@ -120,12 +199,16 @@ export function initQuinielaPredictions() {
       matches.forEach(m => {
         const matchId = predictionKey(m.id);
         if (!predictions[matchId] && m.prediction) {
-          predictions[matchId] = normalizePrediction(m.prediction, matchId);
+          const pred = normalizePrediction(m.prediction, matchId);
+          pred.phase = m.phase;
+          pred.status = m.status;
+          predictions[matchId] = pred;
         }
       });
 
       renderPhase();
       renderPhasePointsBar();
+      renderPointsSummary();
     } catch (err) {
       document.getElementById('q-predictions-list').innerHTML = `<p class="q-error">Error cargando datos: ${err.message}</p>`;
     }
@@ -164,20 +247,25 @@ export function initQuinielaPredictions() {
     list.innerHTML = Object.entries(byDate).map(([date, dateMatches]) => {
       const dateObj = new Date(date + 'T12:00:00');
       const dateStr = dateObj.toLocaleDateString('es-MX', { weekday: 'long', day: 'numeric', month: 'long' });
+      const allFinished = dateMatches.every(m => m.status === 'finished');
+      const collapsedClass = allFinished ? ' q-date-group--collapsed' : '';
       return `
-        <div class="q-date-group">
-          <h3 class="q-date-heading">${dateStr}</h3>
-          ${dateMatches.map((m, i) => {
+        <div class="q-date-group${collapsedClass}" data-date="${date}">
+          <button class="q-date-heading">${dateStr}<span class="q-date-toggle">${allFinished ? '▸' : '▾'}</span></button>
+          <div class="q-date-matches">${dateMatches.map((m, i) => {
             const matchId = predictionKey(m.id);
             const stagger = i < 12 ? ` animate-slide-up stagger-${(i % 4) + 1}` : '';
             return `<div class="${stagger}">${renderPredictionCard(m, predictions[matchId], modified.has(matchId), PHASE_POINTS[currentPhase])}</div>`;
-          }).join('')}
+          }).join('')}</div>
         </div>
       `;
     }).join('');
 
     // Bind prediction card events
     bindCardEvents();
+
+    // Bind collapsible date group toggles
+    bindDateGroupToggles();
 
     // Trigger mini confetti on exact score results
     triggerExactConfetti();
@@ -196,6 +284,7 @@ export function initQuinielaPredictions() {
           if (!predictions[matchId]) predictions[matchId] = { match_id: matchId };
           predictions[matchId].predicted_result = btn.dataset.result;
           modified.add(matchId);
+          updateCardCompleteness(card, matchId);
           updateSaveButton();
         });
       });
@@ -209,10 +298,37 @@ export function initQuinielaPredictions() {
             if (!predictions[matchId]) predictions[matchId] = { match_id: matchId };
             predictions[matchId].predicted_home_score = homeInput?.value ? parseInt(homeInput.value) : null;
             predictions[matchId].predicted_away_score = awayInput?.value ? parseInt(awayInput.value) : null;
+
+            // Auto-sync result button from scores when both are filled
+            const hs = predictions[matchId].predicted_home_score;
+            const as = predictions[matchId].predicted_away_score;
+            if (hs != null && as != null) {
+              const derived = hs > as ? 'home' : hs < as ? 'away' : 'draw';
+              predictions[matchId].predicted_result = derived;
+              card.querySelectorAll('.q-option').forEach(b => {
+                b.classList.toggle('q-option--selected', b.dataset.result === derived);
+              });
+            }
+
             modified.add(matchId);
+            updateCardCompleteness(card, matchId);
             updateSaveButton();
           });
         }
+      });
+
+      // Initialize completeness for cards with pre-existing predictions
+      updateCardCompleteness(card, matchId);
+    });
+  }
+
+  function bindDateGroupToggles() {
+    document.querySelectorAll('.q-date-heading').forEach(heading => {
+      heading.addEventListener('click', () => {
+        const group = heading.closest('.q-date-group');
+        group.classList.toggle('q-date-group--collapsed');
+        const toggle = heading.querySelector('.q-date-toggle');
+        if (toggle) toggle.textContent = group.classList.contains('q-date-group--collapsed') ? '▸' : '▾';
       });
     });
   }
@@ -234,6 +350,19 @@ export function initQuinielaPredictions() {
     btn.disabled = true;
     btn.textContent = 'Guardando...';
     status.textContent = '';
+
+    // Validate: all predictions must have result + both scores
+    const incomplete = Array.from(modified).filter(id => !isPredictionComplete(predictions[id]));
+    if (incomplete.length > 0) {
+      status.textContent = `⚠️ Ingresa el marcador en ${incomplete.length} predicción(es)`;
+      incomplete.forEach(id => {
+        const c = document.querySelector(`[data-match-id="${id}"]`);
+        if (c) { c.classList.add('q-prediction-card--incomplete'); c.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+      });
+      btn.disabled = false;
+      btn.textContent = '💾 Guardar Predicciones';
+      return;
+    }
 
     const toSave = Array.from(modified).map(matchId => ({
       match_id: matchId,
@@ -259,8 +388,35 @@ export function initQuinielaPredictions() {
     btn.textContent = '💾 Guardar Predicciones';
   }
 
-  // Load initial phase
-  loadPhaseData();
+  // Sync phase tabs with server-side phase state.
+  // Renders only open phases as enabled. If the active phase is no longer open,
+  // jump to the first open one so the user never lands on a closed phase.
+  function syncTabs(freshOpenPhases) {
+    openPhases = Array.isArray(freshOpenPhases) ? freshOpenPhases : [];
+    if (openPhases.length > 0 && !openPhases.includes(currentPhase)) {
+      currentPhase = openPhases[0];
+    }
+    const container = document.getElementById('q-phase-tabs');
+    if (container) {
+      container.innerHTML = renderPhaseTabs(false, { openPhases, currentPhase });
+    }
+  }
+
+  // Bootstrap: fetch which phases are open, render the tabs, then load the default phase.
+  async function bootstrapTabs() {
+    try {
+      const data = await getMatches(); // sin phase → el response incluye open_phases
+      syncTabs(data.open_phases || []);
+    } catch (err) {
+      // Fallback: legacy render (solo Fase de Grupos) para no dejar la UI vacía.
+      const container = document.getElementById('q-phase-tabs');
+      if (container) container.innerHTML = renderPhaseTabs();
+    }
+    loadPhaseData();
+  }
+
+  // Bootstrap initial state
+  bootstrapTabs();
 }
 
 /**

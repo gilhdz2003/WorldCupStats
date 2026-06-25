@@ -126,9 +126,18 @@ function handleGetMatches(PDO $pdo) {
         return $match;
     }, $rows);
 
+    // Open phases (is_open = 1) for tab control on the client.
+    // Ordered by tournament progression so the client can default to the first open phase.
+    $phaseStmt = $pdo->query(
+        'SELECT phase FROM q_phases WHERE is_open = 1
+         ORDER BY FIELD(phase, "groups", "round_of_32", "round_of_16", "quarterfinals", "semifinals", "final")'
+    );
+    $openPhases = $phaseStmt ? $phaseStmt->fetchAll(PDO::FETCH_COLUMN) : [];
+
     echo json_encode([
-        'ok'      => true,
-        'matches' => $matches,
-        'phase'   => $phase ?: 'open',
+        'ok'           => true,
+        'matches'      => $matches,
+        'phase'        => $phase ?: 'open',
+        'open_phases'  => $openPhases,
     ]);
 }
