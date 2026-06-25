@@ -401,6 +401,84 @@
   transition: width 0.4s ease;
 }
 
+/* ─── Points Summary Widget ─── */
+.q-points-summary {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  gap: var(--spacing-lg);
+  padding: var(--spacing-md) var(--spacing-lg);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--spacing-lg);
+  text-align: center;
+}
+
+.q-points-summary__total,
+.q-points-summary__phase {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.q-points-summary__divider {
+  width: 1px;
+  background: var(--border-color);
+  align-self: stretch;
+  margin: var(--spacing-xs) 0;
+}
+
+.q-points-summary__label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--text-muted);
+}
+
+.q-points-summary__value {
+  font-size: 2rem;
+  line-height: 1.1;
+}
+
+.q-points-summary__sublabel {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+.q-points-summary__breakdown {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.q-points-summary__sep {
+  color: var(--text-muted);
+}
+
+.q-points-summary__exact {
+  color: #D4AF37;
+  font-weight: 600;
+}
+
+.q-points-summary__correct-res {
+  color: #2E7D32;
+  font-weight: 600;
+}
+
+.q-points-summary__miss {
+  color: #C0392B;
+  font-weight: 500;
+}
+
 /* ─── Prediction Card ─── */
 .q-prediction-card {
   background: var(--bg-secondary);
@@ -841,6 +919,42 @@
   margin-bottom: var(--spacing-md);
   padding-bottom: var(--spacing-xs);
   border-bottom: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--border-color);
+  width: 100%;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  padding: 0 0 var(--spacing-xs) 0;
+  transition: color 0.2s;
+}
+
+.q-date-heading:hover {
+  color: var(--text-primary);
+}
+
+.q-date-toggle {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+}
+
+.q-date-matches {
+  overflow: hidden;
+  transition: max-height 0.4s ease, opacity 0.3s ease;
+}
+
+.q-date-group--collapsed .q-date-matches {
+  max-height: 0 !important;
+  opacity: 0;
+  margin: 0;
+  pointer-events: none;
 }
 
 /* ─── Save Bar ─── */
@@ -907,7 +1021,8 @@
 
 .q-th-pts,
 .q-th-exact,
-.q-th-correct {
+.q-th-correct,
+.q-th-goaldiff {
   text-align: center;
   width: 80px;
 }
@@ -1191,6 +1306,26 @@
 
 /* ─── Responsive ─── */
 @media (max-width: 640px) {
+  .q-points-summary {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-md);
+  }
+
+  .q-points-summary__divider {
+    width: 100%;
+    height: 1px;
+    margin: 0;
+  }
+
+  .q-points-summary__value {
+    font-size: 1.6rem;
+  }
+
+  .q-points-summary__breakdown {
+    font-size: 0.7rem;
+  }
+
   .q-hero-title {
     font-size: 1.8rem;
   }
@@ -1657,4 +1792,19 @@
 .q-confetti-particle--sparkle {
   border-radius: 50%;
   box-shadow: 0 0 3px var(--q-confetti-color, #D4AF37);
+}
+
+/* ─── Incomplete Prediction Warning ─── */
+.q-prediction-card--incomplete {
+  outline: 2px solid #f59e0b;
+  outline-offset: -2px;
+  border-radius: var(--radius-md, 8px);
+}
+
+.q-pred-incomplete-hint {
+  color: #f59e0b;
+  font-size: 0.75rem;
+  text-align: center;
+  padding: 4px 0 0;
+  font-weight: 500;
 }

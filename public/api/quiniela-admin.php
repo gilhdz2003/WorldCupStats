@@ -111,6 +111,20 @@ function scoreMatchPredictions(PDO $pdo, int $matchId): int {
         $points = 0;
         $reason = null;
 
+        // Derive predicted result from scores when both are present
+        // (prevents contradictions like result=away but scores 2-1 imply home)
+        if ($pred['predicted_home_score'] !== null && $pred['predicted_away_score'] !== null) {
+            $hs = (int) $pred['predicted_home_score'];
+            $as = (int) $pred['predicted_away_score'];
+            if ($hs > $as) {
+                $pred['predicted_result'] = 'home';
+            } elseif ($hs < $as) {
+                $pred['predicted_result'] = 'away';
+            } else {
+                $pred['predicted_result'] = 'draw';
+            }
+        }
+
         // Exact score match (only if user actually predicted specific scores)
         if (
             $pred['predicted_home_score'] !== null &&
@@ -265,7 +279,10 @@ if ($method === 'POST') {
             break;
         default:
             http_response_code(400);
-            echo json_encode(['error' => 'Accion POST no valida. Usa: toggle-phase, set-score, recalculate, reset-pin']);
+            echo json_encode(['error' => 'Accion POST no valida. Usa: toggle-phase, set-score, recalculate, reset-pin, toggle-especial']);
+            break;
+        case 'toggle-especial':
+            handleToggleEspecial($pdo, $input);
             break;
     }
 } elseif ($method === 'GET') {
@@ -287,7 +304,10 @@ if ($method === 'POST') {
             break;
         default:
             http_response_code(400);
-            echo json_encode(['error' => 'Accion GET no valida. Usa: participants, phases, export, export-predictions']);
+            echo json_encode(['error' => 'Accion GET no valida. Usa: participants, phases, export, export-predictions, export-especial']);
+            break;
+        case 'export-especial':
+            handleExportEspecial($pdo);
             break;
     }
 } else {
@@ -301,13 +321,21 @@ function handleGetParticipants(PDO $pdo) {
     requireAdmin($pdo);
 
     $stmt = $pdo->prepare(
-        'SELECT u.id, u.name, u.email, u.email_verified, u.is_admin, u.created_at,
+        'SELECT u.id, u.name, u.email, u.email_verified, u.is_admin, u.is_especial, u.created_at,
                 COUNT(p.id) as predictions_count,
-                COALESCE(SUM(p.points_earned), 0) as total_points
+                COALESCE(SUM(p.points_earned), 0) as total_points,
+                COALESCE(SUM(
+                  CASE WHEN m.status = \'finished\'
+                       AND m.home_score IS NOT NULL AND m.away_score IS NOT NULL
+                       AND p.predicted_home_score IS NOT NULL AND p.predicted_away_score IS NOT NULL
+                  THEN (ABS(p.predicted_home_score - m.home_score) + ABS(p.predicted_away_score - m.away_score))
+                  ELSE 0 END
+                ), 0) as goal_diff
          FROM q_users u
          LEFT JOIN q_predictions p ON u.id = p.user_id
+         LEFT JOIN q_matches m ON p.match_id = m.id
          GROUP BY u.id
-         ORDER BY total_points DESC, u.created_at ASC'
+         ORDER BY total_points DESC, goal_diff ASC, u.created_at ASC'
     );
     $stmt->execute();
     $rows = $stmt->fetchAll();
@@ -319,6 +347,7 @@ function handleGetParticipants(PDO $pdo) {
             'email'             => $row['email'],
             'email_verified'    => (bool) $row['email_verified'],
             'is_admin'          => (bool) $row['is_admin'],
+            'is_especial'       => (bool) $row['is_especial'],
             'total_points'      => (int) $row['total_points'],
             'predictions_count' => (int) $row['predictions_count'],
             'created_at'        => $row['created_at'],
@@ -608,7 +637,14 @@ function handleExport(PDO $pdo) {
     $sql = "SELECT u.id, u.name, u.email,
                    COALESCE(SUM(p.points_earned), 0) as total_points,
                    COALESCE(SUM(CASE WHEN sl.reason = 'exact_score' THEN 1 ELSE 0 END), 0) as exact_scores,
-                   COALESCE(SUM(CASE WHEN sl.reason IS NOT NULL THEN 1 ELSE 0 END), 0) as correct_results
+                   COALESCE(SUM(CASE WHEN sl.reason IS NOT NULL THEN 1 ELSE 0 END), 0) as correct_results,
+                   COALESCE(SUM(
+                     CASE WHEN m.status = 'finished'
+                          AND m.home_score IS NOT NULL AND m.away_score IS NOT NULL
+                          AND p.predicted_home_score IS NOT NULL AND p.predicted_away_score IS NOT NULL
+                     THEN (ABS(p.predicted_home_score - m.home_score) + ABS(p.predicted_away_score - m.away_score))
+                     ELSE 0 END
+                   ), 0) as goal_diff
             FROM q_users u
             LEFT JOIN q_predictions p ON u.id = p.user_id
             LEFT JOIN q_matches m ON p.match_id = m.id
@@ -616,24 +652,28 @@ function handleExport(PDO $pdo) {
             WHERE u.email_verified = 1
             $phaseFilter
             GROUP BY u.id
-            ORDER BY total_points DESC, exact_scores DESC, u.created_at ASC";
+            ORDER BY total_points DESC, exact_scores DESC, correct_results DESC, goal_diff ASC, u.created_at ASC";
 
     $stmt = $pdo->prepare($sql);
     $stmt->execute($params);
     $rows = $stmt->fetchAll();
 
-    // Assign ranks (same logic as leaderboard)
+    // Assign ranks (same logic as leaderboard) — puesto único vía gol_diff
     $leaderboard = [];
     $currentRank = 0;
-    $prevPoints  = null;
-    $prevExact   = null;
+    $prevPoints   = null;
+    $prevExact    = null;
+    $prevCorrect  = null;
+    $prevGoalDiff = null;
 
     foreach ($rows as $row) {
         $points = (int) $row['total_points'];
         $exact  = (int) $row['exact_scores'];
         $correct = (int) $row['correct_results'];
+        $goalDiff = (int) $row['goal_diff'];
 
-        if ($points !== $prevPoints || $exact !== $prevExact) {
+        if ($points !== $prevPoints || $exact !== $prevExact
+            || $correct !== $prevCorrect || $goalDiff !== $prevGoalDiff) {
             $currentRank++;
         }
 
@@ -644,10 +684,13 @@ function handleExport(PDO $pdo) {
             'total_points'    => $points,
             'exact_scores'    => $exact,
             'correct_results' => $correct,
+            'goal_diff'       => $goalDiff,
         ];
 
-        $prevPoints = $points;
-        $prevExact  = $exact;
+        $prevPoints   = $points;
+        $prevExact    = $exact;
+        $prevCorrect  = $correct;
+        $prevGoalDiff = $goalDiff;
     }
 
     // Output CSV
@@ -660,7 +703,7 @@ function handleExport(PDO $pdo) {
     fwrite($out, "\xEF\xBB\xBF");
 
     // Headers
-    fputcsv($out, ['Posicion', 'Nombre', 'Email', 'Puntos', 'Marcadores Exactos', 'Resultados Correctos']);
+    fputcsv($out, ['Posicion', 'Nombre', 'Email', 'Puntos', 'Marcadores Exactos', 'Resultados Correctos', 'Gol Average']);
 
     // Rows
     foreach ($leaderboard as $entry) {
@@ -671,6 +714,7 @@ function handleExport(PDO $pdo) {
             $entry['total_points'],
             $entry['exact_scores'],
             $entry['correct_results'],
+            $entry['goal_diff'],
         ]);
     }
 
@@ -719,4 +763,123 @@ function handleResetPin(PDO $pdo, array $input) {
         'email'   => $target['email'],
         'pin'     => $newPin,
     ]);
+}
+
+// --- Action: POST toggle-especial -- mark/unmark user as especial league ---
+
+function handleToggleEspecial(PDO $pdo, array $input) {
+    requireAdmin($pdo);
+    $userId = (int) ($input['user_id'] ?? 0);
+    if ($userId <= 0) {
+        http_response_code(400);
+        echo json_encode(['error' => 'user_id requerido']);
+        return;
+    }
+    $stmt = $pdo->prepare('SELECT id, name FROM q_users WHERE id = ?');
+    $stmt->execute([$userId]);
+    $target = $stmt->fetch();
+    if (!$target) {
+        http_response_code(404);
+        echo json_encode(['error' => 'Usuario no encontrado']);
+        return;
+    }
+    $pdo->prepare('UPDATE q_users SET is_especial = NOT is_especial WHERE id = ?')->execute([$userId]);
+    $check = $pdo->prepare('SELECT is_especial FROM q_users WHERE id = ?');
+    $check->execute([$userId]);
+    $updated = $check->fetch();
+    echo json_encode([
+        'ok'          => true,
+        'user_id'     => $userId,
+        'name'        => $target['name'],
+        'is_especial' => (bool) $updated['is_especial'],
+    ]);
+}
+
+// --- Action: GET export-especial -- CSV download of especial leaderboard ---
+
+function handleExportEspecial(PDO $pdo) {
+    requireAdmin($pdo);
+
+    $phase = $_GET['phase'] ?? 'all';
+
+    $phaseFilter = '';
+    $params = [];
+    if ($phase !== 'all') {
+        $validPhases = ['groups', 'round_of_32', 'round_of_16', 'quarterfinals', 'semifinals', 'final'];
+        if (!in_array($phase, $validPhases)) {
+            http_response_code(400);
+            echo json_encode(['error' => "Fase invalida: $phase"]);
+            return;
+        }
+        $phaseFilter = ' AND m.phase = ?';
+        $params[] = $phase;
+    }
+
+    $sql = "SELECT u.id, u.name, u.email,
+                   COALESCE(SUM(p.points_earned), 0) as total_points,
+                   COALESCE(SUM(CASE WHEN sl.reason = 'exact_score' THEN 1 ELSE 0 END), 0) as exact_scores,
+                   COALESCE(SUM(CASE WHEN sl.reason IS NOT NULL THEN 1 ELSE 0 END), 0) as correct_results,
+                   COALESCE(SUM(
+                     CASE WHEN m.status = 'finished'
+                          AND m.home_score IS NOT NULL AND m.away_score IS NOT NULL
+                          AND p.predicted_home_score IS NOT NULL AND p.predicted_away_score IS NOT NULL
+                     THEN (ABS(p.predicted_home_score - m.home_score) + ABS(p.predicted_away_score - m.away_score))
+                     ELSE 0 END
+                   ), 0) as goal_diff
+            FROM q_users u
+            LEFT JOIN q_predictions p ON u.id = p.user_id
+            LEFT JOIN q_matches m ON p.match_id = m.id
+            LEFT JOIN q_scoring_log sl ON p.match_id = sl.match_id AND p.user_id = sl.user_id
+            WHERE u.is_especial = 1
+            $phaseFilter
+            GROUP BY u.id
+            ORDER BY total_points DESC, exact_scores DESC, correct_results DESC, goal_diff ASC, u.created_at ASC";
+
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute($params);
+    $rows = $stmt->fetchAll();
+
+    $leaderboard = [];
+    $currentRank = 0;
+    $prevPoints = null;
+    $prevExact = null;
+    $prevCorrect = null;
+    $prevGoalDiff = null;
+
+    foreach ($rows as $row) {
+        $points = (int) $row['total_points'];
+        $exact  = (int) $row['exact_scores'];
+        $correct = (int) $row['correct_results'];
+        $goalDiff = (int) $row['goal_diff'];
+        if ($points !== $prevPoints || $exact !== $prevExact
+            || $correct !== $prevCorrect || $goalDiff !== $prevGoalDiff) {
+            $currentRank++;
+        }
+        $leaderboard[] = [
+            'rank'            => $currentRank,
+            'name'            => $row['name'],
+            'email'           => $row['email'],
+            'total_points'    => $points,
+            'exact_scores'    => $exact,
+            'correct_results' => $correct,
+            'goal_diff'       => $goalDiff,
+        ];
+        $prevPoints   = $points;
+        $prevExact    = $exact;
+        $prevCorrect  = $correct;
+        $prevGoalDiff = $goalDiff;
+    }
+
+    $phaseLabel = $phase === 'all' ? 'general' : $phase;
+
+    header('Content-Type: text/csv; charset=utf-8');
+    header('Content-Disposition: attachment; filename="quiniela-especial-' . $phaseLabel . '.csv"');
+    $out = fopen('php://output', 'w');
+    fwrite($out, "\xEF\xBB\xBF");
+    fputcsv($out, ['Posicion', 'Nombre', 'Email', 'Puntos', 'Marcadores Exactos', 'Resultados Correctos', 'Gol Average']);
+    foreach ($leaderboard as $entry) {
+        fputcsv($out, [$entry['rank'], $entry['name'], $entry['email'], $entry['total_points'], $entry['exact_scores'], $entry['correct_results'], $entry['goal_diff']]);
+    }
+    fclose($out);
+    exit;
 }

@@ -46,7 +46,14 @@ function handleGetLeaderboard(PDO $pdo) {
                    COUNT(DISTINCT CASE WHEN sl.reason = 'exact_score'
                        THEN CONCAT(sl.match_id, '-', sl.user_id) END) as exact_scores,
                    COUNT(DISTINCT CASE WHEN sl.reason IS NOT NULL
-                       THEN CONCAT(sl.match_id, '-', sl.user_id) END) as correct_results
+                       THEN CONCAT(sl.match_id, '-', sl.user_id) END) as correct_results,
+                   COALESCE(SUM(
+                     CASE WHEN m.status = 'finished'
+                          AND m.home_score IS NOT NULL AND m.away_score IS NOT NULL
+                          AND p.predicted_home_score IS NOT NULL AND p.predicted_away_score IS NOT NULL
+                     THEN (ABS(p.predicted_home_score - m.home_score) + ABS(p.predicted_away_score - m.away_score))
+                     ELSE 0 END
+                   ), 0) as goal_diff
             FROM q_users u
             LEFT JOIN q_predictions p ON u.id = p.user_id
             LEFT JOIN q_matches m ON p.match_id = m.id
@@ -54,25 +61,32 @@ function handleGetLeaderboard(PDO $pdo) {
             WHERE u.email_verified = 1
             $phaseFilter
             GROUP BY u.id
-            ORDER BY total_points DESC, exact_scores DESC, u.created_at ASC";
+            ORDER BY total_points DESC, exact_scores DESC, correct_results DESC, goal_diff ASC, u.created_at ASC";
 
     $stmt = $pdo->prepare($sql);
     $stmt->execute($params);
     $rows = $stmt->fetchAll();
 
     // Assign rank positions (handle ties)
+    // Puesto único: sube de rank si cambia cualquiera de los desempates
+    // (puntos → exactos → aciertos → gol_diff). Solo un "dead heat" perfecto
+    // (idéntico en los 4) comparte puesto.
     $leaderboard = [];
     $currentRank = 0;
-    $prevPoints  = null;
-    $prevExact   = null;
+    $prevPoints   = null;
+    $prevExact    = null;
+    $prevCorrect  = null;
+    $prevGoalDiff = null;
 
     foreach ($rows as $row) {
         $points    = (int) $row['total_points'];
         $exact     = (int) $row['exact_scores'];
         $correct   = (int) $row['correct_results'];
+        $goalDiff  = (int) $row['goal_diff'];
 
-        // Same rank if same points AND same exact_scores as previous
-        if ($points !== $prevPoints || $exact !== $prevExact) {
+        // Same rank only if ALL tiebreakers match the previous row
+        if ($points !== $prevPoints || $exact !== $prevExact
+            || $correct !== $prevCorrect || $goalDiff !== $prevGoalDiff) {
             $currentRank++;
         }
 
@@ -83,10 +97,13 @@ function handleGetLeaderboard(PDO $pdo) {
             'total_points'     => $points,
             'exact_scores'     => $exact,
             'correct_results'  => $correct,
+            'goal_diff'        => $goalDiff,
         ];
 
-        $prevPoints = $points;
-        $prevExact  = $exact;
+        $prevPoints   = $points;
+        $prevExact    = $exact;
+        $prevCorrect  = $correct;
+        $prevGoalDiff = $goalDiff;
     }
 
     echo json_encode([

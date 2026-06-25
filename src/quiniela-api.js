@@ -165,5 +165,23 @@ export async function adminExportPredictions(phase) {
   return res;
 }
 
+// Liga Especial
+export async function adminToggleEspecial(userId) {
+  return apiFetch('quiniela-admin.php?action=toggle-especial', {
+    method: 'POST', body: JSON.stringify({ user_id: userId })
+  });
+}
+
+export async function adminExportEspecial(phase) {
+  const token = getToken();
+  const url = phase && phase !== 'all'
+    ? `quiniela-admin.php?action=export-especial&phase=${phase}`
+    : 'quiniela-admin.php?action=export-especial';
+  const res = await fetch(API_BASE + url, {
+    headers: { 'Authorization': 'Bearer ' + token }
+  });
+  return res;
+}
+
 // Helpers
 export { isLoggedIn, getUser, getToken, clearSession };

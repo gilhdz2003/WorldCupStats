@@ -1,4 +1,4 @@
-import { isLoggedIn, getUser, adminGetParticipants, adminGetPhases, adminTogglePhase, adminSetScore, adminExport, adminExportPredictions, adminResetPin, adminResetMatch, adminGetConfig, adminToggleLock, adminToggleRegistration, getMatches } from '../quiniela-api.js';
+import { isLoggedIn, getUser, adminGetParticipants, adminGetPhases, adminTogglePhase, adminSetScore, adminExport, adminExportPredictions, adminResetPin, adminResetMatch, adminGetConfig, adminToggleLock, adminToggleRegistration, adminToggleEspecial, adminExportEspecial, getMatches } from '../quiniela-api.js';
 
 export function QuinielaAdmin() {
   const user = getUser();
@@ -62,6 +62,11 @@ export function QuinielaAdmin() {
       </div>
 
       <div class="q-admin-section">
+        <h2>⭐ Liga Especial</h2>
+        <div id="q-admin-especial"><p class="q-loading">Cargando...</p></div>
+      </div>
+
+      <div class="q-admin-section">
         <h2>📤 Exportar</h2>
         <button id="q-admin-export" class="q-btn q-btn--secondary">📊 Descargar Leaderboard CSV</button>
         <div style="margin-top: var(--spacing-md);">
@@ -78,6 +83,7 @@ export function initQuinielaAdmin() {
   loadGlobalLock();
   loadPhases();
   loadParticipants();
+  loadEspecial();
   loadMatchSelect();
   bindAdminEvents();
 }
@@ -232,6 +238,96 @@ async function loadParticipants() {
       </div>
       <p class="q-muted">Total: ${data.participants.length} participantes</p>
     `;
+  } catch (err) {
+    container.innerHTML = `<p class="q-error">${err.message}</p>`;
+  }
+}
+
+async function loadEspecial() {
+  const container = document.getElementById('q-admin-especial');
+  if (!container) return;
+  try {
+    const data = await adminGetParticipants();
+    if (!data.ok) { container.innerHTML = '<p class="q-error">Error</p>'; return; }
+    const especialCount = data.participants.filter(p => p.is_especial).length;
+    container.innerHTML = `
+      <p class="q-muted" style="margin-bottom: var(--spacing-sm);">Marca los participantes de la liga especial (privada).</p>
+      <div class="q-especial-actions" style="margin-bottom: var(--spacing-md);">
+        <div class="q-form-row" style="align-items: center; gap: var(--spacing-sm);">
+          <label style="font-size: 0.85rem;">Fase:</label>
+          <select id="q-especial-phase" style="font-size: 0.85rem; padding: 4px 8px;">
+            <option value="all">Todas</option>
+            <option value="groups">Fase de Grupos</option>
+            <option value="round_of_32">Ronda de 32</option>
+            <option value="round_of_16">Octavos de Final</option>
+            <option value="quarterfinals">Cuartos de Final</option>
+            <option value="semifinals">Semifinal</option>
+            <option value="final">Final</option>
+          </select>
+          <button id="q-admin-export-especial" class="q-btn q-btn--primary q-btn--sm">📥 Descargar CSV Especial</button>
+        </div>
+        <p id="q-especial-count" class="q-muted" style="font-size: 0.8rem; margin-top: var(--spacing-xs);">${especialCount} participante(s) marcado(s)</p>
+      </div>
+      <div class="q-table-wrapper">
+        <table class="q-table">
+          <thead><tr>
+            <th>⭐</th><th>Nombre</th><th>Email</th><th>Puntos</th>
+          </tr></thead>
+          <tbody>
+            ${data.participants.map(p => `
+              <tr data-user-id="${p.id}">
+                <td><input type="checkbox" class="q-especial-toggle" data-user-id="${p.id}" ${p.is_especial ? 'checked' : ''}></td>
+                <td>${p.name}</td>
+                <td>${p.email}</td>
+                <td class="q-pts-cell">${p.total_points}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    `;
+
+    // Bind especial toggles
+    container.querySelectorAll('.q-especial-toggle').forEach(cb => {
+      cb.addEventListener('change', async () => {
+        const userId = cb.dataset.userId;
+        try {
+          cb.disabled = true;
+          await adminToggleEspecial(userId);
+          // Browser already flipped the checkbox; server confirmed the toggle
+          const newCount = container.querySelectorAll('.q-especial-toggle:checked').length;
+          document.getElementById('q-especial-count').textContent = `${newCount} participante(s) marcado(s)`;
+        } catch (err) {
+          alert('Error: ' + err.message);
+          cb.checked = !cb.checked; // revert on error
+        } finally {
+          cb.disabled = false;
+        }
+      });
+    });
+
+    // Bind export especial button
+    document.getElementById('q-admin-export-especial')?.addEventListener('click', async () => {
+      const btn = document.getElementById('q-admin-export-especial');
+      const phase = document.getElementById('q-especial-phase').value;
+      const originalText = btn.textContent;
+      btn.textContent = 'Descargando...';
+      btn.disabled = true;
+      try {
+        const res = await adminExportEspecial(phase);
+        if (!res.ok) throw new Error('Error del servidor');
+        const blob = await res.blob();
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        const phaseLabel = phase !== 'all' ? `-${phase}` : '';
+        a.href = url; a.download = `liga-especial${phaseLabel}.csv`;
+        a.click(); URL.revokeObjectURL(url);
+      } catch (err) { alert('Error exportando: ' + err.message); }
+      finally {
+        btn.textContent = originalText;
+        btn.disabled = false;
+      }
+    });
   } catch (err) {
     container.innerHTML = `<p class="q-error">${err.message}</p>`;
   }

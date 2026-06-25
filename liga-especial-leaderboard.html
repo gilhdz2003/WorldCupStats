@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Liga Especial · Mundial 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --obsidian-0:#0a0807;
+    --obsidian-1:#131009;
+    --obsidian-2:#1c1710;
+    --obsidian-3:#251e15;
+    --gold-100:#fff4d6;
+    --gold-200:#f7e08a;
+    --gold-300:#ecc94b;
+    --gold-400:#d4af37;
+    --gold-500:#b8860b;
+    --gold-600:#8a6608;
+    --silver-200:#f1f3f5;
+    --silver-400:#c4c8cf;
+    --silver-500:#9aa0a8;
+    --bronze-200:#f0c7a0;
+    --bronze-400:#cd7f32;
+    --bronze-500:#a05a2c;
+    --ink:#f6efe2;
+    --ink-muted:#a99c87;
+    --ink-faint:#6b5f4d;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+
+  html,body{min-height:100%}
+
+  body{
+    font-family:'Sora',sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(1100px 620px at 50% -8%, rgba(212,175,55,0.18), transparent 60%),
+      radial-gradient(900px 700px at 85% 110%, rgba(184,134,11,0.10), transparent 55%),
+      radial-gradient(700px 500px at 8% 80%, rgba(212,175,55,0.06), transparent 55%),
+      linear-gradient(180deg, var(--obsidian-1), var(--obsidian-0) 60%, #050402);
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+    padding:40px 18px 56px;
+    position:relative;
+    overflow-x:hidden;
+  }
+
+  /* subtle metallic grain */
+  body::before{
+    content:"";
+    position:fixed;inset:0;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.83 0 0 0 0 0.69 0 0 0 0 0.22 0 0 0 0.5 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/></svg>");
+    opacity:0.045;
+    pointer-events:none;
+    mix-blend-mode:overlay;
+    z-index:0;
+  }
+
+  .board{
+    width:100%;
+    max-width:560px;
+    position:relative;
+    z-index:1;
+  }
+
+  /* ---------- HEADER ---------- */
+  .header{
+    text-align:center;
+    padding:8px 0 22px;
+  }
+
+  .kicker{
+    font-family:'Cinzel',serif;
+    font-weight:500;
+    letter-spacing:0.42em;
+    font-size:0.66rem;
+    color:var(--gold-300);
+    text-transform:uppercase;
+    margin-bottom:14px;
+    opacity:0.92;
+  }
+
+  .trophy{
+    font-size:2.4rem;
+    line-height:1;
+    filter:drop-shadow(0 6px 18px rgba(212,175,55,0.45));
+    margin-bottom:6px;
+    display:inline-block;
+    animation:floaty 4.5s ease-in-out infinite;
+  }
+  @keyframes floaty{
+    0%,100%{transform:translateY(0)}
+    50%{transform:translateY(-5px)}
+  }
+
+  .title{
+    font-family:'Cinzel',serif;
+    font-weight:800;
+    font-size:clamp(2.1rem, 8vw, 3rem);
+    letter-spacing:0.06em;
+    line-height:1.02;
+    background:linear-gradient(176deg, var(--gold-100) 0%, var(--gold-200) 32%, var(--gold-400) 66%, var(--gold-500) 100%);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    text-shadow:0 2px 30px rgba(212,175,55,0.25);
+    background-size:200% 200%;
+    animation:shimmer 6s ease-in-out infinite;
+  }
+  @keyframes shimmer{
+    0%,100%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+  }
+
+  .flourish{
+    display:flex;align-items:center;justify-content:center;gap:12px;
+    margin:14px 0 10px;
+    color:var(--gold-500);
+  }
+  .flourish .line{
+    height:1px;width:70px;
+    background:linear-gradient(90deg, transparent, var(--gold-400), transparent);
+  }
+  .flourish .diamond{
+    width:7px;height:7px;transform:rotate(45deg);
+    background:linear-gradient(135deg,var(--gold-200),var(--gold-500));
+    box-shadow:0 0 8px rgba(212,175,55,0.6);
+  }
+
+  .subtitle{
+    font-family:'Cinzel',serif;
+    font-weight:500;
+    letter-spacing:0.22em;
+    font-size:0.78rem;
+    text-transform:uppercase;
+    color:var(--ink-muted);
+  }
+
+  .meta-row{
+    display:flex;justify-content:center;align-items:center;gap:10px;
+    margin-top:16px;flex-wrap:wrap;
+  }
+  .pill{
+    font-size:0.66rem;letter-spacing:0.18em;text-transform:uppercase;
+    font-weight:600;
+    padding:5px 12px;border-radius:999px;
+    border:1px solid rgba(212,175,55,0.3);
+    background:rgba(212,175,55,0.06);
+    color:var(--gold-200);
+  }
+  .pill--solid{
+    background:linear-gradient(135deg, rgba(212,175,55,0.22), rgba(184,134,11,0.12));
+    color:var(--gold-100);
+  }
+
+  /* ---------- LIST ---------- */
+  .list{
+    display:flex;flex-direction:column;gap:10px;
+    margin-top:18px;
+  }
+
+  .row{
+    position:relative;
+    display:grid;
+    grid-template-columns:auto 1fr auto;
+    align-items:center;
+    gap:14px;
+    padding:14px 16px 14px 14px;
+    border-radius:14px;
+    background:linear-gradient(100deg, rgba(255,255,255,0.035), rgba(255,255,255,0.012) 70%);
+    border:1px solid rgba(255,255,255,0.06);
+    box-shadow:0 8px 24px -16px rgba(0,0,0,0.9), inset 0 1px 0 rgba(255,255,255,0.04);
+    overflow:hidden;
+    opacity:0;
+    transform:translateY(14px);
+    animation:rise 0.6s cubic-bezier(0.2,0.7,0.2,1) forwards;
+    animation-delay:calc(var(--i) * 70ms + 120ms);
+  }
+  /* filas sin burbuja (puesto 6+, sin premio): grid a 2 columnas, nombre alineado a la izquierda */
+  .row.row--no-medal{grid-template-columns:1fr auto}
+  @keyframes rise{
+    to{opacity:1;transform:translateY(0)}
+  }
+
+  /* tier tints */
+  .row[data-tier="1"]{
+    background:linear-gradient(100deg, rgba(212,175,55,0.20), rgba(212,175,55,0.05) 65%);
+    border-color:rgba(212,175,55,0.42);
+    box-shadow:0 0 0 1px rgba(212,175,55,0.18), 0 14px 40px -18px rgba(212,175,55,0.5), inset 0 1px 0 rgba(255,244,214,0.12);
+  }
+  .row[data-tier="2"]{
+    background:linear-gradient(100deg, rgba(192,196,207,0.14), rgba(192,196,207,0.03) 65%);
+    border-color:rgba(192,196,207,0.28);
+  }
+  .row[data-tier="3"]{
+    background:linear-gradient(100deg, rgba(205,127,50,0.16), rgba(205,127,50,0.04) 65%);
+    border-color:rgba(205,127,50,0.3);
+  }
+
+  /* left edge accent */
+  .row::before{
+    content:"";position:absolute;left:0;top:0;bottom:0;width:3px;
+    background:var(--accent, transparent);
+  }
+  .row[data-tier="1"]::before{background:linear-gradient(180deg,var(--gold-200),var(--gold-500))}
+  .row[data-tier="2"]::before{background:linear-gradient(180deg,var(--silver-200),var(--silver-500))}
+  .row[data-tier="3"]::before{background:linear-gradient(180deg,var(--bronze-200),var(--bronze-500))}
+
+  /* champion glow pulse */
+  .row[data-tier="1"]{
+    animation:rise 0.6s cubic-bezier(0.2,0.7,0.2,1) forwards, glow 3.8s ease-in-out infinite 1s;
+  }
+  @keyframes glow{
+    0%,100%{box-shadow:0 0 0 1px rgba(212,175,55,0.18), 0 14px 40px -18px rgba(212,175,55,0.5), inset 0 1px 0 rgba(255,244,214,0.12)}
+    50%{box-shadow:0 0 0 1px rgba(212,175,55,0.3), 0 18px 52px -16px rgba(212,175,55,0.72), inset 0 1px 0 rgba(255,244,214,0.18)}
+  }
+
+  /* medal */
+  .medal{
+    width:46px;height:46px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Cinzel',serif;font-weight:700;font-size:1.18rem;
+    color:#3a2c08;
+    flex-shrink:0;
+    position:relative;
+  }
+  .medal::after{
+    content:"";position:absolute;inset:0;border-radius:50%;
+    box-shadow:inset 0 2px 3px rgba(255,255,255,0.6), inset 0 -3px 5px rgba(0,0,0,0.35), 0 4px 10px rgba(0,0,0,0.4);
+  }
+  .medal span{position:relative;z-index:1}
+  .medal--gold{
+    background:radial-gradient(circle at 32% 26%, #fff7df, #f7e08a 26%, #ecc94b 52%, #d4af37 74%, #b8860b 92%);
+  }
+  .medal--silver{
+    background:radial-gradient(circle at 32% 26%, #ffffff, #f1f3f5 26%, #d8dce2 52%, #c4c8cf 74%, #9aa0a8 92%);
+    color:#3a3f47;
+  }
+  .medal--bronze{
+    background:radial-gradient(circle at 32% 26%, #f8d9bb, #f0c7a0 26%, #d99560 52%, #cd7f32 74%, #a05a2c 92%);
+    color:#3a2410;
+  }
+  .medal--plain{
+    background:radial-gradient(circle at 32% 26%, rgba(255,255,255,0.12), rgba(255,255,255,0.04) 60%, rgba(0,0,0,0.25));
+    color:var(--ink-muted);
+    font-size:1.05rem;
+  }
+  .medal--plain::after{box-shadow:inset 0 1px 2px rgba(255,255,255,0.12), inset 0 -2px 4px rgba(0,0,0,0.45), 0 3px 8px rgba(0,0,0,0.4)}
+
+  /* identity */
+  .identity{min-width:0}
+  .name{
+    font-weight:600;
+    font-size:1.02rem;
+    line-height:1.15;
+    color:var(--ink);
+    letter-spacing:0.01em;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  }
+  .row[data-tier="1"] .name{color:var(--gold-100)}
+  .stats{
+    margin-top:5px;
+    display:flex;gap:12px;flex-wrap:wrap;
+    font-size:0.74rem;font-weight:400;
+    color:var(--ink-muted);
+    letter-spacing:0.02em;
+  }
+  .stats b{font-weight:600;color:var(--ink)}
+  .stat-exact b{color:var(--gold-300)}
+
+  /* points */
+  .pts-wrap{
+    text-align:right;min-width:74px;
+    display:flex;flex-direction:column;align-items:flex-end;gap:6px;
+  }
+  .pts{
+    font-family:'Cinzel',serif;font-weight:700;
+    font-size:1.7rem;line-height:1;
+    background:linear-gradient(176deg, var(--gold-100), var(--gold-300) 55%, var(--gold-500));
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    filter:drop-shadow(0 1px 6px rgba(212,175,55,0.35));
+    font-variant-numeric:tabular-nums;
+  }
+  .pts-label{
+    font-size:0.56rem;letter-spacing:0.28em;text-transform:uppercase;
+    color:var(--ink-faint);font-weight:600;
+  }
+  .bar{
+    width:80px;height:4px;border-radius:999px;
+    background:rgba(255,255,255,0.07);
+    overflow:hidden;
+  }
+  .bar > i{
+    display:block;height:100%;border-radius:999px;
+    background:linear-gradient(90deg, var(--gold-500), var(--gold-300), var(--gold-200));
+    transform:scaleX(0);transform-origin:left;
+    animation:grow 1s cubic-bezier(0.2,0.7,0.2,1) forwards;
+    animation-delay:calc(var(--i) * 70ms + 380ms);
+  }
+  @keyframes grow{to{transform:scaleX(1)}}
+
+  /* ---------- FOOTER ---------- */
+  .footer{
+    margin-top:24px;
+    text-align:center;
+    padding-top:18px;
+    border-top:1px solid rgba(212,175,55,0.14);
+  }
+  .legend{
+    display:inline-flex;gap:14px;flex-wrap:wrap;justify-content:center;
+    font-size:0.7rem;color:var(--ink-muted);letter-spacing:0.04em;
+  }
+  .legend span b{color:var(--gold-200);font-weight:600}
+  .updated{
+    margin-top:12px;
+    font-size:0.64rem;letter-spacing:0.2em;text-transform:uppercase;
+    color:var(--ink-faint);
+  }
+  .brand{
+    margin-top:10px;
+    font-family:'Cinzel',serif;font-weight:600;
+    letter-spacing:0.32em;font-size:0.62rem;
+    color:var(--gold-500);
+    text-transform:uppercase;
+  }
+
+  @media (max-width:420px){
+    .row{grid-template-columns:auto 1fr auto;gap:11px;padding:13px 13px 13px 12px}
+    .medal{width:40px;height:40px;font-size:1.04rem}
+    .name{font-size:0.95rem}
+    .pts{font-size:1.5rem}
+    .bar{width:64px}
+  }
+
+  /* ---------- CSV LOADER (drag & drop invisible, sin botón) ---------- */
+  .toast{
+    position:fixed; left:50%; bottom:26px; transform:translate(-50%,18px);
+    z-index:60;
+    font-family:'Sora',sans-serif; font-weight:600; font-size:0.8rem;
+    padding:10px 18px; border-radius:999px;
+    background:linear-gradient(135deg, rgba(212,175,55,0.24), rgba(184,134,11,0.14));
+    border:1px solid rgba(212,175,55,0.45);
+    color:var(--gold-100);
+    box-shadow:0 10px 30px -10px rgba(0,0,0,0.8);
+    opacity:0; pointer-events:none;
+    transition:opacity .3s ease, transform .3s ease;
+  }
+  .toast.show{opacity:1; transform:translate(-50%,0)}
+  .toast.err{background:linear-gradient(135deg, rgba(205,127,50,0.24), rgba(160,90,44,0.16)); border-color:rgba(205,127,50,0.5)}
+
+  .drop-overlay{
+    position:fixed; inset:0; z-index:70;
+    display:none; align-items:center; justify-content:center;
+    background:radial-gradient(circle at center, rgba(20,16,9,0.93), rgba(5,4,2,0.97));
+    backdrop-filter:blur(3px);
+  }
+  .drop-overlay.active{display:flex}
+  .drop-card{
+    border:2px dashed rgba(212,175,55,0.6);
+    border-radius:22px;
+    padding:46px 58px;
+    text-align:center;
+    background:rgba(212,175,55,0.05);
+    animation:pulse-border 1.6s ease-in-out infinite;
+  }
+  @keyframes pulse-border{
+    0%,100%{border-color:rgba(212,175,55,0.45)}
+    50%{border-color:rgba(212,175,55,0.8)}
+  }
+  .drop-card .ico{font-size:2.6rem; margin-bottom:10px}
+  .drop-card .t{font-family:'Cinzel',serif; font-weight:700; font-size:1.15rem; color:var(--gold-100); letter-spacing:0.04em}
+  .drop-card .s{font-size:0.78rem; color:var(--ink-muted); margin-top:6px}
+</style>
+</head>
+<body>
+  <!--
+    ════════════════════════════════════════════════════════════
+      QUINIELA ESPECIAL · MUNDIAL 2026 — Tabla General Acumulada
+      Para agregar un participante: agrega un objeto al array PARTICIPANTS.
+      El conteo, las medallas y las barras se calculan solos.
+    ════════════════════════════════════════════════════════════
+  -->
+  <main class="board">
+    <header class="header">
+      <div class="kicker">Grupo MB · Mundial 2026</div>
+      <div class="trophy">🏆</div>
+      <h1 class="title">QUINIELA ESPECIAL</h1>
+      <div class="flourish"><span class="line"></span><span class="diamond"></span><span class="line"></span></div>
+      <div class="subtitle">Tabla General Acumulada</div>
+      <div class="meta-row">
+        <span class="pill pill--solid" id="count-pill">Liga VIP</span>
+        <span class="pill">Privado</span>
+      </div>
+    </header>
+
+    <section class="list" id="list"></section>
+
+    <footer class="footer">
+      <div class="legend">
+        <span>Grupos: <b>3 pts</b> resultado</span>
+        <span>·</span>
+        <span><b>5 pts</b> marcador exacto</span>
+      </div>
+      <div class="updated">Actualizado · 15 de Junio, 2026</div>
+      <div class="brand">Quiniela Especial Grupo MB</div>
+    </footer>
+  </main>
+
+  <!-- Drag & drop invisible: arrastra un CSV sobre la página para actualizar (uso local). Sin botón visible. -->
+  <div class="toast" id="toast"></div>
+  <div class="drop-overlay" id="dropOverlay">
+    <div class="drop-card">
+      <div class="ico">📥</div>
+      <div class="t">Suelta el CSV aquí</div>
+      <div class="s">Exportado del panel de admin</div>
+    </div>
+  </div>
+
+<script>
+  /* ───────── DATA — edita aquí para agregar/quitar participantes ─────────
+     pos:    posición en el ranking (permite empates; define la medalla)
+     name:   nombre visible
+     pts:    puntos totales de la fase
+     exact:  marcadores exactos
+     hits:   aciertos totales (incluye exactos)
+  ───────────────────────────────────────────────────────────────────────── */
+  const PARTICIPANTS = [
+    { pos:1,  name:"Roberto Zamora Torres",      pts:33, exact:3, hits:9, gd:17 },
+    { pos:2,  name:"Gilberto Hernandez",         pts:33, exact:3, hits:9, gd:34 },
+    { pos:3,  name:"Jairo Ricardo Flores",       pts:33, exact:3, hits:9, gd:36 },
+    { pos:4,  name:"Laura Andrea Hidalgo Dueñas", pts:31, exact:2, hits:9, gd:34 },
+    { pos:5,  name:"Samantha Nuñez",             pts:28, exact:2, hits:8, gd:37 },
+    { pos:6,  name:"Yanelly Olguin",             pts:27, exact:0, hits:9, gd:0 },
+    { pos:7,  name:"Karina Orozco",              pts:25, exact:2, hits:7, gd:27 },
+    { pos:8,  name:"Daniel Juarez",              pts:24, exact:0, hits:8, gd:44 },
+    { pos:9,  name:"Abel Contreras",             pts:23, exact:1, hits:7, gd:32 },
+    { pos:10, name:"Mary Gonzalez",              pts:23, exact:1, hits:7, gd:35 },
+    { pos:11, name:"José Alfredo Rico Gonzalez", pts:23, exact:1, hits:7, gd:35 },
+    { pos:12, name:"Juan Manuel Kick",           pts:21, exact:0, hits:7, gd:13 },
+    { pos:13, name:"Edith Martinez",             pts:21, exact:0, hits:7, gd:38 },
+    { pos:14, name:"Alma Banda",                 pts:21, exact:0, hits:7, gd:41 },
+    { pos:15, name:"Antonio Hernandez",          pts:0,  exact:0, hits:0, gd:0 },
+  ];
+
+  const UPDATED_DATE = "15 de Junio, 2026";
+
+  /* ───────── render ───────── */
+  const TIER_META = {
+    1:{medal:"medal--gold"},
+    2:{medal:"medal--silver"},
+    3:{medal:"medal--bronze"},
+  };
+
+  function tierLabel(pos){
+    return pos===1?"gold":pos===2?"silver":pos===3?"bronze":"plain";
+  }
+
+  function buildRow(p, i, maxPts){
+    const ordinal = i + 1;                        // numeración secuencial 1..N (sin empates ni huecos)
+    const tier = ordinal<=3 ? ordinal : 0;         // oro/plata/bronce solo para el podio (1-3)
+    const medalClass = tier ? TIER_META[tier].medal : "medal--plain";
+    const barPct = Math.max(8, Math.round((p.pts / maxPts) * 100));
+    const nonExact = p.hits - p.exact;
+    // Gol Average: si no hay marcadores (exactos=0 y gd=0 → score-less) mostrar guion.
+    const gd = p.gd ?? 0;
+    const ga = (p.exact > 0 || gd > 0) ? gd : '—';
+
+    return `
+      <div class="row" data-tier="${tier || ''}" style="--i:${i}">
+        <div class="medal ${medalClass}"><span>${ordinal}</span></div>
+        <div class="identity">
+          <div class="name">${p.name}</div>
+          <div class="stats">
+            <span class="stat-exact">🎯 <b>${p.exact}</b> exacto${p.exact===1?'':'s'}</span>
+            <span>✅ <b>${nonExact}</b> resultado${nonExact===1?'':'s'}</span>
+            <span class="stat-ga" title="Gol Average: desvío total de marcadores. Menor = más preciso (desempata empates)">📏 GA <b>${ga}</b></span>
+          </div>
+        </div>
+        <div class="pts-wrap">
+          <div class="pts">${p.pts}</div>
+          <div class="pts-label">pts</div>
+          <div class="bar"><i style="width:${barPct}%;--i:${i}"></i></div>
+        </div>
+      </div>
+    `;
+  }
+
+  /* ───────── estado ───────── */
+  let currentData = PARTICIPANTS;
+  const $list = document.getElementById('list');
+  const $updated = document.querySelector('.updated');
+
+  function render(data){
+    data = data || currentData;
+    currentData = data;
+    const maxPts = Math.max(...data.map(p=>p.pts), 1);
+    $list.innerHTML = data.map((p,i)=>buildRow(p,i,maxPts)).join('');
+  }
+
+  function setUpdated(label){
+    if ($updated) $updated.textContent = `Actualizado · ${label}`;
+  }
+
+  setUpdated(UPDATED_DATE);
+  render();
+
+  /* ───────── CSV parser → participantes ─────────
+     Acepta el CSV exportado del panel de admin:
+     Posicion,Nombre,Email,Puntos,"Marcadores Exactos","Resultados Correctos"
+     Detecta columnas por nombre (no por orden), así es robusto a cambios.
+  ───────────────────────────────────────────────── */
+  function parseCSV(text){
+    text = text.replace(/^﻿/, ''); // quita BOM si existe
+    const rows = [];
+    let row = [], field = '', q = false;
+    for (let i=0; i<text.length; i++){
+      const c = text[i];
+      if (q){
+        if (c === '"'){
+          if (text[i+1] === '"'){ field += '"'; i++; }
+          else q = false;
+        } else field += c;
+      } else {
+        if (c === '"') q = true;
+        else if (c === ','){ row.push(field); field=''; }
+        else if (c === '\n'){ row.push(field); rows.push(row); row=[]; field=''; }
+        else if (c === '\r'){ /* ignora CR */ }
+        else field += c;
+      }
+    }
+    if (field.length || row.length){ row.push(field); rows.push(row); }
+    return rows.filter(r => r.some(c => c.trim() !== ''));
+  }
+
+  function titleCase(s){
+    return s.trim().toLowerCase().split(/\s+/).map(w => w ? w.charAt(0).toUpperCase() + w.slice(1) : w).join(' ');
+  }
+
+  function findCol(header, keys){
+    const norm = h => h.toLowerCase().trim().replace(/["']/g,'');
+    return header.findIndex(h => keys.some(k => norm(h).includes(k)));
+  }
+
+  function toInt(v){
+    return parseInt(String(v||'0').replace(/[^\d-]/g,'')) || 0;
+  }
+
+  function csvToParticipants(text){
+    const rows = parseCSV(text);
+    if (!rows.length) throw new Error('CSV vacío');
+    const header = rows[0];
+    const cPos   = findCol(header, ['posic']);
+    const cName  = findCol(header, ['nombre']);
+    const cPts   = findCol(header, ['punto','pts','score']);
+    const cExact = findCol(header, ['exact']);
+    const cHits  = findCol(header, ['resultad','aciert','correct']);
+    const cGd    = findCol(header, ['gol','diff','average','desv']);
+    if (cName < 0 || cPts < 0) throw new Error('Columnas no reconocidas (necesita Nombre y Puntos)');
+
+    const out = [];
+    for (let r=1; r<rows.length; r++){
+      const cells = rows[r];
+      const name = (cells[cName] || '').trim();
+      if (!name) continue;
+      const pts   = toInt(cells[cPts]);
+      const exact = cExact>=0 ? toInt(cells[cExact]) : 0;
+      const hits  = cHits>=0  ? Math.max(toInt(cells[cHits]), exact) : exact;
+      const pos   = cPos>=0   ? toInt(cells[cPos]) : 0;
+      const gd    = cGd>=0    ? toInt(cells[cGd]) : 0;
+      out.push({ name:titleCase(name), pts, exact, hits, pos, gd });
+    }
+    if (!out.length) throw new Error('Sin filas de participantes');
+    // El CSV ya viene ordenado por el SQL del backend (puntos → exactos → aciertos
+    // → gol_diff). Preservamos ese orden; la numeración 1..N la asigna el render
+    // por índice de fila, así nunca se repiten números ni hay huecos.
+    return out;
+  }
+
+  /* ───────── carga de archivo ───────── */
+  function todayLabel(){
+    try {
+      const d = new Date().toLocaleDateString('es-MX', {day:'2-digit', month:'long', year:'numeric'});
+      return d.charAt(0).toUpperCase() + d.slice(1);
+    } catch(e){ return UPDATED_DATE; }
+  }
+
+  function handleFile(file){
+    if (!file) return;
+    const isCSV = /\.csv$/i.test(file.name) || /text\/csv/.test(file.type) || !file.type;
+    if (!isCSV){ toast('⚠️ Selecciona un archivo .csv', true); return; }
+    const reader = new FileReader();
+    reader.onload = e => {
+      try {
+        const data = csvToParticipants(e.target.result);
+        render(data);
+        setUpdated(todayLabel());
+        toast(`✓ ${data.length} especialistas cargados`, false);
+      } catch(err){
+        toast('⚠️ ' + err.message, true);
+      }
+    };
+    reader.onerror = () => toast('⚠️ No se pudo leer el archivo', true);
+    reader.readAsText(file, 'UTF-8');
+  }
+
+  /* ───────── toast ───────── */
+  let toastTimer = null;
+  function toast(msg, isErr){
+    const el = document.getElementById('toast');
+    if (!el) return;
+    el.textContent = msg;
+    el.classList.toggle('err', !!isErr);
+    el.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(()=> el.classList.remove('show'), 2600);
+  }
+
+  /* ───────── eventos: drag & drop (sin botón visible) ───────── */
+  const overlay = document.getElementById('dropOverlay');
+  const hasFiles = e => e.dataTransfer && [...(e.dataTransfer.types||[])].includes('Files');
+  let dragCount = 0;
+
+  window.addEventListener('dragenter', e => {
+    if (!hasFiles(e)) return;
+    e.preventDefault(); dragCount++; overlay.classList.add('active');
+  });
+  window.addEventListener('dragover', e => { if (hasFiles(e)) e.preventDefault(); });
+  window.addEventListener('dragleave', () => {
+    dragCount = Math.max(0, dragCount-1);
+    if (dragCount===0) overlay.classList.remove('active');
+  });
+  window.addEventListener('drop', e => {
+    if (!hasFiles(e)) return;
+    e.preventDefault(); dragCount=0; overlay.classList.remove('active');
+    if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]);
+  });
+
+  /* ───────── auto-carga desde data.csv (modo hosted) ─────────
+     Si el HTML está servido desde un server (Hostinger) y existe data.csv
+     junto a él, lo lee y renderiza automáticamente. Actualizar = sobrescribir
+     data.csv en el server y recargar. En file:// o si no hay data.csv,
+     falla silencioso y se queda con el array PARTICIPANTS (seed). */
+  async function tryFetchData(){
+    try {
+      const res = await fetch('data.csv?v=' + Date.now(), {cache:'no-store'});
+      if (!res.ok) return;
+      const text = await res.text();
+      if (!text.trim()) return;
+      const data = csvToParticipants(text);
+      render(data);
+      setUpdated(todayLabel());
+    } catch(e){ /* file:// o sin data.csv: usar seed */ }
+  }
+  tryFetchData();
+</script>
+</body>
+</html>

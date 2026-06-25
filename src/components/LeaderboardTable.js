@@ -11,6 +11,7 @@ export function renderLeaderboardTable(leaderboard, selfId) {
             <th class="q-th-pts">Puntos</th>
             <th class="q-th-exact">Marcadores</th>
             <th class="q-th-correct">Resultados</th>
+            <th class="q-th-goaldiff" title="Gol Average: desvío total de marcadores predichos vs reales. Menor = más preciso.">Gol Avg ↓</th>
           </tr>
         </thead>
         <tbody>
@@ -20,6 +21,9 @@ export function renderLeaderboardTable(leaderboard, selfId) {
             const isSelf = u.id === selfId;
             const selfClass = isSelf ? ' q-lb-row--self' : '';
             const topClass = rank <= 3 ? ` q-lb-row--top${rank}` : '';
+            // Gol Average: exhibir suma total de desvío. Si no hay marcadores predichos
+            // (exactos=0 y goal_diff=0 → score-less), mostrar guion en vez de un 0 engañoso.
+            const ga = (u.exact_scores > 0 || u.goal_diff > 0) ? (u.goal_diff ?? 0) : '—';
             return `
               <tr class="q-lb-row${selfClass}${topClass}">
                 <td class="q-rank-cell">${medal}</td>
@@ -27,12 +31,13 @@ export function renderLeaderboardTable(leaderboard, selfId) {
                 <td class="q-pts-cell">${u.total_points}</td>
                 <td class="q-lb-num">${u.exact_scores}</td>
                 <td class="q-lb-num">${u.correct_results}</td>
+                <td class="q-lb-num">${ga}</td>
               </tr>
             `;
           }).join('')}
         </tbody>
       </table>
     </div>
-    <p class="q-muted">Total: ${leaderboard.length} participantes</p>
+    <p class="q-muted">Total: ${leaderboard.length} participantes · <strong>Gol Avg</strong>: desvío total de marcadores — menor = más preciso (desempata empates)</p>
   `;
 }
