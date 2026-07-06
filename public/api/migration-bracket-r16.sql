@@ -12,11 +12,11 @@
 --          mis-score exact-score predictions. Abbreviations are
 --          lowercased (CAN -> can) to match /logos/{abbr}.png.
 -- =============================================================
--- EXECUTE PHASE 1 NOW (2026-07-02): committee opened all phases,
--- so populating the 5 resolved matches improves UX for people
--- predicting today. PHASE 2 (3 pending) is appended + run later,
--- once ESPN resolves them. Safe either way: predictions bind to
--- match_id (bracket slot), not team name.
+-- Phase 1 (5 matches) executed 2026-07-02 by Gil in phpMyAdmin.
+-- Phase 2 (3 matches) resolved by ESPN 2026-07-03 — run now to
+-- complete the R16 bracket. Idempotent: re-running Phase 1 is
+-- harmless (UPDATE only). Safe: predictions bind to match_id
+-- (bracket slot), not team name.
 -- =============================================================
 
 -- Phase 1 — 5 matches fully resolved by ESPN as of 2026-07-02
@@ -27,19 +27,12 @@ UPDATE q_matches SET home_team='Brazil',        home_abbr='bra', away_team='Norw
 UPDATE q_matches SET home_team='Mexico',        home_abbr='mex', away_team='England',       away_abbr='eng' WHERE id='760505';
 UPDATE q_matches SET home_team='United States', home_abbr='usa', away_team='Belgium',       away_abbr='bel' WHERE id='760507';
 
--- Phase 2 — PENDING. Add UPDATEs here once ESPN resolves them
--- (after their feeder R32 games finish, Jul 2-4). Do NOT guess
--- the teams — read home/away straight from ESPN scoreboard for
--- these IDs and respect the order ESPN returns.
---
---   760506 (jul 6 19:00) — feeders: 760497 ESP/AUT, 760496 POR/CRO
---   750508 (jul 7 20:00) — feeders: 760498 SUI/ALG, 760500 ARG/CPV
---   760509 (jul 7 16:00) — feeders: 760499 AUS/EGY, 760501 COL/GHA
---
--- Example (fill when ready):
--- UPDATE q_matches SET home_team='X', home_abbr='xxx', away_team='Y', away_abbr='yyy' WHERE id='760506';
--- UPDATE q_matches SET home_team='X', home_abbr='xxx', away_team='Y', away_abbr='yyy' WHERE id='760508';
--- UPDATE q_matches SET home_team='X', home_abbr='xxx', away_team='Y', away_abbr='yyy' WHERE id='760509';
+-- Phase 2 — 3 matches resolved by ESPN as of 2026-07-03
+-- (all feeder R32 games finished Jul 2-4). Respect home/away
+-- order returned by ESPN.
+UPDATE q_matches SET home_team='Portugal',    home_abbr='por', away_team='Spain',        away_abbr='esp' WHERE id='760506';
+UPDATE q_matches SET home_team='Switzerland', home_abbr='sui', away_team='Colombia',     away_abbr='col' WHERE id='760508';
+UPDATE q_matches SET home_team='Argentina',   home_abbr='arg', away_team='Egypt',        away_abbr='egy' WHERE id='760509';
 
 -- Verification (run after the UPDATEs)
 SELECT id, phase, home_team, home_abbr, away_team, away_abbr, status
