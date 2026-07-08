@@ -19,12 +19,13 @@ UPDATE q_matches SET home_team='France',  home_abbr='fra', away_team='Morocco', 
 UPDATE q_matches SET home_team='Spain',   home_abbr='esp', away_team='Belgium', away_abbr='bel' WHERE id='760511';
 UPDATE q_matches SET home_team='Norway',  home_abbr='nor', away_team='England', away_abbr='eng' WHERE id='760512';
 
--- Phase 2 — PENDING. Add UPDATE once ESPN resolves it
--- (after both feeder R16 games finish, Jul 7):
---   760513 (jul 12 01:00) — feeders: 760508 SUI/COL, 760509 ARG/EGY
--- Read home/away straight from ESPN and respect the order.
--- Example (fill when ready):
--- UPDATE q_matches SET home_team='X', home_abbr='xxx', away_team='Y', away_abbr='yyy' WHERE id='760513';
+-- Phase 2 — 4th QF match resolved by ESPN on 2026-07-08
+-- (both feeder R16 games finished the night of Jul 7):
+--   760508  SUI 0-0 COL [FT-Pens] → Switzerland advances (winner on penalties)
+--   760509  ARG 3-2 EGY [FT]      → Argentina advances
+-- ESPN placed Argentina as HOME and Switzerland as AWAY for 760513.
+-- Respect that order EXACTLY (cron scores home vs away separately).
+UPDATE q_matches SET home_team='Argentina', home_abbr='arg', away_team='Switzerland', away_abbr='sui' WHERE id='760513';
 
 -- Verification (run after the UPDATEs)
 SELECT id, phase, home_team, home_abbr, away_team, away_abbr, status
