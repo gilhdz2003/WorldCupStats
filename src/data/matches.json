@@ -3270,16 +3270,16 @@
     "status": "STATUS_SCHEDULED",
     "statusDetail": "Sat, July 18th at 5:00 PM EDT",
     "homeTeam": {
-      "name": "Semifinal 1 Loser",
-      "abbreviation": "SF L1",
-      "logo": "/logos/sf l1.png",
+      "name": "France",
+      "abbreviation": "fra",
+      "logo": "/logos/fra.png",
       "score": "0",
       "espnId": "5958"
     },
     "awayTeam": {
-      "name": "Semifinal 2 Loser",
-      "abbreviation": "SF L2",
-      "logo": "/logos/sf l2.png",
+      "name": "England",
+      "abbreviation": "eng",
+      "logo": "/logos/eng.png",
       "score": "0",
       "espnId": "5959"
     },
@@ -3302,16 +3302,16 @@
     "status": "STATUS_SCHEDULED",
     "statusDetail": "Sun, July 19th at 3:00 PM EDT",
     "homeTeam": {
-      "name": "Semifinal 1 Winner",
-      "abbreviation": "SFW1",
-      "logo": "/logos/sfw1.png",
+      "name": "Spain",
+      "abbreviation": "esp",
+      "logo": "/logos/esp.png",
       "score": "0",
       "espnId": "5960"
     },
     "awayTeam": {
-      "name": "Semifinal 2 Winner",
-      "abbreviation": "SFW2",
-      "logo": "/logos/sfw2.png",
+      "name": "Argentina",
+      "abbreviation": "arg",
+      "logo": "/logos/arg.png",
       "score": "0",
       "espnId": "5961"
     },
